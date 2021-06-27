@@ -1,4 +1,4 @@
-function drawScene(mv, glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix){
+function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix){
 
     var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
     var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
@@ -10,6 +10,6 @@ function drawScene(mv, glProgram, modelMatrix, viewMatrix, projMatrix, normalMat
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var floor = new Floor(glProgram);
-    floor.draw(mv);
+    var floor = new Floor(glProgram, [0.0, 1.0, 0.5], [0.0, 0.0, 1.0], [0.0, 0.0, 0.0], [1.0, 1.0, 0.0]);
+    floor.draw();
 }

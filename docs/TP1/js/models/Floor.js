@@ -1,9 +1,27 @@
 class Floor {
-    constructor(glProgram) {
+    // Initializes a Floor. 
+    // glProgram: context variable.
+    // vColor: the color of the plane.
+    // vNormal: the normal vector of the plane.
+    // vStartPos: the (0,0) position of the plane.
+    // vEndPos: the (1,1) position of the plane.
+    //
+    // Explanatory drawing:
+    //
+    //               ------------- (1,1)
+    //              |             |
+    //              |             |
+    //              |             |
+    //        (0,0)  -------------
+    constructor(glProgram, vColor, vNormal, vStartPos, vEndPos) {
         this.index_buffer = null;
         this.position_buffer = null;
         this.normal_buffer = null;
         this.color_buffer = null;
+        this.vColor = vColor;
+        this.vNormal = vNormal;
+        this.vStartPos = vStartPos;
+        this.vEndPos = vEndPos;
         this.n_cols = 100;
         this.n_rows = 100;
         this.glProgram = glProgram;
@@ -42,13 +60,16 @@ class Floor {
               this.position_buffer.push(y*0.01);
               this.position_buffer.push(0.0);
 
-              this.normal_buffer.push(0);
-              this.normal_buffer.push(0);
-              this.normal_buffer.push(1);
+              // This is not necessarily correct.
+              // The normal is a parameter that allows to know the position of the map,
+              // it's not necessarily related to lighting conditions.
+              this.normal_buffer.push(this.vNormal[0]);
+              this.normal_buffer.push(this.vNormal[0]);
+              this.normal_buffer.push(this.vNormal[0]);
 
-              this.color_buffer.push(0.9);
-              this.color_buffer.push(0.0);
-              this.color_buffer.push(0.3);
+              this.color_buffer.push(this.vColor[0]);
+              this.color_buffer.push(this.vColor[1]);
+              this.color_buffer.push(this.vColor[2]);
             }
           }
     }
@@ -84,7 +105,7 @@ class Floor {
         var vertexPositionAttribute = gl.getAttribLocation(this.glProgram, "aVertexPosition");
         gl.enableVertexAttribArray(vertexPositionAttribute);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-                    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
         
         var vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
         gl.enableVertexAttribArray(vertexNormalAttribute);
