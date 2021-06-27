@@ -19,9 +19,9 @@ class Grid {
 
     createIndexBuffer() {
         this.index_buffer = [];
-        for (var i=0;i<this.n_rows-1;i++){
+        for (var i = 0; i < this.n_rows-1; i++){
             this.index_buffer.push(i*this.n_cols);
-            for (var j=0;j<this.n_cols-1;j++){
+            for (var j = 0; j < this.n_cols-1; j++){
                 this.index_buffer.push(i*this.n_cols+j);
                 this.index_buffer.push((i+1)*this.n_cols+j);
                 this.index_buffer.push(i*this.n_cols+j+1);

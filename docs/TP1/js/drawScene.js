@@ -10,6 +10,27 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var plane = new Plane(glProgram, /*X0=*/[-0.5, -0.5, 0.0], /*X1=*/[0.0, 0.0, 1.0], /*vNormal=*/[0.0, 0.5, 0.5], /*vColor=*/[1.0, 0.0, 0.0], /*n_rows=*/100.0, /*n_cols=*/100.0);
-    plane.draw();
+    var pos = [];
+    var normals = [];
+    var colors = [];
+    var n_vertices = 3;
+    var step = 1/n_vertices;
+    for (var i = 0; i < n_vertices; i++) {
+            pos.push(i * step - 0.75)
+            pos.push(i*i * 0.15 - 0.5);
+            pos.push(0);
+
+            normals.push(0.0);
+            normals.push(0.0);
+            normals.push(1.0);
+
+            colors.push(0.0);
+            colors.push(i * step);
+            colors.push(0.5);
+    }
+    var fan = new Fan(glProgram, pos, normals, colors);
+    fan.draw();
+
+    // var plane = new Plane(glProgram, /*X0=*/[-0.5, -0.5, 0.0], /*X1=*/[0.0, 0.0, 1.0], /*vNormal=*/[0.0, 0.5, 0.5], /*vColor=*/[1.0, 0.0, 0.0], /*n_rows=*/100.0, /*n_cols=*/100.0);
+    // plane.draw();
 }

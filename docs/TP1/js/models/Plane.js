@@ -58,8 +58,8 @@ class Plane {
                 // The normal is a parameter that allows to know the position of the map,
                 // it's not necessarily related to lighting conditions.
                 this.normal_buffer.push(this.vNormal[0]);
-                this.normal_buffer.push(this.vNormal[0]);
-                this.normal_buffer.push(this.vNormal[0]);
+                this.normal_buffer.push(this.vNormal[1]);
+                this.normal_buffer.push(this.vNormal[2]);
 
                 this.color_buffer.push(this.vColor[0]);
                 this.color_buffer.push(this.vColor[1]);
@@ -68,7 +68,7 @@ class Plane {
           }
         
         
-        // 3. Transform the position buffer back again to the original space.
+        // 3. Transform the position buffer to the original space.
         // 3.1. Get inverse transformation
         mat4.invert(transform_matrix, transform_matrix);
         // 3.2. Transform
