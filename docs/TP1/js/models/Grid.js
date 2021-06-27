@@ -1,38 +1,19 @@
-class Floor {
-    // Initializes a Floor. 
-    // glProgram: context variable.
-    // vColor: the color of the plane.
-    // vNormal: the normal vector of the plane.
-    // vStartPos: the (0,0) position of the plane.
-    // vEndPos: the (1,1) position of the plane.
-    //
-    // Explanatory drawing:
-    //
-    //               ------------- (1,1)
-    //              |             |
-    //              |             |
-    //              |             |
-    //        (0,0)  -------------
-    constructor(glProgram, vColor, vNormal, vStartPos, vEndPos) {
-        this.index_buffer = null;
-        this.position_buffer = null;
-        this.normal_buffer = null;
-        this.color_buffer = null;
-        this.vColor = vColor;
-        this.vNormal = vNormal;
-        this.vStartPos = vStartPos;
-        this.vEndPos = vEndPos;
-        this.n_cols = 100;
-        this.n_rows = 100;
+class Grid {
+    // Initializes a Grid. 
+    constructor(glProgram, position_buffer, normal_buffer, color_buffer, n_rows, n_cols) {
         this.glProgram = glProgram;
+        this.position_buffer = position_buffer;
+        this.normal_buffer = normal_buffer;
+        this.color_buffer = color_buffer;
+        this.n_rows = n_rows;
+        this.n_cols = n_cols;
+        this.index_buffer = null;
     }
 
     draw() {
         this.createIndexBuffer();
-        this.createPropertiesBuffers();
         this.setupBuffers();
 
-        // Dibujamos.
         gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
     }
 
@@ -48,30 +29,6 @@ class Floor {
             }
             this.index_buffer.push((i+1)*this.n_cols+this.n_cols-1);
         }
-    }
-
-    createPropertiesBuffers() {
-        this.position_buffer = [];
-        this.normal_buffer = [];
-        this.color_buffer = [];
-        for (var y = 0.0; y < this.n_rows; y++){
-            for (var x = 0.0; x < this.n_cols; x++){
-              this.position_buffer.push(x*0.01);
-              this.position_buffer.push(y*0.01);
-              this.position_buffer.push(0.0);
-
-              // This is not necessarily correct.
-              // The normal is a parameter that allows to know the position of the map,
-              // it's not necessarily related to lighting conditions.
-              this.normal_buffer.push(this.vNormal[0]);
-              this.normal_buffer.push(this.vNormal[0]);
-              this.normal_buffer.push(this.vNormal[0]);
-
-              this.color_buffer.push(this.vColor[0]);
-              this.color_buffer.push(this.vColor[1]);
-              this.color_buffer.push(this.vColor[2]);
-            }
-          }
     }
 
     setupBuffers() {
@@ -118,15 +75,5 @@ class Floor {
         gl.vertexAttribPointer(colorAttribute, 3, gl.FLOAT, false, 0, 0);
         
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
-        // // Se usa la matriz de modelado mv.
-        // var u_model_view_matrix = gl.getUniformLocation(this.glProgram, "uMVMatrix");
-        // gl.uniformMatrix4fv(u_model_view_matrix, false, mv);
-        
-        // // Matriz de transformación de normales mn.
-        // var mn = mat4.create();
-        // mat4.invert(mn, mv);
-        // mat4.transpose(mn,mn);
-        // var u_normal_matrix = gl.getUniformLocation(this.glProgram, "uNMatrix");
-        // gl.uniformMatrix4fv(u_normal_matrix, false, mn);
    }
 }

@@ -10,6 +10,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var floor = new Floor(glProgram, [0.0, 1.0, 0.5], [0.0, 0.0, 1.0], [0.0, 0.0, 0.0], [1.0, 1.0, 0.0]);
-    floor.draw();
+    var plane = new Plane(glProgram, /*X0=*/[-0.5, -0.5, 0.0], /*X1=*/[0.0, 0.0, 1.0], /*vNormal=*/[0.0, 0.5, 0.5], /*vColor=*/[1.0, 0.0, 0.0], /*n_rows=*/100.0, /*n_cols=*/100.0);
+    plane.draw();
 }

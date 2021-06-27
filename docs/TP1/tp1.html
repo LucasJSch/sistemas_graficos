@@ -19,7 +19,8 @@
         <script type="text/javascript" src="js/libs/includeHTML.js"></script>
         <script type="text/javascript" src="js/libs/gl-matrix.js"></script>
         <script type="text/javascript" src="js/drawScene.js"></script>
-        <script type="text/javascript" src="js/models/Floor.js"></script>
+        <script type="text/javascript" src="js/models/Grid.js"></script>
+        <script type="text/javascript" src="js/models/Plane.js"></script>
         <!-- <script>
             includeHTML('glsl/vertex-shader.html', document.getElementById('shader-vs'));
         </script>
@@ -59,6 +60,7 @@
 
             var mat4=glMatrix.mat4;
             var vec3=glMatrix.vec3;
+            var vec4=glMatrix.vec4;
 
             var gl = null,
             canvas = null,
@@ -90,7 +92,7 @@
 
                     setupWebGL();
                     initShaders();
-                    tick();   
+                    tick();
 
                 }else{    
                     alert(  "Error: Your browser does not appear to support WebGL.");
@@ -173,7 +175,7 @@
             function tick(){
                 requestAnimationFrame(tick);
                 drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix);
-                animate();
+                // animate();
             }
 
             window.onload=initWebGL;
