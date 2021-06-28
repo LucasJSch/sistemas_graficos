@@ -10,10 +10,12 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var levels = 1;
-    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[0, 0, 0.0], /*vEndPos*/[1, 1, 0.0], fShapePos, fShapeNormal, fShapeColor);
-    extrusion.draw();
 
+    var central_pos = [0.0, 0.0, 0.0];
+    var n_rows = 100;
+    var n_cols = 100;
+    var grid = new Grid(glProgram, fShapePos(central_pos), fShapeNormal(central_pos), fShapeColor(central_pos), n_rows, n_cols);
+    grid.draw();
 }
 
 function fShapePos(central_pos) {
@@ -22,8 +24,8 @@ function fShapePos(central_pos) {
     var z_0 = central_pos[2];
 
     var buffer = [];
-    var n = 50;
-    for (var i = 0; i < n; i++) {
+    var n = 10;
+    for (var i = 0; i < 10; i++) {
         buffer.push(x_0 + Math.cos(i * 2.0 * Math.PI / n));
         buffer.push(y_0 + Math.sin(i * 2.0 * Math.PI / n));
         buffer.push(z_0);
@@ -33,8 +35,8 @@ function fShapePos(central_pos) {
 
 function fShapeNormal(central_pos) {
     var buffer = [];
-    var n = 50;
-    for (var i = 0; i < n; i++) {
+    var n = 10;
+    for (var i = 0; i < 10; i++) {
         buffer.push(0.0);
         buffer.push(0.0);
         buffer.push(1.0);
@@ -44,31 +46,11 @@ function fShapeNormal(central_pos) {
 
 function fShapeColor(central_pos) {
     var buffer = [];
-    var n = 50;
-    for (var i = 0; i < n/5; i++) {
-        buffer.push(0.5);
-        buffer.push(0.0);
-        buffer.push(0.5);
-    }
-    for (var i = 0; i < n/5; i++) {
+    var n = 10;
+    for (var i = 0; i < 10; i++) {
         buffer.push(1.0);
-        buffer.push(0.3);
-        buffer.push(0.5);
-    }
-    for (var i = 0; i < n/5; i++) {
-        buffer.push(1.0);
-        buffer.push(0.5);
-        buffer.push(0.0);
-    }
-    for (var i = 0; i < n/5; i++) {
-        buffer.push(0.0);
-        buffer.push(0.5);
-        buffer.push(1.0);
-    }
-    for (var i = 0; i < n/5; i++) {
         buffer.push(0.0);
         buffer.push(1.0);
-        buffer.push(0.75);
     }
     return buffer;
 }

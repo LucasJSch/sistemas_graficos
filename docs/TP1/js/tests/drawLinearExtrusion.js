@@ -11,7 +11,7 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
     var levels = 1;
-    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[0, 0, 0.0], /*vEndPos*/[1, 1, 0.0], fShapePos, fShapeNormal, fShapeColor);
+    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[-1, -1, 0.0], /*vEndPos*/[1, 1, 0.0], fShapePos, fShapeNormal, fShapeColor);
     extrusion.draw();
 
 }
