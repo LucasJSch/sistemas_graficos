@@ -15,11 +15,13 @@ class LinearExtrusion {
         this.pos_buffer = null;
         this.normal_buffer = null;
         this.color_buffer = null;
+        this.top_pos_buffer = null;
+        this.top_normal_buffer = null;
+        this.top_color_buffer = null;
     }
 
     draw() {
         this.createBuffers();
-        console.log(this.pos_buffer.length);
         var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
         grid.draw();
     }

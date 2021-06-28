@@ -22,7 +22,7 @@ function fShapePos(central_pos) {
     var z_0 = central_pos[2];
 
     var buffer = [];
-    var n = 50;
+    var n = 1000;
     for (var i = 0; i < n; i++) {
         buffer.push(x_0 + 0.3*Math.cos(i * 2.0 * Math.PI / n));
         buffer.push(y_0 + 0.3*Math.sin(i * 2.0 * Math.PI / n));
@@ -33,7 +33,7 @@ function fShapePos(central_pos) {
 
 function fShapeNormal(central_pos) {
     var buffer = [];
-    var n = 50;
+    var n = 1000;
     for (var i = 0; i < n; i++) {
         buffer.push(0.0);
         buffer.push(0.0);
@@ -44,7 +44,7 @@ function fShapeNormal(central_pos) {
 
 function fShapeColor(central_pos) {
     var buffer = [];
-    var n = 50;
+    var n = 1000;
     for (var i = 0; i < n/5; i++) {
         buffer.push(0.5);
         buffer.push(0.0);
