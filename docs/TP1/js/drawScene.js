@@ -10,8 +10,8 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var levels = 1;
-    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[0, 0, 0.0], /*vEndPos*/[1, 1, 0.0], fShapePos, fShapeNormal, fShapeColor);
+    var levels = 2;
+    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[-0.0, -0.0, 0.0], /*vEndPos*/[0.521, 0.521, 0.0], fShapePos, fShapeNormal, fShapeColor);
     extrusion.draw();
 
 }
@@ -22,10 +22,10 @@ function fShapePos(central_pos) {
     var z_0 = central_pos[2];
 
     var buffer = [];
-    var n = 50;
+    var n = 1000;
     for (var i = 0; i < n; i++) {
-        buffer.push(x_0 + Math.cos(i * 2.0 * Math.PI / n));
-        buffer.push(y_0 + Math.sin(i * 2.0 * Math.PI / n));
+        buffer.push(x_0 + 0.3*Math.cos(i * 2.0 * Math.PI / n));
+        buffer.push(y_0 + 0.3*Math.sin(i * 2.0 * Math.PI / n));
         buffer.push(z_0);
     }
     return buffer;
@@ -33,7 +33,7 @@ function fShapePos(central_pos) {
 
 function fShapeNormal(central_pos) {
     var buffer = [];
-    var n = 50;
+    var n = 1000;
     for (var i = 0; i < n; i++) {
         buffer.push(0.0);
         buffer.push(0.0);
@@ -44,7 +44,7 @@ function fShapeNormal(central_pos) {
 
 function fShapeColor(central_pos) {
     var buffer = [];
-    var n = 50;
+    var n = 1000;
     for (var i = 0; i < n/5; i++) {
         buffer.push(0.5);
         buffer.push(0.0);

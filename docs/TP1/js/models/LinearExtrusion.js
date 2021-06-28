@@ -2,7 +2,7 @@ class LinearExtrusion {
     // fShapePos is a function that generates the index buffer for the shape based from the received point.
     // The received point represents the central axis of the shape.
     // Same applies for fShapeNormal and fShapeColor, but with the other buffers.
-    constructor(glProgram, levels, vStartPos, vEndPos, fShapePos, fShapeNormal, fShapeColor, n_rows_per_shape=100, n_cols_per_shape=100) {
+    constructor(glProgram, levels, vStartPos, vEndPos, fShapePos, fShapeNormal, fShapeColor) {
         this.glProgram = glProgram;
         this.levels = levels;
         this.vStartPos = vStartPos;
@@ -10,27 +10,30 @@ class LinearExtrusion {
         this.fShapePos = fShapePos;
         this.fShapeNormal = fShapeNormal;
         this.fShapeColor = fShapeColor;
-        this.n_rows_per_shape = n_rows_per_shape;
-        this.n_cols_per_shape = n_cols_per_shape;
-        this.level_buffers = null;
+        this.n_rows = levels;
+        this.n_cols = null;
+        this.pos_buffer = null;
+        this.normal_buffer = null;
+        this.color_buffer = null;
     }
 
     draw() {
         this.createBuffers();
-        this.drawShapes();
+        console.log(this.pos_buffer.length);
+        var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
+        grid.draw();
     }
 
     createBuffers() {
-        // This array contains references to all the buffers for each level.
-        // The order is: 
-        // [lvl_0_idx_buffer, lvl_0_normal_buffer, lvl_0_color_buffer, lvl_1_idx_buffer, lvl_1_normal_buffer, lvl_1_color_buffer, ... ]
-
-        this.level_buffers = [];
+        this.pos_buffer = [];
+        this.normal_buffer = [];
+        this.color_buffer = [];
         for (var level = 0; level < this.levels; level++) {
             var buffers = this.generateBuffersForLevel(level);
-            this.level_buffers.push(buffers[0]);
-            this.level_buffers.push(buffers[1]);
-            this.level_buffers.push(buffers[2]);
+            this.n_cols = (buffers[0].length/3);
+            this.pos_buffer = this.pos_buffer.concat(buffers[0]);
+            this.normal_buffer = this.normal_buffer.concat(buffers[1]);
+            this.color_buffer = this.color_buffer.concat(buffers[2]);
         }
     }
 
@@ -51,12 +54,5 @@ class LinearExtrusion {
         var color_buffer = this.fShapeColor(central_point);
 
         return [pos_buffer, normal_buffer, color_buffer];
-    }
-
-    drawShapes() {
-        for (var i = 0; i < this.levels; i++) {
-            var grid = new Grid(this.glProgram, this.level_buffers[i*3], this.level_buffers[i*3 + 1], this.level_buffers[i*3 + 2], this.n_rows_per_shape, this.n_cols_per_shape);
-            grid.draw();
-        }
     }
 }
