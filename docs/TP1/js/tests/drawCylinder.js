@@ -10,6 +10,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var cylinder = new Cylinder(glProgram, /*vColor=*/[0.3, 0.0, 0.87]);
+    var cylinder = new Cylinder(glProgram, /*vColor=*/[0.3, 0.05, 0.27]);
     cylinder.draw();
 }

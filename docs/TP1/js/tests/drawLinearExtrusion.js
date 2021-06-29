@@ -11,64 +11,67 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
     var levels = 2;
-    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[-0.0, -0.0, 0.0], /*vEndPos*/[0.521, 0.521, 0.0], fShapePos, fShapeNormal, fShapeColor);
+    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[-0.0, -0.0, 0.0], /*vEndPos*/[0.521, 0.521, 0.0], new ShapeGenerator());
     extrusion.draw();
 
 }
 
-function fShapePos(central_pos) {
-    var x_0 = central_pos[0];
-    var y_0 =  central_pos[1];
-    var z_0 = central_pos[2];
-
-    var buffer = [];
-    var n = 1000;
-    for (var i = 0; i < n; i++) {
-        buffer.push(x_0 + 0.3*Math.cos(i * 2.0 * Math.PI / n));
-        buffer.push(y_0 + 0.3*Math.sin(i * 2.0 * Math.PI / n));
-        buffer.push(z_0);
+class ShapeGenerator {
+    getPosBuffer(central_pos) {
+        var x_0 = central_pos[0];
+        var y_0 =  central_pos[1];
+        var z_0 = central_pos[2];
+        
+        var buffer = [];
+        var n = 1000;
+        for (var i = 0; i < n; i++) {
+            buffer.push(x_0 + 0.1*Math.cos(i * 2.0 * Math.PI / n));
+            buffer.push(y_0 + 0.1*Math.sin(i * 2.0 * Math.PI / n));
+            buffer.push(z_0);
+        }
+        return buffer;
     }
-    return buffer;
-}
-
-function fShapeNormal(central_pos) {
-    var buffer = [];
-    var n = 1000;
-    for (var i = 0; i < n; i++) {
-        buffer.push(0.0);
-        buffer.push(0.0);
-        buffer.push(1.0);
+        
+    // TODO: Fix this. This is incorrect.
+    getNormalBuffer(central_pos) {
+        var buffer = [];
+        var n = 1000;
+        for (var i = 0; i < n; i++) {
+            buffer.push(0.0);
+            buffer.push(0.0);
+            buffer.push(1.0);
+        }
+        return buffer;
     }
-    return buffer;
-}
-
-function fShapeColor(central_pos) {
-    var buffer = [];
-    var n = 1000;
-    for (var i = 0; i < n/5; i++) {
-        buffer.push(0.5);
-        buffer.push(0.0);
-        buffer.push(0.5);
+        
+    getColorBuffer(central_pos) {
+        var buffer = [];
+        var n = 1000;
+        for (var i = 0; i < n/5; i++) {
+            buffer.push(0.5);
+            buffer.push(0.0);
+            buffer.push(0.5);
+        }
+        for (var i = 0; i < n/5; i++) {
+            buffer.push(1.0);
+            buffer.push(0.3);
+            buffer.push(0.5);
+        }
+        for (var i = 0; i < n/5; i++) {
+            buffer.push(1.0);
+            buffer.push(0.5);
+            buffer.push(0.0);
+        }
+        for (var i = 0; i < n/5; i++) {
+            buffer.push(0.0);
+            buffer.push(0.5);
+            buffer.push(1.0);
+        }
+        for (var i = 0; i < n/5; i++) {
+            buffer.push(0.0);
+            buffer.push(1.0);
+            buffer.push(0.75);
+        }
+        return buffer;
     }
-    for (var i = 0; i < n/5; i++) {
-        buffer.push(1.0);
-        buffer.push(0.3);
-        buffer.push(0.5);
-    }
-    for (var i = 0; i < n/5; i++) {
-        buffer.push(1.0);
-        buffer.push(0.5);
-        buffer.push(0.0);
-    }
-    for (var i = 0; i < n/5; i++) {
-        buffer.push(0.0);
-        buffer.push(0.5);
-        buffer.push(1.0);
-    }
-    for (var i = 0; i < n/5; i++) {
-        buffer.push(0.0);
-        buffer.push(1.0);
-        buffer.push(0.75);
-    }
-    return buffer;
 }

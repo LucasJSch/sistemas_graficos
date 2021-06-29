@@ -2,14 +2,12 @@ class LinearExtrusion {
     // fShapePos is a function that generates the index buffer for the shape based from the received point.
     // The received point represents the central axis of the shape.
     // Same applies for fShapeNormal and fShapeColor, but with the other buffers.
-    constructor(glProgram, levels, vStartPos, vEndPos, fShapePos, fShapeNormal, fShapeColor) {
+    constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator) {
         this.glProgram = glProgram;
         this.levels = levels;
         this.vStartPos = vStartPos;
         this.vEndPos = vEndPos;
-        this.fShapePos = fShapePos;
-        this.fShapeNormal = fShapeNormal;
-        this.fShapeColor = fShapeColor;
+        this.shapeGenerator = shapeGenerator;
         this.n_rows = levels;
         this.n_cols = null;
         this.pos_buffer = null;
@@ -51,9 +49,9 @@ class LinearExtrusion {
 
         vec3.scale(central_point, direction_vector, level * lvl_step);
         vec3.add(central_point, this.vStartPos, central_point);
-        var pos_buffer = this.fShapePos(central_point);
-        var normal_buffer = this.fShapeNormal(central_point);
-        var color_buffer = this.fShapeColor(central_point);
+        var pos_buffer = this.shapeGenerator.getPosBuffer(central_point);
+        var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
+        var color_buffer = this.shapeGenerator.getColorBuffer(central_point);
 
         return [pos_buffer, normal_buffer, color_buffer];
     }
