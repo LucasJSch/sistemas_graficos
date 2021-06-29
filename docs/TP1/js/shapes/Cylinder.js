@@ -5,9 +5,8 @@ class Cylinder {
         this.vColor = vColor;
         this.pointsPerCircle = pointsPerCircle;
         this.vCentralBottomPos = [0.0, 0.0, 0.0];
-        this.vCentralTopPos = [0.5, 0.5, 0.5];
-        this.length = 0.25;
-        this.radius = 0.1;
+        this.vCentralTopPos = [0.0, 0.0, 1.0];
+        this.radius = 1.0;
         this.sides = null;
         this.top_fan = null;
         this.bottom_fan = null;
