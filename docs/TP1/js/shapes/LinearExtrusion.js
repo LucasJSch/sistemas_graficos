@@ -43,7 +43,7 @@ class LinearExtrusion {
         var minus_start_pos = vec3.create();
         var central_point = vec3.create();
 
-        var lvl_step = vec3.distance(this.vStartPos, this.vEndPos) / this.levels;
+        var lvl_step = vec3.distance(this.vStartPos, this.vEndPos) / (this.levels-1);
         vec3.scale(minus_start_pos, this.vStartPos, -1.0);
         vec3.add(direction_vector, this.vEndPos, minus_start_pos);
 
@@ -52,6 +52,11 @@ class LinearExtrusion {
         var pos_buffer = this.shapeGenerator.getPosBuffer(central_point);
         var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
         var color_buffer = this.shapeGenerator.getColorBuffer(central_point);
+
+        if(level == 1) {
+            console.log(central_point);
+            console.log(lvl_step);
+        }
 
         return [pos_buffer, normal_buffer, color_buffer];
     }
