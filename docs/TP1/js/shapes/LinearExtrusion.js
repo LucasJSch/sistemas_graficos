@@ -1,7 +1,7 @@
 class LinearExtrusion {
-    // fShapePos is a function that generates the index buffer for the shape based from the received point.
-    // The received point represents the central axis of the shape.
-    // Same applies for fShapeNormal and fShapeColor, but with the other buffers.
+    // shapeGenerator is an instance of a class that has 3 methods:
+    // getPosBuffer(central_point), getNormalBuffer(central_point), getColorBuffer(central_point)
+    // For a working example, see either the Cylinder class or the /tests/drawLinearExtrusion.js file.
     constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator) {
         this.glProgram = glProgram;
         this.levels = levels;

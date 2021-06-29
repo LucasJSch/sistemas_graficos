@@ -11,7 +11,7 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
     var levels = 2;
-    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[-0.0, -0.0, 0.0], /*vEndPos*/[0.521, 0.521, 0.0], new ShapeGenerator());
+    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[0.0, 0.0, 0.0], /*vEndPos*/[0.0, 0.0, 0.5], new ShapeGenerator());
     extrusion.draw();
 
 }
@@ -25,8 +25,8 @@ class ShapeGenerator {
         var buffer = [];
         var n = 1000;
         for (var i = 0; i < n; i++) {
-            buffer.push(x_0 + 0.1*Math.cos(i * 2.0 * Math.PI / n));
-            buffer.push(y_0 + 0.1*Math.sin(i * 2.0 * Math.PI / n));
+            buffer.push(x_0 + 0.5*Math.cos(i * 2.0 * Math.PI / n));
+            buffer.push(y_0 + 0.5*Math.sin(i * 2.0 * Math.PI / n));
             buffer.push(z_0);
         }
         return buffer;
