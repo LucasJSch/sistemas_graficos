@@ -43,20 +43,25 @@ class LinearExtrusion {
         var minus_start_pos = vec3.create();
         var central_point = vec3.create();
 
-        var lvl_step = vec3.distance(this.vStartPos, this.vEndPos) / (this.levels-1);
-        vec3.scale(minus_start_pos, this.vStartPos, -1.0);
-        vec3.add(direction_vector, this.vEndPos, minus_start_pos);
+        // If this is the first level, the central_pos should match with the start pos.
+        if (level == 0) {
+        central_point = this.vStartPos;
+        }
+        // If this is not the last nor the first level, compute the current pos.
+        else if (level != (this.levels -1)) {
+            var lvl_step = vec3.distance(this.vStartPos, this.vEndPos) / (this.levels-1);
+            vec3.scale(minus_start_pos, this.vStartPos, -1.0);
+            vec3.add(direction_vector, this.vEndPos, minus_start_pos);
 
-        vec3.scale(central_point, direction_vector, level * lvl_step);
-        vec3.add(central_point, this.vStartPos, central_point);
+            vec3.scale(central_point, direction_vector, level * lvl_step);
+            vec3.add(central_point, this.vStartPos, central_point);
+        // If this is the las level, the central_pos should match with the end pos.
+        } else {
+            central_point = this.vEndPos;
+        }
         var pos_buffer = this.shapeGenerator.getPosBuffer(central_point);
         var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
         var color_buffer = this.shapeGenerator.getColorBuffer(central_point);
-
-        if(level == 1) {
-            console.log(central_point);
-            console.log(lvl_step);
-        }
 
         return [pos_buffer, normal_buffer, color_buffer];
     }
