@@ -25,7 +25,7 @@ class Coordinates {
         var transf_y_rotation = mat4.create();
         var transf_z_rotation = mat4.create();
         mat4.fromRotation(transf_x_rotation, Math.PI/2, [0.0, 1.0, 0.0]);
-        mat4.fromRotation(transf_y_rotation, Math.PI/2, [1.0, 0.0, 0.0]);
+        mat4.fromRotation(transf_y_rotation, -Math.PI/2, [1.0, 0.0, 0.0]);
 
         // One transform for the custom passed by parameter, and one fixed by this class.
         var scaleTransform_x = mat4.create();
