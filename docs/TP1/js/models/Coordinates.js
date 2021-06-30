@@ -27,22 +27,29 @@ class Coordinates {
         mat4.fromRotation(transf_y_rotation, Math.PI/2, [1.0, 0.0, 0.0]);
 
         // One transform for the custom passed by parameter, and one fixed by this class.
-        var scaleTransform = mat4.create();
-        var scaleTransform2 = mat4.create();
-        mat4.fromScaling(scaleTransform, vScaleFactor);
-        mat4.fromScaling(scaleTransform2, [0.05, 0.05, 1.0]);
-        mat4.multiply(scaleTransform, scaleTransform, scaleTransform2);
+        var scaleTransform_x = mat4.create();
+        var scaleTransform_y = mat4.create();
+        var scaleTransform_z = mat4.create();
+        // Generic scaling for each coordinate axis.
+        var scaleTransform_generic = mat4.create();
+        mat4.fromScaling(scaleTransform_generic, [0.05, 0.05, 1.0]);
+        mat4.fromScaling(scaleTransform_x, [vScaleFactor[0], vScaleFactor[0], vScaleFactor[0]]);
+        mat4.fromScaling(scaleTransform_y, [vScaleFactor[1], vScaleFactor[1], vScaleFactor[1]]);
+        mat4.fromScaling(scaleTransform_z, [vScaleFactor[2], vScaleFactor[2], vScaleFactor[2]]);
+        mat4.multiply(scaleTransform_x, scaleTransform_x, scaleTransform_generic);
+        mat4.multiply(scaleTransform_y, scaleTransform_y, scaleTransform_generic);
+        mat4.multiply(scaleTransform_z, scaleTransform_z, scaleTransform_generic);
 
         // Get final transformation matrices (scale, then rotate, then apply the outside matrix).
         var transf_x = mat4.create();
         var transf_y = mat4.create();
         var transf_z = mat4.create();
         mat4.multiply(transf_x, transformMatrix, transf_x_rotation);
-        mat4.multiply(transf_x, transf_x, scaleTransform);
+        mat4.multiply(transf_x, transf_x, scaleTransform_x);
         mat4.multiply(transf_y, transformMatrix, transf_y_rotation);
-        mat4.multiply(transf_y, transf_y, scaleTransform);
+        mat4.multiply(transf_y, transf_y, scaleTransform_y);
         mat4.multiply(transf_z, transformMatrix, transf_z_rotation);
-        mat4.multiply(transf_z, transf_z, scaleTransform);
+        mat4.multiply(transf_z, transf_z, scaleTransform_z);
         
 
         x_coord.draw(transf_x);

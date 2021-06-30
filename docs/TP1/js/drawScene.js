@@ -11,5 +11,8 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
     var coordinates = new Coordinates(glProgram);
-    coordinates.draw(mat4.create(), [1.0, 1.0, 1.0]);
+    coordinates.draw(mat4.create(), [1.0, 1.5, 2.0]);
+
+    var cube = new Cube(glProgram, [0.0, 0.0, 1.0]);
+    cube.draw();
 }
