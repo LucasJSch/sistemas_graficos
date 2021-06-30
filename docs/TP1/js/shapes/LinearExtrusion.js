@@ -18,10 +18,21 @@ class LinearExtrusion {
         this.top_color_buffer = null;
     }
 
-    draw() {
+    draw(transformMatrix) {
+        if (transformMatrix == null) {
+            transformMatrix = mat4.create();
+        }
+
         this.createBuffers();
+        this.applyTransformation(transformMatrix);
+
         var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
         grid.draw();
+    }
+
+    applyTransformation(transformMatrix) {
+        var utils = new Utils();
+        this.pos_buffer = utils.TransformPosBuffer(transformMatrix, this.pos_buffer);
     }
 
     createBuffers() {

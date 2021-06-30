@@ -1,6 +1,6 @@
 class Cylinder {
     // Draws a closed-surface cylinder at the origin with unitary radius and unitary length.
-    constructor(glProgram, vColor, pointsPerCircle=1000) {
+    constructor(glProgram, vColor, pointsPerCircle=100) {
         this.glProgram = glProgram;
         this.vColor = vColor;
         this.pointsPerCircle = pointsPerCircle;
@@ -14,20 +14,19 @@ class Cylinder {
     }
 
     draw(transformMatrix) {
-        // TODO: Apply transformation matrix to pos.
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
         }
 
         this.shapeGen = new CylinderShapeGenerator(this.pointsPerCircle, this.radius, this.vColor);
         this.sides = new LinearExtrusion(this.glProgram, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
-        this.createTopAndBottomFans();
-        this.sides.draw();
-        this.top_fan.draw();
-        this.bottom_fan.draw();
+        this.createTopAndBottomFans(transformMatrix);
+        this.sides.draw(transformMatrix);
+        this.top_fan.draw(transformMatrix);
+        this.bottom_fan.draw(transformMatrix);
     }
 
-    createTopAndBottomFans() {
+    createTopAndBottomFans(transformMatrix) {
         var top_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralTopPos);
         var top_normal_buffer = this.shapeGen.getNormalBuffer(this.vCentralTopPos);
         var top_color_buffer = this.shapeGen.getColorBuffer(this.vCentralTopPos);
@@ -58,13 +57,19 @@ class CylinderShapeGenerator {
             buffer.push(y_0 + this.radius*Math.sin(i * 2.0 * Math.PI / this.pointsPerCircle));
             buffer.push(z_0);
         }
+        // We need to connect the shape's end and beginning.
+        // Because of this we iterate in the other functions until pointsPerCircle + 1.
+        buffer.push(x_0 + this.radius*Math.cos(0));
+        buffer.push(y_0 + this.radius*Math.sin(0));
+        buffer.push(z_0);
+
         return buffer;
     }
         
     // TODO: Fix this. This is incorrect.
     getNormalBuffer(central_pos) {
         var buffer = [];
-        for (var i = 0; i < this.pointsPerCircle; i++) {
+        for (var i = 0; i < this.pointsPerCircle + 1; i++) {
             buffer.push(0.0);
             buffer.push(0.0);
             buffer.push(1.0);
@@ -74,7 +79,7 @@ class CylinderShapeGenerator {
         
     getColorBuffer(central_pos) {
         var buffer = [];
-        for (var i = 0; i < this.pointsPerCircle; i++) {
+        for (var i = 0; i < this.pointsPerCircle + 1; i++) {
             buffer.push(this.vColor[0]);
             buffer.push(this.vColor[1]);
             buffer.push(this.vColor[2]);

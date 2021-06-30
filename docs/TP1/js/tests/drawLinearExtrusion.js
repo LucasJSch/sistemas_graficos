@@ -12,7 +12,9 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
 
     var levels = 2;
     var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[0.0, 0.0, 0.0], /*vEndPos*/[0.0, 0.0, 0.5], new ShapeGenerator());
-    extrusion.draw();
+    var transf = mat4.create();
+    mat4.fromTranslation(transf, [1.0, 0.5, 0.5]);
+    extrusion.draw(transf);
 
 }
 
