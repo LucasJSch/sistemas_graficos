@@ -1,5 +1,6 @@
 class Coordinates {
     // Draws XYZ coordinates. (3 thin cylinders)
+    // TODO: Y axis should be inverted.
     constructor(glProgram) {
         this.glProgram = glProgram;
     }
