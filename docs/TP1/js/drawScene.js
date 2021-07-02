@@ -1,3 +1,4 @@
+// This function serves as an interface between the main js script that initializes the environment and the JS classes.
 function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix) {
 
     var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
@@ -13,9 +14,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     var coordinates = new Coordinates(glProgram);
     coordinates.draw(mat4.create());
 
-    var transf = mat4.create();
-    mat4.fromTranslation(transf, [0.0, 0.0, 0.0]);
-
-    var cube = new Cube(glProgram, [0.1, 0.5, 0.5]);
-    cube.draw(transf);
+    var crane = new Crane(glProgram);
+    crane.draw();
 }

@@ -8,7 +8,6 @@ class Cube {
     }
 
     draw(transformMatrix) {
-        // TODO: Apply transformation matrix to pos.
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
         }

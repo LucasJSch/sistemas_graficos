@@ -26,6 +26,7 @@
         <script type="text/javascript" src="js/shapes/Cylinder.js"></script>
         <script type="text/javascript" src="js/shapes/Cube.js"></script>
         <script type="text/javascript" src="js/models/Coordinates.js"></script>
+        <script type="text/javascript" src="js/models/Crane.js"></script>
         <script type="text/javascript" src="js/utils/Utils.js"></script>
         <!-- <script>
             includeHTML('glsl/vertex-shader.html', document.getElementById('shader-vs'));
@@ -136,8 +137,10 @@
                 mat4.identity(modelMatrix);
                 mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
 
+                // This defines the camera position.
                 mat4.identity(viewMatrix);
-                mat4.translate(viewMatrix,viewMatrix, [0.0, 0.0, -5.0]);
+                mat4.translate(viewMatrix,viewMatrix, [0.0, -4.0, -30.0]);
+                mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [1.0, 0.0, 0.0]);
             }
                     
                     
@@ -182,7 +185,7 @@
                 
                 rotate_angle += 0.01;
                 mat4.identity(modelMatrix);
-                mat4.rotate(modelMatrix,modelMatrix, rotate_angle, [1.0, 0.0, 0.0]);
+                mat4.rotate(modelMatrix,modelMatrix, rotate_angle, [0.0, 0.0, 1.0]);
 
 
                 mat4.identity(normalMatrix);
