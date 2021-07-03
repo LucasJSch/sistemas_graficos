@@ -1,0 +1,60 @@
+class CraneBox {
+    // Draws a crane box.
+    constructor(glProgram, vColor) {
+        // TODO: Add a class for a rectangel-pyramid and then add an instance of it here.
+        // TODO: Add cranebox connection to the long thingy.
+        this.glProgram = glProgram;
+        this.mainCube = new Cube(glProgram, vColor);
+        this.mainCube_transf = mat4.create();
+        this.top = new Cube(glProgram, vColor);
+        this.top_transf = mat4.create();
+        this.bottom = new Cube(glProgram, vColor);
+        this.bottom_transf = mat4.create();
+    }
+
+    draw(transformMatrix) {
+        if (transformMatrix == null) {
+            transformMatrix = mat4.create();
+        }
+
+        this.createTransformationMatrices(transformMatrix);
+        this.mainCube.draw(this.mainCube_transf);
+        this.top.draw(this.top_transf);
+        this.bottom.draw(this.bottom_transf);
+    }
+
+    createTransformationMatrices(transformMatrix) {
+        // Scaling matrices:
+        var mainCube_s = mat4.create();
+        var top_s = mat4.create();
+        var bottom_s = mat4.create();
+
+        // Rotation matrices:
+        var top_r = mat4.create();
+        var bottom_r = mat4.create();
+
+        // Translation matrices:
+        var top_t = mat4.create();
+        var bottom_t = mat4.create();
+
+        // Scaling.
+        mat4.fromScaling(mainCube_s,  [1.0, 1.0, 1.0]);
+        mat4.scale(top_s, mainCube_s, [1.0, 1.4, 0.05]);
+        mat4.scale(bottom_s, mainCube_s, [1.0, 1.7, 0.3]);
+
+        // Translations.
+        mat4.fromTranslation(top_t, [0.0, 0.0, 0.98]);
+
+        // Compute final results:
+        this.mainCube_transf = mainCube_s;
+        mat4.mul(this.top_transf, top_t, top_r);
+        mat4.mul(this.top_transf, this.top_transf, top_s);
+        mat4.mul(this.bottom_transf, bottom_t, bottom_r);
+        mat4.mul(this.bottom_transf, this.bottom_transf, bottom_s);
+
+        // Apply transformMatrix
+        mat4.mul(this.mainCube_transf,  transformMatrix, this.mainCube_transf);
+        mat4.mul(this.top_transf, transformMatrix, this.top_transf);
+        mat4.mul(this.bottom_transf, transformMatrix, this.bottom_transf);
+    }
+}

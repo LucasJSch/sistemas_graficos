@@ -14,6 +14,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     var coordinates = new Coordinates(glProgram);
     coordinates.draw(mat4.create());
 
-    var crane = new Crane(glProgram);
+    var crane = new Crane(glProgram, [0.88, 0.8, 0.0275]);
     crane.draw();
 }
