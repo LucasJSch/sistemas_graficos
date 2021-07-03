@@ -25,6 +25,10 @@ class Crane {
     }
 
     draw(transformMatrix) {
+        if (transformMatrix == null) {
+            transformMatrix = mat4.create();
+        }
+
         this.createTransformationMatrices();
         this.A.draw(this.A_transf);
         this.B.draw(this.B_transf);

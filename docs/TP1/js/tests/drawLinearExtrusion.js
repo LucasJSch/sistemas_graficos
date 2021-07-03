@@ -34,7 +34,6 @@ class ShapeGenerator {
         return buffer;
     }
         
-    // TODO: Fix this. This is incorrect.
     getNormalBuffer(central_pos) {
         var buffer = [];
         var n = 1000;
