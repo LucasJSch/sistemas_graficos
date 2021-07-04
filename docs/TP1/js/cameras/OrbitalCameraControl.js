@@ -36,16 +36,33 @@ function OrbitalCameraControl(initialPos){
     });
 
     // Reset camera.
-    document.addEventListener("wheel", function(e) {
+    document.addEventListener("keydown", function(e) {
         if (e.key == "r") {
             cameraPosition = init_camera_pos;
             isMouseDown = true;
         }
     });
-    document.addEventListener("keydown", function(e) {
+
+    document.addEventListener("keyup", function(e) {
         if (e.key == "r") {
             cameraPosition = init_camera_pos;
             isMouseDown = false;
+        }
+    });
+
+    document.addEventListener("wheel", function(e) {
+        console.log("wheel");
+        let deltaY = e.deltaY;
+        if (deltaY != 0) {
+            // Wheel up.
+            if (deltaY < 0) {
+                radius += 1.0;
+            }
+
+            // Wheel down.
+            if (deltaY > 0) {
+                radius -= 1.0;
+            }
         }
     });
 
