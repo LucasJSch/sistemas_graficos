@@ -30,6 +30,8 @@
         <script type="text/javascript" src="js/models/CraneBox.js"></script>
         <script type="text/javascript" src="js/models/CraneLoad.js"></script>
         <script type="text/javascript" src="js/utils/Utils.js"></script>
+        <script type="text/javascript" src="js/cameras/DroneCameraControl.js"></script>
+        <script type="text/javascript" src="js/cameras/OrbitalCameraControl.js"></script>
         <!-- <script>
             includeHTML('glsl/vertex-shader.html', document.getElementById('shader-vs'));
         </script>
@@ -98,7 +100,8 @@
             var normalMatrix = mat4.create();
             var rotate_angle = -Math.PI/2;
             
-
+            // let droneControl = new DroneCameraControl();
+            let orbitalControl = new OrbitalCameraControl();
          
             function initWebGL(){
 
@@ -141,7 +144,7 @@
 
                 // This defines the camera position.
                 mat4.identity(viewMatrix);
-                mat4.translate(viewMatrix,viewMatrix, [0.0, -10.0, -30.0]);
+                mat4.translate(viewMatrix,viewMatrix, [0.0, -0.0, -30.0]);
                 mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [1.0, 0.0, 0.0]);
             }
                     
@@ -184,10 +187,15 @@
             }
             
             function animate(){
+
+                // droneControl.update();
+				// modelMatrix=droneControl.getMatrix();
+                orbitalControl.update();
+                // viewMatrix = orbitalControl.getMatrix();
                 
-                rotate_angle += 0.01;
+                // rotate_angle += 0.01;
                 mat4.identity(modelMatrix);
-                mat4.rotate(modelMatrix,modelMatrix, rotate_angle, [0.0, 0.0, 1.0]);
+                // mat4.rotate(modelMatrix,modelMatrix, rotate_angle, [0.0, 0.0, 1.0]);
 
 
                 mat4.identity(normalMatrix);

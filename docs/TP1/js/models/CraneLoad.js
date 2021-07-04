@@ -22,26 +22,27 @@ class CraneLoad {
 
         this.createTransformationMatrices();
         this.mainHolder.draw(this.mainHolder_transf);
+        this.holder1.draw(this.holder1_transf);
     }
 
     createTransformationMatrices() {
         // Scaling matrices:
         var mainHolder_s = mat4.create();
+        var holder1_s = mat4.create();
 
         // Rotation matrices:
         var mainHolder_r = mat4.create();
 
         // Translation matrices:
-        var mainHolder_t = mat4.create();
+        var holder1_t = mat4.create();
 
-        // Scaling.
-        mat4.fromScaling(mainHolder_s,  [1.0, 1.0, 5.0]);
-
-        // Rotations.
-
-        // Translations.
+        mat4.fromScaling(mainHolder_s,  [0.1, 0.1, 1.0]);
+        mat4.fromScaling(holder1_s,  [0.1, 0.1, 1.0]);
+        mat4.mul(holder1_s, holder1_s, mainHolder_s);
+        mat4.fromTranslation(holder1_t, [0.0, 0.0, 0.0]);
 
         // Compute final results:
         this.mainHolder_transf = mainHolder_s;
+        this.holder1_transf = holder1_s;
     }
 }
