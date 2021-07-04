@@ -15,12 +15,26 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     coordinates.draw(mat4.create());
 
     var t = mat4.create();
-    var bezier = new CubicBsplineCurve([-5.0, -5.0, 0.0], [-5.0, 0.0, 0.0], [5.0, 0.0, 0.0], [5.0, 5.0, 0.0]);
-    var bezier2 = new CuadraticBsplineCurve([-5.0, 0, 0.0], [0.0, 0.0, 0.0], [0.0, -5.0, 0.0]);
-    for (var i = 0.0; i < 1.0; i+=0.05) {
+    var bezier = new CubicBezierCurve([-2.0, -2.0, 0.0], [-2.0, 0.0, 0.0], [2.0, 0.0, 0.0], [2.0, 2.0, 0.0]);
+    var bezier2 = new CuadraticBezierCurve([-2.0, 0, 0.0], [0.0, 0.0, 0.0], [0.0, -2.0, 0.0]);
+    for (var i = 0.0; i < 1.0; i+=0.1) {
         var dist = bezier2.getPoint(i);
-        vec3.scale(dist, dist, 5.0);
+        vec3.scale(dist, dist, 1.0);
         var cube = new Cube(glProgram, [1.0, 0.0, 0.0]);
+        mat4.fromTranslation(t, dist);
+        cube.draw(t);
+    }
+    for (var i = 0.0; i < 1.0; i+=0.1) {
+        var dist = bezier2.getFirstDerivative(i);
+        vec3.scale(dist, dist, 1.0);
+        var cube = new Cube(glProgram, [0.0, 1.0, 0.0]);
+        mat4.fromTranslation(t, dist);
+        cube.draw(t);
+    }
+    for (var i = 0.0; i < 1.0; i+=0.1) {
+        var dist = bezier2.getSecondDerivative(i);
+        vec3.scale(dist, dist, 1.0);
+        var cube = new Cube(glProgram, [0.0, 0.0, 1.0]);
         mat4.fromTranslation(t, dist);
         cube.draw(t);
     }
