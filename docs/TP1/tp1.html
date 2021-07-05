@@ -31,12 +31,14 @@
         <script type="text/javascript" src="js/models/Crane.js"></script>
         <script type="text/javascript" src="js/models/CraneBox.js"></script>
         <script type="text/javascript" src="js/models/CraneLoad.js"></script>
+        <script type="text/javascript" src="js/models/Building.js"></script>
         <script type="text/javascript" src="js/shapes/ConvergedCube.js"></script>
         <script type="text/javascript" src="js/utils/Utils.js"></script>
         <script type="text/javascript" src="js/cameras/DroneCameraControl.js"></script>
         <script type="text/javascript" src="js/cameras/OrbitalCameraControl.js"></script>
         <script type="text/javascript" src="js/curves/Bezier.js"></script>
         <script type="text/javascript" src="js/curves/Bspline.js"></script>
+        <script type="text/javascript" src="js/curves/BsplineConcatenator.js"></script>
         <!-- <script>
             includeHTML('glsl/vertex-shader.html', document.getElementById('shader-vs'));
         </script>
@@ -150,7 +152,7 @@
                 // This defines the camera position.
                 mat4.identity(viewMatrix);
                 mat4.translate(viewMatrix,viewMatrix, [0.0, -0.0, -30.0]);
-                mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [1.0, 0.0, 0.0]);
+                // mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [0.0, 0.0, 0.0]);
             }
                     
                     
@@ -195,8 +197,8 @@
 
                 // droneControl.update();
 				// viewMatrix=droneControl.getMatrix();
-                orbitalControl.update();
-                viewMatrix = orbitalControl.getMatrix();
+                // orbitalControl.update();
+                // viewMatrix = orbitalControl.getMatrix();
                 
                 // rotate_angle += 0.01;
                 mat4.identity(modelMatrix);

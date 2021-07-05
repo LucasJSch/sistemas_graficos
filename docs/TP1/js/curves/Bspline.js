@@ -70,7 +70,7 @@ class CuadraticBsplineCurve {
         var retval = vec3.create();
         vec3.scale(aux, this.p0, 0.5*(1-t)*(1-t));
         vec3.add(retval, retval, aux);
-        vec3.scale(aux, this.p1, 0.5 + (t-1)*t);
+        vec3.scale(aux, this.p1, 0.5 + (1-t)*t);
         vec3.add(retval, retval, aux);
         vec3.scale(aux, this.p2, 0.5 * t*t);
         vec3.add(retval, retval, aux);

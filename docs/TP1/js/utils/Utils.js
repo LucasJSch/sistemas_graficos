@@ -14,4 +14,18 @@ class Utils {
         
         return transformedBuffer;
     }
+
+    AddRandomNoiseToBufferWithRadius(vRadius, buffer) {
+        var transformedBuffer = new Array(buffer.length);
+        var newPos = vec4.create();
+        
+        for (var i = 0; i < buffer.length; i+=3) {
+            vec4.set(newPos, buffer[i] + (Math.random()-0.5) * vRadius[0], buffer[i+1] + (Math.random()-0.5) * vRadius[1], buffer[i+2] + (Math.random()-0.5) * vRadius[2], 1);
+            transformedBuffer[i] = newPos[0];
+            transformedBuffer[i+1] = newPos[1];
+            transformedBuffer[i+2] = newPos[2];
+        }
+        
+        return transformedBuffer;
+    }
 }

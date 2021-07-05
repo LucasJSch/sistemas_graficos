@@ -14,22 +14,16 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     var coordinates = new Coordinates(glProgram);
     coordinates.draw(mat4.create());
 
-    var cube = new Crane(glProgram);
-    cube.rotateCabin();
-    cube.rotateCabin();
-    cube.rotateCabin();
-    cube.rotateCabin();
-    cube.rotateCabin();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.lowerCrane();
-    cube.draw();
-
+    var concatenator = new CuadraticBsplineConcatenator([[0.0, -2.0, 0.0], [0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [-2.0, 2.0, 0.0], [0.0, 2.0, 0.0]]);
+    for (var i = 0.0; i < 3.0; i+=0.05) {
+        var dist = concatenator.getPoint(i);
+        var t = mat4.create();
+        vec3.scale(dist, dist, 3.0);
+        var cube = new Cube(glProgram, [1.0, 0.0, 0.0]);
+        var aux = mat4.create();
+        mat4.fromScaling(aux, [0.1, 0.1, 0.1]);
+        mat4.fromTranslation(t, dist);
+        mat4.mul(t, t, aux);
+        cube.draw(t);
+    }
 }
