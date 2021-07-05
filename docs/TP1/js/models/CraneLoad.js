@@ -29,6 +29,14 @@ class CraneLoad {
         this.base.draw(this.base_transf);
     }
 
+    elevate() {
+
+    }
+
+    elevate() {
+
+    }
+    
     createTransformationMatrices(transformMatrix) {
         var aux = mat4.create();
         

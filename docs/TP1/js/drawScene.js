@@ -20,7 +20,16 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     cube.rotateCabin();
     cube.rotateCabin();
     cube.rotateCabin();
-    cube.rotateCabin();
+    cube.lowerCrane();
+    cube.lowerCrane();
+    cube.lowerCrane();
+    cube.lowerCrane();
+    cube.lowerCrane();
+    cube.lowerCrane();
+    cube.lowerCrane();
+    cube.lowerCrane();
+    cube.lowerCrane();
+    cube.lowerCrane();
     cube.draw();
 
 }
