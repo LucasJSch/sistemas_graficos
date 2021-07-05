@@ -5,8 +5,8 @@ class Building {
         this.pointsPerLongSide = 5;
         this.pointsPerShortSide = 5;
         this.cubic_cyl_gen = new CubicCylinderGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
-        this.levels = 5;
-        this.buildingHeight = 2;
+        this.levels = 2;
+        this.buildingHeight = 5;
 
         this.utils = new Utils();
     }
@@ -20,29 +20,41 @@ class Building {
         var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
         elevator.draw(transformMatrix);
 
-        // Generate column positions.
-        var columnsPosBuf = this.cubic_cyl_gen.getPosBuffer([0.0, 0.0, 0.0]);
+        // Generate bspline interpolation points.
+        var bsplinePosBuf = this.cubic_cyl_gen.getPosBuffer([0.0, 0.0, 0.0]);
         var transf = mat4.create();
-        mat4.fromScaling(transf, [2.5, 2.5, 0.0]);
-        columnsPosBuf = this.utils.TransformPosBuffer(transf, columnsPosBuf);
-        columnsPosBuf = addNoiseToBuffer_(columnsPosBuf);
-        var columns_vertices = [];
-        for (var i = 0; i < columnsPosBuf.length; i+=3) {
-            columns_vertices.push([columnsPosBuf[i], columnsPosBuf[i+1], columnsPosBuf[i+2]]);
+        mat4.fromScaling(transf, [10.0, 10.0, 0.0]);
+        bsplinePosBuf = this.utils.TransformPosBuffer(transf, bsplinePosBuf);
+        var bspline_vertices = [];
+        for (var i = 0; i < bsplinePosBuf.length; i+=3) {
+            bspline_vertices.push([bsplinePosBuf[i], bsplinePosBuf[i+1], bsplinePosBuf[i+2]]);
+        }
+        // Adds noise to the positions.
+        bspline_vertices = getColumnPositionsWithNoise_(bspline_vertices);
+
+        // Bspline curves generator.
+        var concatenator = new CuadraticBsplineConcatenator(bspline_vertices);
+
+        // Generate column positions.
+        var col_pos = [];
+        for (var i = 0; i < concatenator.getNumberOfSplines(); i++) {
+            var p = vec3.create();
+            vec3.scale(p, concatenator.getPoint(i), 0.9);
+            col_pos.push(p);
         }
 
         // Columns.
-        var columns = new BuildingColumns(this.glProgram, [1.0, 0.2, 0.2], this.buildingHeight, columns_vertices);
+        var columns = new BuildingColumns(this.glProgram, [1.0, 0.2, 0.2], this.buildingHeight, col_pos);
         columns.draw(transformMatrix);
-
-        // Bspline curves generator.
-        var concatenator = new CuadraticBsplineConcatenator(columns_vertices);
 
         // Floor.
         var floors_shapeGen = new FloorShapeGenerator(100, concatenator, [1.0, 0.0, 0.0]);
         var floors = new BuildingFloors(this.glProgram, this.levels, concatenator, [0.0, 1.0, 0.0], this.buildingHeight);
         floors.draw(transformMatrix);
 
+        // Windows.
+        var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
+        windows.draw();
     }
 }
 
@@ -117,24 +129,12 @@ class CubicCylinderGenerator {
     }
 }
 
-
-function addNoiseToBuffer_(buffer) {
-    var transformedBuffer = new Array(buffer.length);
-    var newPos = vec4.create();
-    
-    for (var i = 0; i < buffer.length; i+=3) {
-        if (buffer[i] > 0.8) {
-            vec4.set(newPos, buffer[i] + Math.cos(i), buffer[i+1] + Math.sin(i), buffer[i+2], 1);
-        } else if (buffer[i] > 0.4) {
-            vec4.set(newPos, buffer[i] + 0.5*Math.cos(i), buffer[i+1] + Math.sin(i), buffer[i+2], 1);
-        }
-        else {
-            vec4.set(newPos, buffer[i] + 0.5*Math.tan(i) * Math.cos(i+0.1), buffer[i+1] + 0.5*Math.sin(i*0.79), buffer[i+2], 1);
-        }
-        transformedBuffer[i] = newPos[0];
-        transformedBuffer[i+1] = newPos[1];
-        transformedBuffer[i+2] = newPos[2];
+// Adds random noise to the vertices.
+function getColumnPositionsWithNoise_(vertices) {
+    var r = new Random(1546);        
+    let k = 5;
+    for (var i = 0; i < vertices.length; i++) {
+        vertices[i] = [k*r.nextFloat() + vertices[i][0], k*r.nextFloat() + vertices[i][1], vertices[i][2]];
     }
-    
-    return transformedBuffer;
+    return vertices;
 }

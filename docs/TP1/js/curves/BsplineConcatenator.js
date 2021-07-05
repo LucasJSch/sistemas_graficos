@@ -21,6 +21,18 @@ class CuadraticBsplineConcatenator {
         return this.bsplines[curveNumber].getPoint(u);
     }
 
+    // 0 <= t <= ceil(n_points/3)
+    getFirstDerivative(t) {
+        var curveNumber = Math.floor(t);
+        var u = t % 1;
+
+        if (curveNumber > this.bsplines.length-1) {
+            console.log("ERROR: Invalid t in CuadraticBsplineConcatenator. t = " + t);
+        }
+
+        return this.bsplines[curveNumber].getFirstDerivative(u);
+    }
+
     getNumberOfSplines() {
         return this.bsplines.length;
     }
