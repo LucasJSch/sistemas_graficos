@@ -105,7 +105,7 @@
             var normalMatrix = mat4.create();
             var rotate_angle = -Math.PI/2;
             
-            // let droneControl = new DroneCameraControl();
+            // let droneControl = new DroneCameraControl([0.0, 0.0, 0.0]);
             let orbitalControl = new OrbitalCameraControl();
          
             function initWebGL(){
@@ -194,7 +194,7 @@
             function animate(){
 
                 // droneControl.update();
-				// modelMatrix=droneControl.getMatrix();
+				// viewMatrix=droneControl.getMatrix();
                 orbitalControl.update();
                 viewMatrix = orbitalControl.getMatrix();
                 

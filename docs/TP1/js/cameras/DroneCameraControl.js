@@ -1,22 +1,19 @@
 
     function DroneCameraControl(initialPos){
 
-        let MIN_Y=1;
+        let FACTOR_ROTACION = 0.05;        
+        let FACTOR_TRASLACION = 0.05;
 
-        let FACTOR_ROTACION=0.05;        
-        let FACTOR_TRASLACION=0.05;
+        if (!initialPos) {
+            initialPos = [0, 0, 0];
+        }
 
-        let vec3=glMatrix.vec3;  //defino vec3 para no tener que escribir glMatrix.vec3
-        let mat4=glMatrix.mat4;
+        let position = vec3.fromValues(initialPos[0], initialPos[1], initialPos[2]);
+        let rotation = vec3.create();
 
-        if (!initialPos) initialPos=[0,0,0];
+        let worldMatrix = mat4.create();
 
-        let position=vec3.fromValues(initialPos[0],initialPos[1],initialPos[2]);
-        let rotation=vec3.create();
-
-        let worldMatrix=mat4.create();
-
-        let camInitialState={
+        let camInitialState = {
             xVel:0,
             zVel:0,
             yVel:0,
@@ -34,13 +31,9 @@
             rightAxisMode:"move"
         }
 
-        let camState=Object.assign({},camInitialState);
+        let camState=Object.assign({}, camInitialState);
 
-        
-        // Eventos de teclado **********************************************
-
-        document.addEventListener("keydown",function(e){
-            //console.log(e.key);
+        document.addEventListener("keydown",function(e) {
                 
             /*
                 ASDW para rotar en 2 ejes
@@ -74,13 +67,6 @@
                     camState.zRotVelTarget=FACTOR_ROTACION;break;                                 
                 case "w": 
                     camState.zRotVelTarget=-FACTOR_ROTACION;break;
-                    /*
-                case "q":
-                    camState.xRotVelTarget=FACTOR_ROTACION;break;                                 
-                case "e": 
-                    camState.xRotVelTarget=-FACTOR_ROTACION;break;                        
-                    */
-                        
                 case "r": 
                     rotation=vec3.create();
                     position=vec3.fromValues(initialPos[0],initialPos[1],initialPos[2]);
@@ -135,7 +121,6 @@
 
             let translation=vec3.fromValues(-camState.xVel,camState.yVel,-camState.zVel);            
             
-
             let rotIncrement=vec3.fromValues(camState.xRotVel,camState.yRotVel,camState.zRotVel);            
             vec3.add(rotation,rotation,rotIncrement);
 
