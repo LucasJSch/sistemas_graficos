@@ -14,11 +14,12 @@ class Crane {
         this.craneBox_transf = mat4.create();
         this.long = new Cube(glProgram, this.yellowColor);
         this.long_transf = mat4.create();
-        this.F_weight = new Cube(glProgram, this.grayColor);
-        this.F_weight_transf = mat4.create();
+        this.weight = new Cube(glProgram, this.grayColor);
+        this.weight_transf = mat4.create();
         this.screw = new Cylinder(glProgram, this.metalColor);
         this.screw_transf = mat4.create();
-        // TODO: Create special class for H
+        this.craneLoad = new CraneLoad(glProgram, this.grayColor, this.metalColor);
+        this.craneLoad_transf = mat4.create();
     }
 
     draw(transformMatrix) {
@@ -32,7 +33,9 @@ class Crane {
         this.cylinderBase.draw(this.cylinderBase_transf);
         this.craneBox.draw(this.craneBox_transf);
         this.long.draw(this.long_transf);
-        // this.F_weight.draw(this.F_weight_transf);
+        this.weight.draw(this.weight_transf);
+        this.screw.draw(this.screw_transf);
+        this.craneLoad.draw(this.craneLoad_transf);
     }
 
     createTransformationMatrices() {
@@ -42,8 +45,9 @@ class Crane {
         var cylinderBase_s = mat4.create();
         var craneBox_s = mat4.create();
         var long_s = mat4.create();
-        var F_weight_s = mat4.create();
+        var weight_s = mat4.create();
         var screw_s = mat4.create();
+        var craneLoad_s = mat4.create();
 
         // Rotation matrices:
         var firstBase_r = mat4.create();
@@ -51,8 +55,9 @@ class Crane {
         var cylinderBase_r = mat4.create();
         var craneBox_r = mat4.create();
         var long_r = mat4.create();
-        var F_weight_r = mat4.create();
+        var weight_r = mat4.create();
         var screw_r = mat4.create();
+        var craneLoad_r = mat4.create();
 
         // Translation matrices:
         var firstBase_t = mat4.create();
@@ -60,8 +65,9 @@ class Crane {
         var cylinderBase_t = mat4.create();
         var craneBox_t = mat4.create();
         var long_t = mat4.create();
-        var F_weight_t = mat4.create();
+        var weight_t = mat4.create();
         var screw_t = mat4.create();
+        var craneLoad_t = mat4.create();
 
         // Description of actions for each body:
         // firstBase: Scale
@@ -69,9 +75,9 @@ class Crane {
         // cylinderBase: Scale, translate respect to secondBase.
         // craneBox: Scale, translate respect to cylinderBase.
         // long: Scale, rotate, translate respect to craneBox.
-        // F_weight: Scale, rotate, translate respect to long.
+        // weight: Scale, rotate, translate respect to long.
         // screw: Scale, rotate, translate respect to long.
-        // H: Scale, translate respect to screw.
+        // craneLoad: Scale, translate respect to screw.
 
         // Scaling.
         mat4.fromScaling(firstBase_s,  [1.0, 1.0, 5.0]);
@@ -79,12 +85,12 @@ class Crane {
         mat4.scale(cylinderBase_s, secondBase_s, [0.4, 0.4, 0.8]);
         mat4.fromScaling(craneBox_s, [1.0, 1.2, 1.0]);
         mat4.fromScaling(long_s, [0.35, 15.0, 0.35]);
-        // mat4.fromScaling(F_weight_s, [1.0, 1.0, 1.0]);
-        // G_s = E_s;
+        mat4.fromScaling(weight_s, [1.0, 1.0, 1.0]);
+        mat4.fromScaling(screw_s, [0.1, 0.1, 0.4]);
+        mat4.fromScaling(craneLoad_s, [1.0, 1.0, 1.0]);
 
         // Rotations.
-        // mat4.fromRotation(E_r, Math.PI/2.0, [0.0, 1.0, 0.0]);
-        // G_r = E_r;
+        mat4.fromRotation(screw_r, Math.PI/2.0, [0.0, 1.0, 0.0]);
 
         // Translations.
         mat4.fromTranslation(secondBase_t, [0.1, 0.1, 4.9]);
@@ -92,12 +98,14 @@ class Crane {
         mat4.mul(cylinderBase_t, secondBase_t, cylinderBase_t);
         mat4.fromTranslation(craneBox_t, [0.0, 0.0, 3.0]);
         mat4.mul(craneBox_t, cylinderBase_t, craneBox_t);
-        mat4.fromTranslation(long_t, [0.0, 5.0, 1.2]);
+        mat4.fromTranslation(long_t, [0.0, 5.0, 1.3]);
         mat4.mul(long_t, craneBox_t, long_t);
-        // mat4.fromTranslation(F_weight_t, [-0.2, -1.0, -0.2]);
-        // mat4.mul(F_weight_t, long_t, F_weight_t);
-        // mat4.fromTranslation(G_t, [0.0, 11.25, 0.0]);
-        // mat4.mul(G_t, E_t, G_t);
+        mat4.fromTranslation(weight_t, [0.0, -8.0, -0.3]);
+        mat4.mul(weight_t, long_t, weight_t);
+        mat4.fromTranslation(screw_t, [-0.2, 7.0, 0.2]);
+        mat4.mul(screw_t, long_t, screw_t);
+        mat4.fromTranslation(craneLoad_t, [0.2, 0.0, -3.0]);
+        mat4.mul(craneLoad_t, screw_t, craneLoad_t);
 
         // Compute final results:
         this.firstBase_transf = firstBase_s;
@@ -109,9 +117,11 @@ class Crane {
         mat4.mul(this.craneBox_transf, this.craneBox_transf, craneBox_s);
         mat4.mul(this.long_transf, long_t, long_r);
         mat4.mul(this.long_transf, this.long_transf, long_s);
-        // mat4.mul(this.F_weight_transf, F_weight_t, F_weight_r);
-        // mat4.mul(this.F_weight_transf, this.F_weight_transf, F_weight_s);
-        // mat4.mul(this.G_transf, G_t, G_r);
-        // mat4.mul(this.G_transf, this.G_transf, G_s);
+        mat4.mul(this.weight_transf, weight_t, weight_r);
+        mat4.mul(this.weight_transf, this.weight_transf, weight_s);
+        mat4.mul(this.screw_transf, screw_t, screw_r);
+        mat4.mul(this.screw_transf, this.screw_transf, screw_s);
+        mat4.mul(this.craneLoad_transf, craneLoad_t, craneLoad_r);
+        mat4.mul(this.craneLoad_transf, this.craneLoad_transf, craneLoad_s);
     }
 }

@@ -20,7 +20,7 @@ class CraneLoad {
             transformMatrix = mat4.create();
         }
 
-        this.createTransformationMatrices();
+        this.createTransformationMatrices(transformMatrix);
         this.mainHolder.draw(this.mainHolder_transf);
         this.holder1.draw(this.holder1_transf);
         this.holder2.draw(this.holder2_transf);
@@ -29,7 +29,7 @@ class CraneLoad {
         this.base.draw(this.base_transf);
     }
 
-    createTransformationMatrices() {
+    createTransformationMatrices(transformMatrix) {
         var aux = mat4.create();
         
         // Scaling matrices:
@@ -43,8 +43,6 @@ class CraneLoad {
         var secondary_holders_t = mat4.create();
         mat4.fromTranslation(secondary_holders_t, [0.0, 0.0, -1.0]);
         
-        // Main holder
-
         // Secondary holders are distinguished from one another by their rotations.
         // They have the same translation and scaling.
         mat4.mul(this.holder1_transf, secondary_holders_s, secondary_holders_t);
@@ -67,5 +65,13 @@ class CraneLoad {
         mat4.mul(this.base_transf, this.base_transf, aux);
         mat4.fromRotation(aux, 0.1, [0.0, 0.0, 1.0], [1.0, 0.0, 0.0]);
         mat4.mul(this.base_transf, aux, this.base_transf);
+
+        // Apply transformMatrix/
+        mat4.mul(this.base_transf, transformMatrix, this.base_transf);
+        mat4.mul(this.holder1_transf, transformMatrix, this.holder1_transf);
+        mat4.mul(this.holder2_transf, transformMatrix, this.holder2_transf);
+        mat4.mul(this.holder3_transf, transformMatrix, this.holder3_transf);
+        mat4.mul(this.holder4_transf, transformMatrix, this.holder4_transf);
+        mat4.mul(this.mainHolder_transf, transformMatrix, this.mainHolder_transf);
     }
 }
