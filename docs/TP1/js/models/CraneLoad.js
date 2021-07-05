@@ -35,9 +35,9 @@ class CraneLoad {
         // Scaling matrices:
         var mainHolder_s = mat4.create();
         this.mainHolder_transf = mainHolder_s;
-        mat4.fromScaling(mainHolder_s,  [0.1, 0.1, 3.0]);
+        mat4.fromScaling(mainHolder_s,  [0.01, 0.01, 3.0]);
         var secondary_holders_s = mat4.create();
-        mat4.fromScaling(secondary_holders_s,  [0.1, 0.1, 2.0]);
+        mat4.fromScaling(secondary_holders_s,  [0.01, 0.01, 2.0]);
 
         // Translation matrices:
         var secondary_holders_t = mat4.create();
@@ -61,7 +61,7 @@ class CraneLoad {
         mat4.mul(this.holder4_transf, aux, this.holder3_transf);
 
         mat4.fromScaling(aux, [2.8, 2.8, 0.1]);
-        mat4.fromTranslation(this.base_transf, [0.0, 0.0, -0.98]);
+        mat4.fromTranslation(this.base_transf, [0.0, 0.0, -0.90]);
         mat4.mul(this.base_transf, this.base_transf, aux);
         mat4.fromRotation(aux, 0.1, [0.0, 0.0, 1.0], [1.0, 0.0, 0.0]);
         mat4.mul(this.base_transf, aux, this.base_transf);

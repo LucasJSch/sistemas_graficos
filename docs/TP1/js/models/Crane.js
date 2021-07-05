@@ -3,6 +3,7 @@ class Crane {
     constructor(glProgram) {
         this.yellowColor = [0.88, 0.8, 0.0275];
         this.grayColor = [0.48627451, 0.48627451, 0.48627451];
+        this.loadColor = [0.48627451, 0.52627451, 0.48627451];
         this.metalColor = [0.450980392, 0.56640625, 0.690196078];
         this.firstBase = new Cube(glProgram, this.yellowColor);
         this.firstBase_transf = mat4.create();
@@ -18,7 +19,7 @@ class Crane {
         this.weight_transf = mat4.create();
         this.screw = new Cylinder(glProgram, this.metalColor);
         this.screw_transf = mat4.create();
-        this.craneLoad = new CraneLoad(glProgram, this.grayColor, this.metalColor);
+        this.craneLoad = new CraneLoad(glProgram, this.grayColor, this.loadColor);
         this.craneLoad_transf = mat4.create();
     }
 
@@ -80,7 +81,7 @@ class Crane {
         // craneLoad: Scale, translate respect to screw.
 
         // Scaling.
-        mat4.fromScaling(firstBase_s,  [1.0, 1.0, 5.0]);
+        mat4.fromScaling(firstBase_s,  [1.25, 1.25, 5.0]);
         mat4.scale(secondBase_s, firstBase_s, [0.8, 0.8, 0.8]);
         mat4.scale(cylinderBase_s, secondBase_s, [0.4, 0.4, 0.8]);
         mat4.fromScaling(craneBox_s, [1.0, 1.2, 1.0]);
@@ -93,7 +94,7 @@ class Crane {
         mat4.fromRotation(screw_r, Math.PI/2.0, [0.0, 1.0, 0.0]);
 
         // Translations.
-        mat4.fromTranslation(secondBase_t, [0.1, 0.1, 4.9]);
+        mat4.fromTranslation(secondBase_t, [0.0, 0.0, 4.9]);
         mat4.fromTranslation(cylinderBase_t, [0.0, 0.0, 4.0]);
         mat4.mul(cylinderBase_t, secondBase_t, cylinderBase_t);
         mat4.fromTranslation(craneBox_t, [0.0, 0.0, 3.0]);
