@@ -15,10 +15,10 @@ class BuildingColumns {
         }
 
         var t = mat4.create();
-        for (var i = 0; i < columns_positions.length; i++) {
+        for (var i = 0; i < this.columns_positions.length; i++) {
             var cyl = new Cylinder(this.glProgram, this.vColor);
-            mat4.fromTranslation(t, columns_positions[i]);
-            mat4.mul(t, t, s);
+            mat4.fromTranslation(t, this.columns_positions[i]);
+            mat4.mul(t, t, this.scale_matrix);
             cyl.draw(t);
         }
     }

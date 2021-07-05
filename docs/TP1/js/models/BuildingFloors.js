@@ -1,11 +1,12 @@
 class BuildingFloors {
     // Draws the floors of a building (i.e. only the concrete.)
     // shapeGen: defines the contour of the floor.
-    constructor(glProgram, nFloors, bsplineConcatenator, vColor) {
+    constructor(glProgram, nFloors, bsplineConcatenator, vColor, height) {
         this.glProgram = glProgram;
         this.shapeGen = new FloorShapeGenerator(/*n_points=*/70, bsplineConcatenator, vColor);
         this.vColor = [0.95, 0.95, 0.95];
         this.nFloors = nFloors;
+        this.height = height;
     }
 
     draw(transformMatrix) {
@@ -13,7 +14,7 @@ class BuildingFloors {
             transformMatrix = mat4.create();
         }
 
-        var floors = new LinearExtrusion(this.glProgram, this.nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, 5.0], this.shapeGen);
+        var floors = new LinearExtrusion(this.glProgram, this.nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, this.height], this.shapeGen);
         floors.draw(transformMatrix);
     }
 }

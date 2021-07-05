@@ -2,11 +2,11 @@ class Building {
     // Draws a crane.
     constructor(glProgram) {
         this.glProgram = glProgram;
-        this.pointsPerLongSide = 10;
+        this.pointsPerLongSide = 5;
         this.pointsPerShortSide = 5;
-        this.windows_shapeGen = new WindowsShapeGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
+        this.cubic_cyl_gen = new CubicCylinderGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
         this.levels = 5;
-        this.buildingHeight = 5;
+        this.buildingHeight = 2;
 
         this.utils = new Utils();
     }
@@ -16,10 +16,12 @@ class Building {
             transformMatrix = mat4.create();
         }
 
-        var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.levels, this.windows_shapeGen, this.buildingHeight);
+        // Elevator
+        var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
         elevator.draw(transformMatrix);
 
-        var columnsPosBuf = this.windows_shapeGen.getPosBuffer([0.0, 0.0, 0.0]);
+        // Generate column positions.
+        var columnsPosBuf = this.cubic_cyl_gen.getPosBuffer([0.0, 0.0, 0.0]);
         var transf = mat4.create();
         mat4.fromScaling(transf, [2.5, 2.5, 0.0]);
         columnsPosBuf = this.utils.TransformPosBuffer(transf, columnsPosBuf);
@@ -28,16 +30,23 @@ class Building {
         for (var i = 0; i < columnsPosBuf.length; i+=3) {
             columns_vertices.push([columnsPosBuf[i], columnsPosBuf[i+1], columnsPosBuf[i+2]]);
         }
+
+        // Columns.
+        var columns = new BuildingColumns(this.glProgram, [1.0, 0.2, 0.2], this.buildingHeight, columns_vertices);
+        columns.draw(transformMatrix);
+
+        // Bspline curves generator.
         var concatenator = new CuadraticBsplineConcatenator(columns_vertices);
 
+        // Floor.
         var floors_shapeGen = new FloorShapeGenerator(100, concatenator, [1.0, 0.0, 0.0]);
-        var floors = new BuildingFloors(this.glProgram, floors_shapeGen, 5);
+        var floors = new BuildingFloors(this.glProgram, this.levels, concatenator, [0.0, 1.0, 0.0], this.buildingHeight);
         floors.draw(transformMatrix);
 
     }
 }
 
-class WindowsShapeGenerator {
+class CubicCylinderGenerator {
     constructor(pointsPerLongSide, pointsPerShortSide, vColor) {
         this.pointsPerLongSide = pointsPerLongSide;
         this.pointsPerShortSide = pointsPerShortSide;
