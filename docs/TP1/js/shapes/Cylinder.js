@@ -20,13 +20,14 @@ class Cylinder {
 
         this.shapeGen = new CylinderShapeGenerator(this.pointsPerCircle, this.radius, this.vColor);
         this.sides = new LinearExtrusion(this.glProgram, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
-        this.createTopAndBottomFans(transformMatrix);
+        this.createTopAndBottomFans();
         this.sides.draw(transformMatrix);
         this.top_fan.draw(transformMatrix);
         this.bottom_fan.draw(transformMatrix);
     }
 
-    createTopAndBottomFans(transformMatrix) {
+    // TODO: Use correctly fan pos buffer. (i.e. first use central pos)
+    createTopAndBottomFans() {
         var top_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralTopPos);
         var top_normal_buffer = this.shapeGen.getNormalBuffer(this.vCentralTopPos);
         var top_color_buffer = this.shapeGen.getColorBuffer(this.vCentralTopPos);
