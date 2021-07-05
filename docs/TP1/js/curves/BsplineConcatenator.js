@@ -5,9 +5,6 @@ class CuadraticBsplineConcatenator {
         this.bsplines = [];
         for (var i = 0; i < this.n_points-2; i++) {
             var bspline = new CuadraticBsplineCurve(this.points[i], this.points[i+1], this.points[i+2]);
-            console.log(this.points[i]);
-            console.log(this.points[i+1]);
-            console.log(this.points[i+2]);
             this.bsplines.push(bspline);
         }
     }
@@ -22,5 +19,9 @@ class CuadraticBsplineConcatenator {
         }
 
         return this.bsplines[curveNumber].getPoint(u);
+    }
+
+    getNumberOfSplines() {
+        return this.bsplines.length;
     }
 }

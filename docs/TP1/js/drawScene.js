@@ -16,6 +16,4 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
 
     var building = new Building(glProgram);
     building.draw();
-
-    // var aux = new CuadraticBsplineConcatenator([[0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.0, 2.0, 0.0], [0.0, 0.0, 1.0]]);
 }
