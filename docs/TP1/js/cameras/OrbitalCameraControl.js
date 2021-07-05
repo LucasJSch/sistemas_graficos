@@ -51,7 +51,6 @@ function OrbitalCameraControl(initialPos){
     });
 
     document.addEventListener("wheel", function(e) {
-        console.log("wheel");
         let deltaY = e.deltaY;
         if (deltaY != 0) {
             // Wheel up.
