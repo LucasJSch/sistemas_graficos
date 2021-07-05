@@ -21,6 +21,8 @@ class Crane {
         this.screw_transf = mat4.create();
         this.craneLoad = new CraneLoad(glProgram, this.grayColor, this.loadColor);
         this.craneLoad_transf = mat4.create();
+
+        this.craneBox_rotation = 0.0;
     }
 
     draw(transformMatrix) {
@@ -28,7 +30,7 @@ class Crane {
             transformMatrix = mat4.create();
         }
 
-        this.createTransformationMatrices();
+        this.createTransformationMatrices(transformMatrix);
         this.firstBase.draw(this.firstBase_transf);
         this.secondBase.draw(this.secondBase_transf);
         this.cylinderBase.draw(this.cylinderBase_transf);
@@ -39,7 +41,11 @@ class Crane {
         this.craneLoad.draw(this.craneLoad_transf);
     }
 
-    createTransformationMatrices() {
+    rotateCabin() {
+        this.craneBox_rotation += 0.1;
+    }
+
+    createTransformationMatrices(transformMatrix) {
         // Scaling matrices:
         var firstBase_s = mat4.create();
         var secondBase_s = mat4.create();
@@ -56,8 +62,10 @@ class Crane {
         var cylinderBase_r = mat4.create();
         var craneBox_r = mat4.create();
         var long_r = mat4.create();
+        var long_r2 = mat4.create();
         var weight_r = mat4.create();
         var screw_r = mat4.create();
+        var screw_r2 = mat4.create();
         var craneLoad_r = mat4.create();
 
         // Translation matrices:
@@ -91,6 +99,7 @@ class Crane {
         mat4.fromScaling(craneLoad_s, [1.0, 1.0, 1.0]);
 
         // Rotations.
+        mat4.fromRotation(craneBox_r, this.craneBox_rotation, [0.0, 0.0, 1.0]);
         mat4.fromRotation(screw_r, Math.PI/2.0, [0.0, 1.0, 0.0]);
 
         // Translations.
@@ -110,19 +119,30 @@ class Crane {
 
         // Compute final results:
         this.firstBase_transf = firstBase_s;
+
         mat4.mul(this.secondBase_transf, secondBase_t, secondBase_r);
         mat4.mul(this.secondBase_transf, this.secondBase_transf, secondBase_s);
+
         mat4.mul(this.cylinderBase_transf, cylinderBase_t, cylinderBase_r);
         mat4.mul(this.cylinderBase_transf, this.cylinderBase_transf, cylinderBase_s);
+
         mat4.mul(this.craneBox_transf, craneBox_t, craneBox_r);
         mat4.mul(this.craneBox_transf, this.craneBox_transf, craneBox_s);
+
         mat4.mul(this.long_transf, long_t, long_r);
         mat4.mul(this.long_transf, this.long_transf, long_s);
+        mat4.mul(this.long_transf, craneBox_r, this.long_transf);
+
         mat4.mul(this.weight_transf, weight_t, weight_r);
         mat4.mul(this.weight_transf, this.weight_transf, weight_s);
+        mat4.mul(this.weight_transf, craneBox_r, this.weight_transf);
+
         mat4.mul(this.screw_transf, screw_t, screw_r);
         mat4.mul(this.screw_transf, this.screw_transf, screw_s);
+        mat4.mul(this.screw_transf, craneBox_r, this.screw_transf);
+
         mat4.mul(this.craneLoad_transf, craneLoad_t, craneLoad_r);
         mat4.mul(this.craneLoad_transf, this.craneLoad_transf, craneLoad_s);
+        mat4.mul(this.craneLoad_transf, craneBox_r, this.craneLoad_transf);
     }
 }

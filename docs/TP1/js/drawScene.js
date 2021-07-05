@@ -15,5 +15,12 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     coordinates.draw(mat4.create());
 
     var cube = new Crane(glProgram);
+    cube.rotateCabin();
+    cube.rotateCabin();
+    cube.rotateCabin();
+    cube.rotateCabin();
+    cube.rotateCabin();
+    cube.rotateCabin();
     cube.draw();
+
 }
