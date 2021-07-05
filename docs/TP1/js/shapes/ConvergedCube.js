@@ -69,7 +69,7 @@ class ConvergedCubeShapeGenerator {
     }
     
     getPosBuffer(central_pos) {
-        var radius = 1.0;
+        var radius = 0.5;
         if (central_pos == this.vCentralTopPos) {
             radius = radius * this.scaleFactor;
         }
