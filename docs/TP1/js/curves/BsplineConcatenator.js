@@ -10,8 +10,6 @@ class CuadraticBsplineConcatenator {
             console.log(this.points[i+2]);
             this.bsplines.push(bspline);
         }
-        console.log("bsplines length: " + this.bsplines.length);
-        console.log("n_points: " + this.n_points);
     }
 
     // 0 <= t <= ceil(n_points/3)

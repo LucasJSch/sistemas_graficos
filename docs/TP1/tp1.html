@@ -150,9 +150,9 @@
                 mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
 
                 // This defines the camera position.
-                mat4.identity(viewMatrix);
-                mat4.translate(viewMatrix,viewMatrix, [0.0, -0.0, -30.0]);
-                // mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [0.0, 0.0, 0.0]);
+                // mat4.identity(viewMatrix);
+                // mat4.translate(viewMatrix,viewMatrix, [0.0, -0.0, -30.0]);
+                // // mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [0.0, 0.0, 0.0]);
             }
                     
                     
@@ -197,8 +197,8 @@
 
                 // droneControl.update();
 				// viewMatrix=droneControl.getMatrix();
-                // orbitalControl.update();
-                // viewMatrix = orbitalControl.getMatrix();
+                orbitalControl.update();
+                viewMatrix = orbitalControl.getMatrix();
                 
                 // rotate_angle += 0.01;
                 mat4.identity(modelMatrix);

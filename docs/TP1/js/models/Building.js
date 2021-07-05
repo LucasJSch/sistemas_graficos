@@ -23,6 +23,21 @@ class Building {
         mat4.fromScaling(transf, [1.7, 1.7, 0.0]);
         columnsPosBuf = this.utils.TransformPosBuffer(transf, columnsPosBuf);
         columnsPosBuf = addNoiseToBuffer_(columnsPosBuf);
+        var vertices = [];
+        for (var i = 0; i < columnsPosBuf.length; i+=3) {
+            vertices.push([columnsPosBuf[i], columnsPosBuf[i+1], columnsPosBuf[i+2]]);
+        }
+        var concatenator = new CuadraticBsplineConcatenator(vertices);
+        for (var i = 0.0; i < vertices.length - 2; i+=0.1) {
+            var dist = concatenator.getPoint(i);
+            var cube = new Cube(glProgram, [0.8, 0.5, 0.1]);
+            var t = mat4.create();
+            var t2 = mat4.create();
+            mat4.fromTranslation(t, dist);
+            mat4.fromScaling(t2, [0.1, 0.1, 0.1]);
+            mat4.mul(t, t, t2);
+            cube.draw(t);
+        }
         var grid = new Grid(this.glProgram, columnsPosBuf, columnsPosBuf, columnsPosBuf, 50, 50);
         grid.draw();
     }
