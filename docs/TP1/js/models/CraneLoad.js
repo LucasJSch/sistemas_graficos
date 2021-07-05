@@ -65,5 +65,7 @@ class CraneLoad {
         mat4.fromScaling(aux, [2.8, 2.8, 0.1]);
         mat4.fromTranslation(this.base_transf, [0.0, 0.0, -0.98]);
         mat4.mul(this.base_transf, this.base_transf, aux);
+        mat4.fromRotation(aux, 0.1, [0.0, 0.0, 1.0], [1.0, 0.0, 0.0]);
+        mat4.mul(this.base_transf, aux, this.base_transf);
     }
 }

@@ -14,6 +14,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     var coordinates = new Coordinates(glProgram);
     coordinates.draw(mat4.create());
 
-    var cube = new CraneLoad(glProgram, [0.7, 0.3, 0.4], [0.3, 0.7, 0.2]);
+    var cube = new Crane(glProgram);
     cube.draw();
 }
