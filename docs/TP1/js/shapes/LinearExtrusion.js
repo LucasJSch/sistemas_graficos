@@ -2,7 +2,7 @@ class LinearExtrusion {
     // shapeGenerator is an instance of a class that has 3 methods:
     // getPosBuffer(central_point), getNormalBuffer(central_point), getColorBuffer(central_point)
     // For a working example, see either the Cylinder class or the /tests/drawLinearExtrusion.js file.
-    constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator) {
+    constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator, useFan=false) {
         this.glProgram = glProgram;
         this.levels = levels;
         this.vStartPos = vStartPos;
@@ -16,6 +16,8 @@ class LinearExtrusion {
         this.top_pos_buffer = null;
         this.top_normal_buffer = null;
         this.top_color_buffer = null;
+
+        this.useFan = useFan;
     }
 
     draw(transformMatrix) {
@@ -26,8 +28,13 @@ class LinearExtrusion {
         this.createBuffers();
         this.applyTransformation(transformMatrix);
 
-        var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
-        grid.draw();
+        if (!this.useFan) {
+            var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
+            grid.draw();
+        } else {
+            var fan = new Fan(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
+            fan.draw();          
+        }
     }
 
     applyTransformation(transformMatrix) {
@@ -74,6 +81,6 @@ class LinearExtrusion {
         var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
         var color_buffer = this.shapeGenerator.getColorBuffer(central_point);
 
-        return [pos_buffer, normal_buffer, color_buffer];
+        return [pos_buffer, normal_buffer, color_buffer, central_point];
     }
 }

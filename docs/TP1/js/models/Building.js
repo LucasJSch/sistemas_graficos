@@ -6,7 +6,7 @@ class Building {
         this.pointsPerShortSide = 5;
         this.cubic_cyl_gen = new CubicCylinderGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
         this.levels = 2;
-        this.buildingHeight = 5;
+        this.buildingHeight = 2;
 
         this.utils = new Utils();
     }
@@ -18,7 +18,7 @@ class Building {
 
         // Elevator
         var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
-        elevator.draw(transformMatrix);
+        // elevator.draw(transformMatrix);
 
         // Generate bspline interpolation points.
         var bsplinePosBuf = this.cubic_cyl_gen.getPosBuffer([0.0, 0.0, 0.0]);
@@ -54,7 +54,7 @@ class Building {
 
         // Windows.
         var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
-        windows.draw();
+        // windows.draw();
     }
 }
 

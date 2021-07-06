@@ -16,9 +16,4 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
 
     var building = new Building(glProgram);
     building.draw();
-
-    t = mat4.create();
-    mat4.fromTranslation(t, [25., 10., 0.]);
-    var coordinates2 = new Coordinates(glProgram);
-    coordinates2.draw(t);
 }

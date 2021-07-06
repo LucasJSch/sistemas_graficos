@@ -3,7 +3,7 @@ class BuildingFloors {
     // shapeGen: defines the contour of the floor.
     constructor(glProgram, nFloors, bsplineConcatenator, vColor, height) {
         this.glProgram = glProgram;
-        this.shapeGen = new FloorShapeGenerator(/*n_points=*/70, bsplineConcatenator, vColor);
+        this.shapeGen = new FloorShapeGenerator(glProgram, /*n_points=*/70, bsplineConcatenator, vColor);
         this.vColor = [0.95, 0.95, 0.95];
         this.nFloors = nFloors;
         this.height = height;
@@ -14,14 +14,15 @@ class BuildingFloors {
             transformMatrix = mat4.create();
         }
 
-        var floors = new LinearExtrusion(this.glProgram, this.nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, this.height], this.shapeGen);
+        var floors = new LinearExtrusionWithFillings(this.glProgram, this.nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, this.height], this.shapeGen);
         floors.draw(transformMatrix);
     }
 }
 
 
 class FloorShapeGenerator {
-    constructor(n_points, bsplineConcatenator, vColor) {
+    constructor(glProgram, n_points, bsplineConcatenator, vColor) {
+        this.glProgram = glProgram;
         this.n_points = n_points;
         this.bsplineConcatenator = bsplineConcatenator;
         this.vColor = vColor;
@@ -54,7 +55,9 @@ class FloorShapeGenerator {
     // TODO: Fix this. This is incorrect.
     getNormalBuffer(central_pos) {
         var buffer = [];
-        for (var i = 0; i <  this.bsplineConcatenator.getNumberOfSplines(); i++) {
+        let bspline_points = this.bsplineConcatenator.getNumberOfSplines();
+        let step =  bspline_points / this.n_points;
+        for (var i = 0; i < bspline_points; i+=step) {
             buffer.push(0.0);
             buffer.push(0.0);
             buffer.push(1.0);
@@ -64,10 +67,12 @@ class FloorShapeGenerator {
         
     getColorBuffer(central_pos) {
         var buffer = [];
-        for (var i = 0; i <  this.bsplineConcatenator.getNumberOfSplines(); i++) {
+        let bspline_points = this.bsplineConcatenator.getNumberOfSplines();
+        let step =  bspline_points / this.n_points;
+        for (var i = 0; i < bspline_points; i+=step) {
             buffer.push(0.0);
             buffer.push(0.5);
-            buffer.push(central_pos[2]*0.1);
+            buffer.push(0.3);
         }
         return buffer;
     }

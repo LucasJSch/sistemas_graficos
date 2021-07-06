@@ -20,6 +20,10 @@ class Fan {
         gl.drawElements(gl.TRIANGLE_FAN, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
     }
 
+    getPosBuffer() {
+        return this.position_buffer;
+    }
+    
     createIndexBuffer() {
         var len = this.color_buffer.length/3;
         this.index_buffer = [];
