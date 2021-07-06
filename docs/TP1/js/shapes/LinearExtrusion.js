@@ -2,6 +2,7 @@ class LinearExtrusion {
     // shapeGenerator is an instance of a class that has 3 methods:
     // getPosBuffer(central_point), getNormalBuffer(central_point), getColorBuffer(central_point)
     // For a working example, see either the Cylinder class or the /tests/drawLinearExtrusion.js file.
+    // TDOO: Add support for textures.
     constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator, useFan=false) {
         this.glProgram = glProgram;
         this.levels = levels;
@@ -21,6 +22,7 @@ class LinearExtrusion {
     }
 
     draw(transformMatrix) {
+        console.log("draw: ");
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
         }
@@ -56,6 +58,11 @@ class LinearExtrusion {
     }
 
     generateBuffersForLevel(level) {
+        if (level > this.levels) {
+            console.log("ERROR: Level received: " + level);
+            console.log("ERROR: Max allowed level: " + this.levels);
+
+        }
         // Get central point of level.
         var direction_vector = vec3.create();
         var minus_start_pos = vec3.create();
@@ -63,13 +70,14 @@ class LinearExtrusion {
 
         // If this is the first level, the central_pos should match with the start pos.
         if (level == 0) {
-        central_point = this.vStartPos;
+            central_point = this.vStartPos;
         }
         // If this is not the last nor the first level, compute the current pos.
         else if (level != (this.levels -1)) {
             var lvl_step = vec3.distance(this.vStartPos, this.vEndPos) / (this.levels-1);
             vec3.scale(minus_start_pos, this.vStartPos, -1.0);
             vec3.add(direction_vector, this.vEndPos, minus_start_pos);
+            vec3.normalize(direction_vector, direction_vector);
 
             vec3.scale(central_point, direction_vector, level * lvl_step);
             vec3.add(central_point, this.vStartPos, central_point);
@@ -77,6 +85,11 @@ class LinearExtrusion {
         } else {
             central_point = this.vEndPos;
         }
+
+        // console.log("direction_vector: " + direction_vector);
+        // console.log("Level step: " + lvl_step);
+        // console.log("Level: " + level);
+        // console.log("central_point: " + central_point);
         var pos_buffer = this.shapeGenerator.getPosBuffer(central_point);
         var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
         var color_buffer = this.shapeGenerator.getColorBuffer(central_point);

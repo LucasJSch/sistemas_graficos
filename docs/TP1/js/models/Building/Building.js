@@ -5,8 +5,8 @@ class Building {
         this.pointsPerLongSide = 5;
         this.pointsPerShortSide = 5;
         this.cubic_cyl_gen = new CubicCylinderGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
-        this.levels = 10    ;
-        this.buildingHeight = 15;
+        this.levels = 10;
+        this.buildingHeight = 3.0;
 
         this.utils = new Utils();
     }
@@ -17,7 +17,7 @@ class Building {
         }
 
         // Elevator
-        var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
+        // var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
         // elevator.draw(transformMatrix);
 
         // Generate bspline interpolation points.
@@ -44,13 +44,13 @@ class Building {
         }
 
         // Columns.
-        var columns = new BuildingColumns(this.glProgram, [0.5, 0.5, 0.5], this.buildingHeight, col_pos);
-        columns.draw(transformMatrix);
+        // var columns = new BuildingColumns(this.glProgram, [0.5, 0.5, 0.5], this.buildingHeight, col_pos);
+        // columns.draw(transformMatrix);
 
         // Floor.
-        var floors_shapeGen = new FloorShapeGenerator(100, concatenator, [1.0, 0.0, 0.0]);
-        var floors = new BuildingFloors(this.glProgram, this.levels, concatenator, [0.0, 1.0, 0.0], this.buildingHeight);
-        floors.draw(transformMatrix);
+        // var floors_shapeGen = new FloorShapeGenerator(100, concatenator, [1.0, 0.0, 0.0]);
+        // var floors = new BuildingFloors(this.glProgram, this.levels, concatenator, [0.0, 1.0, 0.0], this.buildingHeight);
+        // floors.draw(transformMatrix);
 
         // Windows.
         var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
@@ -121,9 +121,9 @@ class CubicCylinderGenerator {
     getColorBuffer(central_pos) {
         var buffer = [];
         for (var i = 0; i < this.totalPoints; i++) {
-            buffer.push(0.5);
-            buffer.push(0.3);
-            buffer.push(central_pos[2]*0.1);
+            buffer.push(this.vColor[0]);
+            buffer.push(this.vColor[1]);
+            buffer.push(this.vColor[2]);
         }
         return buffer;
     }

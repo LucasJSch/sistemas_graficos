@@ -21,7 +21,8 @@
         <script type="text/javascript" src="js/libs/three.min.js"></script>
         <script type="text/javascript" src="js/libs/jquery.min.js"></script>
         <script type="text/javascript" src="js/libs/random.js"></script>
-        <script type="text/javascript" src="js/drawScene.js"></script>
+        <!-- <script type="text/javascript" src="js/drawScene.js"></script> -->
+        <script type="text/javascript" src="js/tests/drawLinearExtrusion.js"></script>
         <script type="text/javascript" src="js/shapes/basic_shapes/Fan.js"></script>
         <script type="text/javascript" src="js/shapes/basic_shapes/Grid.js"></script>
         <script type="text/javascript" src="js/shapes/Plane.js"></script>
@@ -89,7 +90,7 @@
                 vec3 diffColor=mix(vec3(0.7,0.7,0.7),vNormal,0.4);
                 vec3 color=dot(lightVec,vNormal)*diffColor+vec3(0.2,0.2,0.2);
 
-               gl_FragColor = vec4(vColor,1.0);
+               gl_FragColor = vec4(vColor, 1.0);
             }
         </script>
         
@@ -141,6 +142,11 @@
            
 
             function setupWebGL(){
+                /******** Experimental ******/
+                // gl.enable(gl.BLEND);
+                // gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+                /********************* ******/
+
                 gl.enable(gl.DEPTH_TEST);
                 //set the clear color
                 gl.clearColor(0.1, 0.1, 0.2, 1.0);     

@@ -7,11 +7,11 @@ class BuildingWindows {
 
     // TODO: Use transformMatrix.
     draw(transformMatrix) {
-        var t = mat4.create();
-        var t2 = mat4.create();
-        mat4.fromScaling(t, [7.0, 6.5, 1.0]);
-        mat4.fromTranslation(t2, [2.0, 1.0, 0.0]);
-        mat4.mul(t, t2, t);
-        this.rectangle.draw(t);
+        // var t = mat4.create();
+        // var t2 = mat4.create();
+        // mat4.fromScaling(t, [7.0, 6.5, 1.0]);
+        // mat4.fromTranslation(t2, [2.0, 1.0, 0.0]);
+        // mat4.mul(t, t2, t);
+        this.rectangle.draw();
     }
 }

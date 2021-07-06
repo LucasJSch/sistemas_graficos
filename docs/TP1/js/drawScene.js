@@ -12,7 +12,15 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
     var coordinates = new Coordinates(glProgram);
-    coordinates.draw(mat4.create());
+    coordinates.draw();
+
+    var coordinates2 = new Coordinates(glProgram);
+    t = mat4.create();
+    t2 = mat4.create();
+    mat4.fromScaling(t2, [5.0, 5.0, 5.0]);
+    mat4.fromTranslation(t, [0.0, 0.0, 15.0]);
+    mat4.mul(t, t, t2);
+    coordinates2.draw(t);
 
     var building = new Building(glProgram);
     building.draw();

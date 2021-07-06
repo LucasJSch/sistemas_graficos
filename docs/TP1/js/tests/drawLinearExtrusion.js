@@ -10,10 +10,23 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var levels = 2;
-    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[0.0, 0.0, 0.0], /*vEndPos*/[0.0, 0.0, 0.5], new ShapeGenerator());
+    var coord = new Coordinates(glProgram);
+    coord.draw();
+
+    var coordinates2 = new Coordinates(glProgram);
+    t = mat4.create();
+    t2 = mat4.create();
+    mat4.fromScaling(t2, [5.0, 5.0, 5.0]);
+    mat4.fromTranslation(t, [0.0, 0.0, 15.0]);
+    mat4.mul(t, t, t2);
+    coordinates2.draw(t);
+
+
+    var levels = 60;
+    var height = 15;
+    var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[0.0, 0.0, 0.0], /*vEndPos*/[0.0, 0.0, height], new ShapeGenerator(10, 5, [1.0, 0.0, 0.0]));
     var transf = mat4.create();
-    mat4.fromTranslation(transf, [1.0, 0.5, 0.5]);
+    mat4.fromTranslation(transf, [0.0, 0.0, 0.0]);
     extrusion.draw(transf);
 
 }
