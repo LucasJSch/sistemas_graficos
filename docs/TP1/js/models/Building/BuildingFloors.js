@@ -29,8 +29,8 @@ class SingleBuildingFloor {
     constructor(glProgram, bsplineConcatenator, vColor, height) {
         this.glProgram = glProgram;
         this.shapeGen = new FloorShapeGenerator(glProgram, /*n_points=*/70, bsplineConcatenator, vColor);
-        this.vColor = [0.95, 0.95, 0.95];
-        this.height = 0.2;
+        this.vColor = vColor;
+        this.height = 0.3;
     }
 
     draw(transformMatrix) {
@@ -93,9 +93,9 @@ class FloorShapeGenerator {
         let bspline_points = this.bsplineConcatenator.getNumberOfSplines();
         let step =  bspline_points / this.n_points;
         for (var i = 0; i < bspline_points; i+=step) {
-            buffer.push(0.0);
-            buffer.push(0.5);
-            buffer.push(0.3);
+            buffer.push(this.vColor[0]);
+            buffer.push(this.vColor[1]);
+            buffer.push(this.vColor[2]);
         }
         return buffer;
     }

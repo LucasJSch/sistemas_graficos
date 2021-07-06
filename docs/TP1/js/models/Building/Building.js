@@ -5,7 +5,7 @@ class Building {
         this.pointsPerLongSide = 5;
         this.pointsPerShortSide = 5;
         this.cubic_cyl_gen = new CubicCylinderGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
-        this.levels = 10;
+        this.levels = 10    ;
         this.buildingHeight = 15;
 
         this.utils = new Utils();
@@ -44,7 +44,7 @@ class Building {
         }
 
         // Columns.
-        var columns = new BuildingColumns(this.glProgram, [1.0, 0.2, 0.2], this.buildingHeight, col_pos);
+        var columns = new BuildingColumns(this.glProgram, [0.5, 0.5, 0.5], this.buildingHeight, col_pos);
         columns.draw(transformMatrix);
 
         // Floor.
@@ -54,7 +54,7 @@ class Building {
 
         // Windows.
         var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
-        // windows.draw();
+        windows.draw();
     }
 }
 

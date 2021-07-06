@@ -34,11 +34,11 @@ class LinearExtrusionWithFillings {
             nrmBuf.unshift(buffers[1][2]);
             nrmBuf.unshift(buffers[1][2]);
 
+            clrBuf.unshift(buffers[2][0]);
+            clrBuf.unshift(buffers[2][1]);
             clrBuf.unshift(buffers[2][2]);
-            clrBuf.unshift(buffers[2][2]);
-            clrBuf.unshift(buffers[2][2]);
-            clrBuf.unshift(buffers[2][2]);
-            clrBuf.unshift(buffers[2][2]);
+            clrBuf.unshift(buffers[2][0]);
+            clrBuf.unshift(buffers[2][1]);
             clrBuf.unshift(buffers[2][2]);
 
             var fan = new Fan(this.glProgram, posBuf, nrmBuf, clrBuf);
