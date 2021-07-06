@@ -16,4 +16,9 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
 
     var building = new Building(glProgram);
     building.draw();
+
+    // t = mat4.create();
+    // mat4.fromTranslation(t, [20, 20, 0]);
+    // var crane = new Crane(glProgram);
+    // crane.draw(t);
 }

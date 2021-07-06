@@ -3,7 +3,7 @@ class BuildingFloors {
     // shapeGen: defines the contour of the floor.
     constructor(glProgram, nFloors, bsplineConcatenator, vColor, height) {
         this.glProgram = glProgram;
-        this.shapeGen = new FloorShapeGenerator(glProgram, /*n_points=*/70, bsplineConcatenator, vColor);
+        this.bsplineConcatenator = bsplineConcatenator;
         this.vColor = [0.95, 0.95, 0.95];
         this.nFloors = nFloors;
         this.height = height;
@@ -14,11 +14,34 @@ class BuildingFloors {
             transformMatrix = mat4.create();
         }
 
-        var floors = new LinearExtrusionWithFillings(this.glProgram, this.nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, this.height], this.shapeGen);
-        floors.draw(transformMatrix);
+        var floors = [];
+        for (var i = 0; i < this.nFloors; i++) {
+            var t = mat4.create();
+            mat4.fromTranslation(t, [0.0, 0.0, i * this.height/this.nFloors]);
+            var floor = new SingleBuildingFloor(this.glProgram, this.bsplineConcatenator, this.vColor, this.height);
+            mat4.mul(t, transformMatrix, t);
+            floor.draw(t);
+        }
     }
 }
 
+class SingleBuildingFloor {
+    constructor(glProgram, bsplineConcatenator, vColor, height) {
+        this.glProgram = glProgram;
+        this.shapeGen = new FloorShapeGenerator(glProgram, /*n_points=*/70, bsplineConcatenator, vColor);
+        this.vColor = [0.95, 0.95, 0.95];
+        this.height = 0.2;
+    }
+
+    draw(transformMatrix) {
+        if (transformMatrix == null) {
+            transformMatrix = mat4.create();
+        }
+
+        var floors = new LinearExtrusionWithFillings(this.glProgram, 2, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, this.height], this.shapeGen);
+        floors.draw(transformMatrix);
+    }
+}
 
 class FloorShapeGenerator {
     constructor(glProgram, n_points, bsplineConcatenator, vColor) {

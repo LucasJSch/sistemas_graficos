@@ -182,5 +182,14 @@ class Crane {
         mat4.mul(this.craneLoad_transf, craneLoad_t, craneLoad_r);
         mat4.mul(this.craneLoad_transf, this.craneLoad_transf, craneLoad_s);
         mat4.mul(this.craneLoad_transf, craneBox_r, this.craneLoad_transf);
+
+        mat4.mul(this.firstBase_transf, transformMatrix, this.firstBase_transf);
+        mat4.mul(this.secondBase_transf, transformMatrix, this.secondBase_transf);
+        mat4.mul(this.cylinderBase_transf, transformMatrix, this.cylinderBase_transf);
+        mat4.mul(this.craneBox_transf, transformMatrix, this.craneBox_transf);
+        mat4.mul(this.long_transf, transformMatrix, this.long_transf);
+        mat4.mul(this.weight_transf, transformMatrix, this.weight_transf);
+        mat4.mul(this.screw_transf, transformMatrix, this.screw_transf);
+        mat4.mul(this.craneLoad_transf, transformMatrix, this.craneLoad_transf);
     }
 }

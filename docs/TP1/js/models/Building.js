@@ -5,8 +5,8 @@ class Building {
         this.pointsPerLongSide = 5;
         this.pointsPerShortSide = 5;
         this.cubic_cyl_gen = new CubicCylinderGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
-        this.levels = 2;
-        this.buildingHeight = 2;
+        this.levels = 10;
+        this.buildingHeight = 15;
 
         this.utils = new Utils();
     }
