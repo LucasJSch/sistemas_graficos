@@ -5,8 +5,17 @@ class Building {
         this.pointsPerLongSide = 5;
         this.pointsPerShortSide = 5;
         this.cubic_cyl_gen = new CubicCylinderGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
-        this.levels = 10;
-        this.buildingHeight = 3.0;
+        this.firstPartHeight = 5;
+        this.firstPartLevels = 5;
+        this.secondPartHeight = 10;
+        this.secondPartLevels = 5;
+        // 0 < scaleFactorBetweenParts <= 1
+        this.scaleFactorBetweenParts = 0.75;
+        this.floorColor = [1.0, 0.0, 0.0];
+        this.columnsColor = [0.5, 0.5, 0.5];
+        this.windowsColor = [0.3, 0.0, 8.0];
+        this.elevatorColor = [1.0, 0.0, 0.0];
+
 
         this.utils = new Utils();
     }
@@ -16,10 +25,6 @@ class Building {
             transformMatrix = mat4.create();
         }
 
-        // Elevator
-        // var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
-        // elevator.draw(transformMatrix);
-
         // Generate bspline interpolation points.
         var bsplinePosBuf = this.cubic_cyl_gen.getPosBuffer([0.0, 0.0, 0.0]);
         var transf = mat4.create();
@@ -27,13 +32,28 @@ class Building {
         bsplinePosBuf = this.utils.TransformPosBuffer(transf, bsplinePosBuf);
         var bspline_vertices = [];
         for (var i = 0; i < bsplinePosBuf.length; i+=3) {
-            bspline_vertices.push([bsplinePosBuf[i], bsplinePosBuf[i+1], bsplinePosBuf[i+2]]);
+        bspline_vertices.push([bsplinePosBuf[i], bsplinePosBuf[i+1], bsplinePosBuf[i+2]]);
         }
         // Adds noise to the positions.
         bspline_vertices = getColumnPositionsWithNoise_(bspline_vertices);
-
         // Bspline curves generator.
         var concatenator = new CuadraticBsplineConcatenator(bspline_vertices);
+
+        this.drawFirstPart(transformMatrix, concatenator);
+
+        // Translate the second part in height in relation to the first part.
+        var t = mat4.create();
+        mat4.fromTranslation(t, [0.0, 0.0, this.firstPartHeight]);
+        mat4.mul(t, transformMatrix, t);
+
+        this.drawSecondPart(t, concatenator);
+    }
+
+    // Draws the first part of the building (the largest one).
+    drawFirstPart(transformMatrix, concatenator) {
+        // Elevator
+        var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.firstPartLevels, this.cubic_cyl_gen, this.firstPartHeight);
+        elevator.draw(transformMatrix);
 
         // Generate column positions.
         var col_pos = [];
@@ -44,17 +64,50 @@ class Building {
         }
 
         // Columns.
-        // var columns = new BuildingColumns(this.glProgram, [0.5, 0.5, 0.5], this.buildingHeight, col_pos);
-        // columns.draw(transformMatrix);
+        var columns = new BuildingColumns(this.glProgram, this.columnsColor, this.firstPartHeight, col_pos);
+        columns.draw(transformMatrix);
 
         // Floor.
-        // var floors_shapeGen = new FloorShapeGenerator(100, concatenator, [1.0, 0.0, 0.0]);
-        // var floors = new BuildingFloors(this.glProgram, this.levels, concatenator, [0.0, 1.0, 0.0], this.buildingHeight);
-        // floors.draw(transformMatrix);
+        var floors = new BuildingFloors(this.glProgram, this.firstPartLevels, concatenator, this.floorColor, this.firstPartHeight);
+        floors.draw(transformMatrix);
 
         // Windows.
-        var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.levels, this.cubic_cyl_gen, this.buildingHeight);
-        windows.draw();
+        var scaleMatrix = mat4.create();
+        var transMatrix = mat4.create();
+        mat4.fromScaling(scaleMatrix, [7.0, 6.5, 1.0]);
+        mat4.fromTranslation(transMatrix, [2.0, 1.0, 0.0]);
+        var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.firstPartLevels, this.cubic_cyl_gen, this.firstPartHeight, scaleMatrix, transMatrix);
+        windows.draw(transformMatrix);
+    }
+
+    drawSecondPart(transformMatrix, concatenator) {
+        // Elevator
+        var elevator = new BuildingElevator(this.glProgram, /*texture=*/null, this.secondPartLevels, this.cubic_cyl_gen, this.secondPartHeight);
+        elevator.draw(transformMatrix);
+
+        // Generate column positions.
+        var col_pos = [];
+        for (var i = 0; i < concatenator.getNumberOfSplines(); i++) {
+            var p = vec3.create();
+            vec3.scale(p, concatenator.getPoint(i), 0.9 * this.scaleFactorBetweenParts);
+            col_pos.push(p);
+        }
+
+        // Columns.
+        var columns = new BuildingColumns(this.glProgram, this.columnsColor, this.secondPartHeight, col_pos);
+        columns.draw(transformMatrix);
+
+        // Floor.
+        var floors = new BuildingFloors(this.glProgram, this.secondPartLevels, concatenator, this.floorColor, this.secondPartHeight, this.scaleFactorBetweenParts);
+        floors.draw(transformMatrix);
+
+        // Windows.
+        var scaleMatrix = mat4.create();
+        var transMatrix = mat4.create();
+        mat4.fromScaling(scaleMatrix, [7.0 * this.scaleFactorBetweenParts, 6.5 * this.scaleFactorBetweenParts, 1.0]);
+        mat4.fromTranslation(transMatrix, [2.0, 1.0, 0.0]);
+        var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.secondPartLevels, this.cubic_cyl_gen, this.secondPartHeight, scaleMatrix, transMatrix);
+        windows.draw(transformMatrix);
     }
 }
 

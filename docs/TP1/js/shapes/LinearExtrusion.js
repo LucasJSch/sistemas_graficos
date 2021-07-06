@@ -22,7 +22,6 @@ class LinearExtrusion {
     }
 
     draw(transformMatrix) {
-        console.log("draw: ");
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
         }
