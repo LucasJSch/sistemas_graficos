@@ -16,37 +16,48 @@
     		</canvas>    		
     	</center>
 
+        <!-- Third party libs -->
         <script type="text/javascript" src="js/libs/includeHTML.js"></script>
         <script type="text/javascript" src="js/libs/gl-matrix.js"></script>
         <script type="text/javascript" src="js/libs/three.min.js"></script>
         <script type="text/javascript" src="js/libs/jquery.min.js"></script>
         <script type="text/javascript" src="js/libs/random.js"></script>
-        <script type="text/javascript" src="js/drawScene.js"></script>
+        <!-- Interface between this script and JS classes -->
+        <!-- <script type="text/javascript" src="js/drawScene.js"></script> -->
+        <script type="text/javascript" src="js/tests/drawExtrusion.js"></script>
+        <!-- Shapes -->
         <script type="text/javascript" src="js/shapes/basic_shapes/Fan.js"></script>
         <script type="text/javascript" src="js/shapes/basic_shapes/Grid.js"></script>
         <script type="text/javascript" src="js/shapes/Plane.js"></script>
         <script type="text/javascript" src="js/shapes/LinearExtrusion.js"></script>
         <script type="text/javascript" src="js/shapes/Cylinder.js"></script>
         <script type="text/javascript" src="js/shapes/Cube.js"></script>
+        <script type="text/javascript" src="js/shapes/ConvergedCube.js"></script>
         <script type="text/javascript" src="js/models/Coordinates.js"></script>
+        <!-- Crane -->
         <script type="text/javascript" src="js/models/Crane/Crane.js"></script>
         <script type="text/javascript" src="js/models/Crane/CraneBox.js"></script>
         <script type="text/javascript" src="js/models/Crane/CraneLoad.js"></script>
+        <!-- Building -->
         <script type="text/javascript" src="js/models/Building/Building.js"></script>
-        <script type="text/javascript" src="js/shapes/ConvergedCube.js"></script>
-        <script type="text/javascript" src="js/utils/Utils.js"></script>
-        <script type="text/javascript" src="js/cameras/DroneCameraControl.js"></script>
-        <script type="text/javascript" src="js/cameras/OrbitalCameraControl.js"></script>
-        <script type="text/javascript" src="js/curves/Bezier.js"></script>
-        <script type="text/javascript" src="js/curves/Bspline.js"></script>
-        <script type="text/javascript" src="js/curves/BsplineConcatenator.js"></script>
-        <script type="text/javascript" src="js/curves/BezierConcatenator.js"></script>
         <script type="text/javascript" src="js/models/Building/BuildingFloors.js"></script>
         <script type="text/javascript" src="js/models/Building/BuildingElevator.js"></script>
         <script type="text/javascript" src="js/models/Building/BuildingColumns.js"></script>
         <script type="text/javascript" src="js/models/Building/BuildingWindows.js"></script>
+        <!-- Slide -->
         <script type="text/javascript" src="js/models/Slide/Slide.js"></script>
+        <script type="text/javascript" src="js/models/Slide/SlideShapeGenerator.js"></script>
+        <!-- Cameras -->
+        <script type="text/javascript" src="js/cameras/DroneCameraControl.js"></script>
+        <script type="text/javascript" src="js/cameras/OrbitalCameraControl.js"></script>
+        <!-- Curves -->
+        <script type="text/javascript" src="js/curves/Bezier.js"></script>
+        <script type="text/javascript" src="js/curves/Bspline.js"></script>
+        <script type="text/javascript" src="js/curves/BsplineConcatenator.js"></script>
+        <script type="text/javascript" src="js/curves/BezierConcatenator.js"></script>
         <script type="text/javascript" src="js/shapes/LinearExtrusionWithFillings.js"></script>
+        <!-- Utils -->
+        <script type="text/javascript" src="js/utils/Utils.js"></script>
         <!-- <script>
             includeHTML('glsl/vertex-shader.html', document.getElementById('shader-vs'));
         </script>
