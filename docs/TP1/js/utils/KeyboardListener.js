@@ -1,6 +1,5 @@
 class KeyboardListener {
     // Registers listeners to key events.
-    // Each listener must have a execute(e) method.
     constructor() {
         this.keydown_listeners = [];
         this.keyup_listeners = [];
@@ -19,7 +18,7 @@ class KeyboardListener {
         document.addEventListener("keydown", function(e) {
             if (keydown_listeners != null) {
                 for (var i = 0; i < keydown_listeners.length; i++) {
-                    keydown_listeners[i].execute(e);
+                    keydown_listeners[i](e);
                 }
             }
         });
@@ -28,7 +27,7 @@ class KeyboardListener {
         document.addEventListener("keyup", function(e) {
             if (keyup_listeners != null) {
                 for (var i = 0; i < keyup_listeners.length; i++) {
-                    keyup_listeners[i].execute(e);
+                    keyup_listeners[i](e);
                 }
             }
         });

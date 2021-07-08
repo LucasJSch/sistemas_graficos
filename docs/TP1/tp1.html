@@ -24,6 +24,7 @@
         <script type="text/javascript" src="js/libs/random.js"></script>
         <!-- Interface between this script and JS classes -->
         <script type="text/javascript" src="js/drawScene.js"></script>
+        <script type="text/javascript" src="js/initCameras.js"></script>
         <!-- Shapes -->
         <script type="text/javascript" src="js/shapes/basic_shapes/Fan.js"></script>
         <script type="text/javascript" src="js/shapes/basic_shapes/Grid.js"></script>
@@ -126,8 +127,6 @@
         
         <script>
 
-            var keyobardListener = null;
-
             var mat4=glMatrix.mat4;
             var vec3=glMatrix.vec3;
             var vec4=glMatrix.vec4;
@@ -145,8 +144,8 @@
             var normalMatrix = mat4.create();
             var rotate_angle = -Math.PI/2;
             
-            // let droneControl = new DroneCameraControl([0.0, 0.0, 0.0]);
-            let orbitalControl = new OrbitalCameraControl();
+            var droneControl = null;
+            var orbitalControl = null;
          
             function initWebGL(){
 
@@ -163,7 +162,7 @@
 
                     setupWebGL();
                     initShaders();
-                    setupKeyboardListeners();
+                    [droneControl, orbitalControl] = initCameras();
                     tick();
 
                 }else{    
@@ -194,9 +193,9 @@
                 mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
 
                 // This defines the camera position.
-                // mat4.identity(viewMatrix);
-                // mat4.translate(viewMatrix,viewMatrix, [0.0, -0.0, -30.0]);
-                // // mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [0.0, 0.0, 0.0]);
+                mat4.identity(viewMatrix);
+                mat4.translate(viewMatrix,viewMatrix, [0.0, -0.0, -30.0]);
+                mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [0.0, 0.0, 0.0]);
             }
                     
                     
@@ -236,32 +235,14 @@
                 }
                 return shader;
             }
-            
-            class listener666 {
-                execute(e) {
-                    console.log("listening666: " + e.key);
-                }
-            }
 
-            class listener667 {
-                execute(e) {
-                    console.log("listening 667: " + e.key);
-                }
-            }
-
-            function setupKeyboardListeners() {
-                var listen = new listener666();
-                var listen2 = new listener667();
-                keyobardListener = new KeyboardListener();
-                keyobardListener.registerKeyDownListener(listen);
-                keyobardListener.registerKeyUpListener(listen2);
-                keyobardListener.initialize();
+            function listen(e) {
+                console.log("listen: " + e.key);
             }
 
             function animate(){
-
                 // droneControl.update();
-				// viewMatrix=droneControl.getMatrix();
+				// viewMatrix = droneControl.getMatrix();
                 orbitalControl.update();
                 viewMatrix = orbitalControl.getMatrix();
                 
