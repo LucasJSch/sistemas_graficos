@@ -5,7 +5,7 @@ class Slide {
         this.height = 5.0;
         this.extrusion_levels = 50;
         this.slide_repetitions = 5;
-        this.slide_color = [1.0, 0.0, 0.0];
+        this.slide_color = [0.9778, 0.5511, 0.2622];
         this.bezier_points = [[0.0, 0.0, 0.0], [-2.0, 0.0, 0.2], [-2.0, -1.0, 0.4], [0.0, -1.0, 0.6], [0.0, -1.0, 0.6], [2.0, -1.0, 0.8], [2.0, 0.0, 1.0], [0.0, 0.0, 1.2]]; 
         this.bezier_concatenator = null;
         this.slide_shapeGen = new SlideShapeGenerator(this.slide_color);
@@ -48,11 +48,13 @@ class Slide {
         mat4.fromScaling(t, [0.2, 0.2, 5.5]);
         mat4.fromTranslation(aux, [0.5, -0.3, 0.0]);
         mat4.mul(t, aux, t);
+        mat4.mul(t, transformMatrix, t);
         column.draw(t);
     
         mat4.fromScaling(t, [0.2, 0.2, 5.5]);
         mat4.fromTranslation(aux, [-0.5, -0.3, 0.0]);
         mat4.mul(t, aux, t);
+        mat4.mul(t, transformMatrix, t);
         column.draw(t);
     }
 }

@@ -2,6 +2,10 @@ class SlideShapeGenerator {
     constructor(vColor) {
         this.vColor = vColor;
         this.resolution = 50;
+        this.x_radius = 0.25;
+        this.y_radius = 0.5;
+        this.x_offset = 0.75;
+        this.y_offset = 0.0;
     }
 
     getPositionBuffer(central_pos) {
@@ -11,8 +15,8 @@ class SlideShapeGenerator {
         
         var buffer = [];
         for (var i = 0; i < this.resolution-1; i++) {
-            buffer.push(x_0 + 0.25*Math.cos(-i * 2.0 * Math.PI / (this.resolution*2)) + 0.75);
-            buffer.push(y_0 + 0.5*Math.sin(-i * 2.0 * Math.PI / (this.resolution*2)));
+            buffer.push(x_0 + this.x_radius*Math.cos(-i * 2.0 * Math.PI / (this.resolution*2)) + this.x_offset);
+            buffer.push(y_0 + this.y_radius*Math.sin(-i * 2.0 * Math.PI / (this.resolution*2)) + this.y_offset);
             buffer.push(z_0);
         }
 
