@@ -58,6 +58,7 @@
         <script type="text/javascript" src="js/shapes/LinearExtrusionWithFillings.js"></script>
         <!-- Utils -->
         <script type="text/javascript" src="js/utils/Utils.js"></script>
+        <script type="text/javascript" src="js/utils/KeyboardListener.js"></script>
         <!-- Script to import the shaders in a single line (not working for now) -->
         <!-- <script>
             includeHTML('glsl/vertex-shader.html', document.getElementById('shader-vs'));
@@ -125,6 +126,7 @@
         
         <script>
 
+            var keyobardListener = null;
 
             var mat4=glMatrix.mat4;
             var vec3=glMatrix.vec3;
@@ -161,6 +163,7 @@
 
                     setupWebGL();
                     initShaders();
+                    setupKeyboardListeners();
                     tick();
 
                 }else{    
@@ -234,6 +237,27 @@
                 return shader;
             }
             
+            class listener666 {
+                execute() {
+                    console.log("listening");
+                }
+            }
+
+            class listener667 {
+                execute() {
+                    console.log("listening 667");
+                }
+            }
+
+            function setupKeyboardListeners() {
+                var listen = new listener666();
+                var listen2 = new listener667();
+                keyobardListener = new KeyboardListener();
+                keyobardListener.registerKeyDownListener('k', listen);
+                keyobardListener.registerKeyUpListener('k', listen2);
+                keyobardListener.initialize();
+            }
+
             function animate(){
 
                 // droneControl.update();
