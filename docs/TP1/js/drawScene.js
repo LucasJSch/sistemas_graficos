@@ -16,20 +16,20 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     coordinates.draw();
 
     // Building.
-    var building = new Building(glProgram);
-    building.draw();
+    // var building = new Building(glProgram);
+    // building.draw();
 
     // Slide
-    // t_slide = mat4.create();
-    // mat4.fromTranslation(t_slide, [0.0, 0.0, 0.0]);
-    // var slide = new Slide(glProgram);
-    // slide.draw();
+    t_slide = mat4.create();
+    mat4.fromTranslation(t_slide, [0.0, 0.0, 0.0]);
+    var slide = new Slide(glProgram);
+    slide.draw();
 
     // Crane.
-    t_crane = mat4.create();
-    mat4.fromTranslation(t_crane, [20, 20, 0]);
-    var crane = new Crane(glProgram);
-    crane.draw(t_crane);
+    // t_crane = mat4.create();
+    // mat4.fromTranslation(t_crane, [20, 20, 0]);
+    // var crane = new Crane(glProgram);
+    // crane.draw(t_crane);
 
     // Floor.
     // t_floor_s = mat4.create();

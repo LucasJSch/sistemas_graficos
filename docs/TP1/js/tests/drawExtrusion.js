@@ -14,7 +14,7 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     coord.draw();
 
     var levels = 100;
-    var shapeGen = new ShapeGen2(glProgram);
+    var shapeGen = new SlideShapeGenerator([0.3, 0.3, 0.3]);
     var repetitions = 5;
     var beizer_points = [];
     for (var rep = 0; rep < repetitions; rep++) {
@@ -109,11 +109,11 @@ class ShapeGen2 {
             buffer.push(0.0);
             buffer.push(1.0);
         }
-        // Negro.
+        // Gris.
         for (var i = 0; i < n/5; i++) {
-            buffer.push(0.0);
-            buffer.push(0.0);
-            buffer.push(0.0);
+            buffer.push(0.9);
+            buffer.push(0.9);
+            buffer.push(0.9);
         }
         return buffer;
     }
