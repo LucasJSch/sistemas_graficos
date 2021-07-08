@@ -118,4 +118,8 @@ class ConvergedCubeShapeGenerator {
         }
         return buffer;
     }
+
+    getUVBuffer() {
+        return [];
+    }
 }

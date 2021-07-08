@@ -114,7 +114,7 @@ class CubicCylinderGenerator {
     constructor(pointsPerLongSide, pointsPerShortSide, vColor) {
         this.pointsPerLongSide = pointsPerLongSide;
         this.pointsPerShortSide = pointsPerShortSide;
-        this.totalPoints = 2*pointsPerShortSide + 2*pointsPerLongSide + 1;
+        this.totalPoints = 2*(pointsPerShortSide+1) + 2*(pointsPerLongSide+1) + 1;
         this.vColor = vColor;
         this.longSideLength = 4.0;
         this.shortSideLength = 2.0;
@@ -133,7 +133,7 @@ class CubicCylinderGenerator {
             buffer.push(y_0 - this.shortSideLength/2.0);
             buffer.push(z_0);
         }
-        for (var i = -this.shortSideLength/2.0;  i <= this.pointsPerShortSide/2.0; i++) {
+        for (var i = -this.pointsPerShortSide/2.0;  i <= this.pointsPerShortSide/2.0; i++) {
             buffer.push(x_0 + this.longSideLength/2.0);
             buffer.push(y_0 +  this.shortSideLength * i / this.pointsPerShortSide);
             buffer.push(z_0);
@@ -145,7 +145,7 @@ class CubicCylinderGenerator {
             buffer.push(y_0 + this.shortSideLength/2.0);
             buffer.push(z_0);
         }
-        for (var i = this.shortSideLength/2.0;   i >= -this.pointsPerShortSide/2.0; i--) {
+        for (var i = this.pointsPerShortSide/2.0;   i >= -this.pointsPerShortSide/2.0; i--) {
             buffer.push(x_0 - this.longSideLength/2.0);
             buffer.push(y_0 +  this.shortSideLength * i / this.pointsPerShortSide);
             buffer.push(z_0);
@@ -176,6 +176,43 @@ class CubicCylinderGenerator {
             buffer.push(this.vColor[0]);
             buffer.push(this.vColor[1]);
             buffer.push(this.vColor[2]);
+        }
+        return buffer;
+    }
+
+    getUVBuffer(topPos) {
+        var buffer = [];
+        for (var i = 0; i <= this.pointsPerLongSide; i++) {
+            buffer.push(i / this.pointsPerLongSide);
+            if (!topPos) {
+                buffer.push(0.0);
+            } else {
+                buffer.push(1.0);
+            }
+        }
+        for (var i = 0; i <= this.pointsPerShortSide; i++) {
+            buffer.push(i / this.pointsPerShortSide);
+            if (!topPos) {
+                buffer.push(0.0);
+            } else {
+                buffer.push(1.0);
+            }
+        }
+        for (var i = 0; i <= this.pointsPerLongSide; i++) {
+            buffer.push(i / this.pointsPerLongSide);
+            if (!topPos) {
+                buffer.push(0.0);
+            } else {
+                buffer.push(1.0);
+            }
+        }
+        for (var i = 0; i <= this.pointsPerShortSide; i++) {
+            buffer.push(i / this.pointsPerShortSide);
+            if (!topPos) {
+                buffer.push(0.0);
+            } else {
+                buffer.push(1.0);
+            }
         }
         return buffer;
     }

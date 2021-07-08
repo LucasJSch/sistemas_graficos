@@ -98,6 +98,7 @@
             attribute vec3 aVertexPosition;
             attribute vec3 aVertexNormal;
             attribute vec3 aVertexColor;
+            attribute vec2 aVertexUV;
 
             uniform mat4 modelMatrix;
             uniform mat4 viewMatrix;
@@ -107,6 +108,7 @@
             varying vec3 vNormal;
             varying vec3 vPosWorld;
             varying vec3 vColor;
+            varying vec2 vUV;
 
             /********** Lighting ************/
             //varying highp vec3 vLighting;
@@ -118,6 +120,7 @@
                 vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;    // La posicion en coordenadas de mundo
                 vNormal=(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       // La normal en coordenadas de mundo
                 vColor = aVertexColor;
+                vUV = aVertexUV;
                 
                 
                 /********** Lighting ************/
@@ -135,6 +138,7 @@
             varying vec3 vNormal;
             varying vec3 vPosWorld;
             varying vec3 vColor;
+            varying vec2 vUV;
 
             /********** Lighting ************/
             //varying highp vec3 vLighting;

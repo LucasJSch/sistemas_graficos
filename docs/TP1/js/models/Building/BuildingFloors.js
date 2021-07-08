@@ -100,4 +100,8 @@ class FloorShapeGenerator {
         }
         return buffer;
     }
+
+    getUVBuffer() {
+        return [];
+    }
 }

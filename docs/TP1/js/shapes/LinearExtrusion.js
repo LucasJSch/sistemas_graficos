@@ -14,9 +14,7 @@ class LinearExtrusion {
         this.pos_buffer = null;
         this.normal_buffer = null;
         this.color_buffer = null;
-        this.top_pos_buffer = null;
-        this.top_normal_buffer = null;
-        this.top_color_buffer = null;
+        this.uv_buffer = null;
 
         this.useFan = useFan;
     }
@@ -30,10 +28,10 @@ class LinearExtrusion {
         this.applyTransformation(transformMatrix);
 
         if (!this.useFan) {
-            var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
+            var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer);
             grid.draw();
         } else {
-            var fan = new Fan(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
+            var fan = new Fan(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.top_uv_buffer);
             fan.draw();          
         }
     }
@@ -47,12 +45,14 @@ class LinearExtrusion {
         this.pos_buffer = [];
         this.normal_buffer = [];
         this.color_buffer = [];
+        this.uv_buffer = [];
         for (var level = 0; level < this.levels; level++) {
             var buffers = this.generateBuffersForLevel(level);
             this.n_cols = (buffers[0].length/3);
             this.pos_buffer = this.pos_buffer.concat(buffers[0]);
             this.normal_buffer = this.normal_buffer.concat(buffers[1]);
             this.color_buffer = this.color_buffer.concat(buffers[2]);
+            this.uv_buffer = this.uv_buffer.concat(buffers[4]);
         }
     }
 
@@ -66,6 +66,7 @@ class LinearExtrusion {
         var direction_vector = vec3.create();
         var minus_start_pos = vec3.create();
         var central_point = vec3.create();
+        var topPos = false;
 
         // If this is the first level, the central_pos should match with the start pos.
         if (level == 0) {
@@ -83,12 +84,14 @@ class LinearExtrusion {
         // If this is the last level, the central_pos should match with the end pos.
         } else {
             central_point = this.vEndPos;
+            topPos = true;
         }
 
         var pos_buffer = this.shapeGenerator.getPosBuffer(central_point);
         var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
         var color_buffer = this.shapeGenerator.getColorBuffer(central_point);
+        var uv_buffer = this.shapeGenerator.getUVBuffer(topPos);
 
-        return [pos_buffer, normal_buffer, color_buffer, central_point];
+        return [pos_buffer, normal_buffer, color_buffer, central_point, uv_buffer];
     }
 }

@@ -87,4 +87,8 @@ class CylinderShapeGenerator {
         }
         return buffer;
     }
+
+    getUVBuffer() {
+        return [];
+    }
 }
