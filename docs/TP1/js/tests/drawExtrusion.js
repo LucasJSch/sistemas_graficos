@@ -13,24 +13,13 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     var coord = new Coordinates(glProgram);
     coord.draw();
 
-    var coordinates2 = new Coordinates(glProgram);
-    t = mat4.create();
-    t2 = mat4.create();
-    mat4.targetTo(t, [0.0, 0.0, 0.0], [1.0, 0.0, 0.0], [0.9, 0.0, 0.0]);
-    console.log(mat4.str(t));
-    mat4.fromTranslation(t2, [0.0, 0.0, 5.3]);
-    mat4.mul(t, t2, t);
-    coordinates2.draw(t);
-
-
-    // var levels = 60;
-    // var shapeGen = new shapeGen();
-    // var curveGen = new CurveGen();
-    // var curveLength = 15;
-    // var extrusion = new Extrusion(glProgram, levels, shapeGen, curveGen, curveLength);
-    // var transf = mat4.create();
-    // mat4.fromTranslation(transf, [0.0, 0.0, 0.0]);
-    // extrusion.draw(transf);
+    var levels = 10;
+    var shapeGen = new ShapeGen(glProgram);
+    var bezier = new CubicBezierConcatenator([[0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [-2.0, -1.0, 0.0], [0.0, -1.0, 0.0], [0.0, -1.0, 0.0], [2.0, -1.0, 0.0], [2.0, 0.0, 0.0], [0.0, 0.0, 0.0]]);
+    var extrusion = new Extrusion(glProgram, levels, shapeGen, bezier, /*enableFillings=*/false);
+    var transf = mat4.create();
+    mat4.fromTranslation(transf, [0.0, 0.0, 0.0]);
+    extrusion.draw(transf);
 
 }
 
@@ -41,5 +30,24 @@ class ShapeGen {
 
     getShape() {
         return new Cylinder(glProgram, this.vColor);
+    }
+
+    getHeight() {
+        return 0.05;
+    }
+
+    getTransformMatrix(normal, position=null) {
+        var t = mat4.create();
+        mat4.targetTo(t, [0.0, 0.0, 0.0], normal, [0.0, 0.0, 1.0]);
+        var aux = mat4.create();
+        mat4.fromTranslation(aux, position);
+        mat4.mul(t, aux, t);
+        return t;
+    }
+    
+    getPreTransformMatrix() {
+        var t = mat4.create();
+        mat4.fromScaling(t, [0.05, 0.05, 0.05]);
+        return t;
     }
 }

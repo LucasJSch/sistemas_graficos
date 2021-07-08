@@ -33,7 +33,7 @@ class CuadraticBsplineConcatenator {
         return this.bsplines[curveNumber].getFirstDerivative(u);
     }
 
-    getNumberOfSplines() {
+    getNumberOfCurves() {
         return this.bsplines.length;
     }
 }

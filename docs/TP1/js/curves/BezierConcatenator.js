@@ -22,6 +22,18 @@ class CubicBezierConcatenator {
         return this.beziers[curveNumber].getPoint(u);
     }
 
+    // 0 <= t <= ceil(n_points/3)
+    getFirstDerivative(t) {
+        var curveNumber = Math.floor(t);
+        var u = t % 1;
+
+        if (curveNumber > this.beziers.length-1) {
+            console.log("ERROR: Invalid t in CuadraticBsplineConcatenator. t = " + t);
+        }
+
+        return this.beziers[curveNumber].getFirstDerivative(u);
+    }
+
     getNumberOfCurves() {
         return this.beziers.length;
     }
