@@ -21,7 +21,7 @@ class Extrusion {
         for (var level = 0; level < this.levels; level++) {
             var point = this.curveGen.getPoint(level * step);
             var normal = this.curveGen.getFirstDerivative(level * step);
-            var buffers = this.generateBuffersForPositionAndNormal(point, normal);
+            var buffers = this.generateBuffersForPositionAndNormal(point, normal, transformMatrix);
             this.n_cols = (buffers[0].length/3);
             this.position_buffer = this.position_buffer.concat(buffers[0]);
             this.normal_buffer = this.normal_buffer.concat(buffers[1]);
@@ -32,7 +32,7 @@ class Extrusion {
         grid.draw();
     }
 
-    generateBuffersForPositionAndNormal(position, normal) {
+    generateBuffersForPositionAndNormal(position, normal, transformMatrix) {
         var pos_buffer = this.shapeGen.getPositionBuffer([0.0, 0.0, 0.0]);
         var normal_buffer = this.shapeGen.getNormalBuffer([0.0, 0.0, 0.0]);
         var color_buffer = this.shapeGen.getColorBuffer([0.0, 0.0, 0.0]);
@@ -42,6 +42,7 @@ class Extrusion {
         var aux = mat4.create();
         mat4.fromTranslation(aux, position);
         mat4.mul(t, aux, t);
+        mat4.mul(t, transformMatrix, t);
 
         pos_buffer = this.utils.TransformPosBuffer(t, pos_buffer)
 

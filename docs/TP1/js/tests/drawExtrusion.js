@@ -15,12 +15,21 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
 
     var levels = 50;
     var shapeGen = new ShapeGen2(glProgram);
-    var bezier = new CubicBezierConcatenator([[0.0, 0.0, 0.0], [-2.0, 0.0, 0.2], [-2.0, -1.0, 0.4], [0.0, -1.0, 0.6], [0.0, -1.0, 0.8], [2.0, -1.0, 1.0], [2.0, 0.0, 1.2], [0.0, 0.0, 1.4]]);
+    var repetitions = 5;
+    var beizer_points = [];
+    for (var rep = 0; rep < repetitions; rep++) {
+        beizer_points.push([0.0, 0.0, 0.0   + rep*1.4]);
+        beizer_points.push([-2.0, 0.0, 0.2  + rep*1.4]);
+        beizer_points.push([-2.0, -1.0, 0.4 + rep*1.4]);
+        beizer_points.push([0.0, -1.0, 0.6  + rep*1.4]);
+        beizer_points.push([0.0, -1.0, 0.8  + rep*1.4]);
+        beizer_points.push([2.0, -1.0, 1.0  + rep*1.4]);
+        beizer_points.push([2.0, 0.0, 1.2   + rep*1.4]);
+        beizer_points.push([0.0, 0.0, 1.4   + rep*1.4]);
+    }
+    var bezier = new CubicBezierConcatenator(beizer_points);
     var extrusion = new Extrusion(glProgram, levels, shapeGen, bezier);
-    var transf = mat4.create();
-    mat4.fromTranslation(transf, [0.0, 0.0, 0.0]);
-    extrusion.draw(transf);
-
+    extrusion.draw();
 }
 
 class ShapeGen2 {
