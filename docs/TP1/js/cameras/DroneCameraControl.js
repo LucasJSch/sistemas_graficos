@@ -1,11 +1,10 @@
 class DroneCameraControl {
-    constructor(initialPos, keyboardListener){
+    constructor(initialPos){
         if (!initialPos) {
             this.initialPos = [0, 0, 0];
         } else{
             this.initialPos = initialPos;
         }
-        this.keyboardListener = keyboardListener;
         this.rotationFactor = 0.01;
         this.translationFactor = 0.01;
         this.position = vec3.fromValues(initialPos[0], initialPos[1], initialPos[2]);
