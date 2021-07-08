@@ -1,21 +1,20 @@
 class Building {
     // Draws a crane.
-    constructor(glProgram) {
+    constructor(glProgram, firstPartLevels=5, secondPartLevels=5, pointsPerLongSide=5, pointsPerShortSide=5) {
         this.glProgram = glProgram;
-        this.pointsPerLongSide = 5;
-        this.pointsPerShortSide = 5;
+        this.pointsPerLongSide = pointsPerLongSide;
+        this.pointsPerShortSide = pointsPerShortSide;
         this.cubic_cyl_gen = new CubicCylinderGenerator(this.pointsPerLongSide, this.pointsPerShortSide, [1.0, 0.0, 0.0]);
         this.firstPartHeight = 5;
-        this.firstPartLevels = 5;
+        this.firstPartLevels = firstPartLevels;
         this.secondPartHeight = 10;
-        this.secondPartLevels = 5;
+        this.secondPartLevels = secondPartLevels;
         // 0 < scaleFactorBetweenParts <= 1
         this.scaleFactorBetweenParts = 0.75;
         this.floorColor = [1.0, 0.0, 0.0];
         this.columnsColor = [0.5, 0.5, 0.5];
         this.windowsColor = [0.3, 0.0, 8.0];
         this.elevatorColor = [1.0, 0.0, 0.0];
-
 
         this.utils = new Utils();
     }

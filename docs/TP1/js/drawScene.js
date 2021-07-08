@@ -1,5 +1,5 @@
 // This function serves as an interface between the main js script that initializes the environment and the JS classes.
-function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix) {
+function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix, controls) {
 
     var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
     var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
@@ -10,14 +10,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(viewMatrixUniform, false, viewMatrix);
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
-
-    // Coordinates.
-    var coordinates = new Coordinates(glProgram);
-    coordinates.draw();
-
-    // Building.
-    var building = new Building(glProgram);
-    building.draw();
 
     // Slide
     t_slide = mat4.create();
@@ -42,4 +34,14 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     mat4.mul(t_floor_t, t_floor_s, t_floor_t);
     var floor = new Plane(glProgram, [0.721, 0.737, 0.580]);
     floor.draw(t_floor_t);
+
+
+    // Building.
+    var firstPartFloors = controls.firstPartFloors;
+    var secondPartFloors = controls.secondPartFloors;
+    var columnsLongSide = columnsLongSide = controls.buildingColumnsAmount / 2;
+    var columnsShortSide = controls.buildingColumnsAmount - columnsLongSide;
+
+    var building = new Building(glProgram, firstPartFloors, secondPartFloors, columnsLongSide, columnsShortSide);
+    building.draw();
 }

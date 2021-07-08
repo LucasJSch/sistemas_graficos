@@ -6,14 +6,38 @@
             body{ background-color: grey; }
             canvas{ background-color: white; }
 			textarea{ background-color: black; foreground-color: white;}
+
+            .navbar {
+                overflow: hidden;
+                background-color: #333;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            .navbar a:hover, .dropdown:hover .dropbtn {
+                background-color: grey;
+            }
+
         </style>
     </head>
     <body>
-
+        <div class="navbar">
+            <a onclick="editFirstPartFloors()">Cantidad de pisos primer tramo </a>
+            <a onclick="editSecondPartFloors()">Cantidad de pisos segundo tramo </a>
+            <a onclick="editColumnsAmount()">Cantidad de columnas del edificio </a>
+        </div>
     	<center>    		            
             <canvas id="my-canvas" width="1000" height="800">
             	Your browser does not support the HTML5 canvas element.
-    		</canvas>    		
+    		</canvas>
     	</center>
 
         <!-- Third party libs -->
@@ -60,6 +84,7 @@
         <!-- Utils -->
         <script type="text/javascript" src="js/utils/Utils.js"></script>
         <script type="text/javascript" src="js/utils/KeyboardListener.js"></script>
+        <script type="text/javascript" src="js/utils/SceneControls.js"></script>
         <!-- Script to import the shaders in a single line (not working for now) -->
         <!-- <script>
             includeHTML('glsl/vertex-shader.html', document.getElementById('shader-vs'));
@@ -248,13 +273,34 @@
             
             function tick(){
                 requestAnimationFrame(tick);
-                drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix);
+                drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix, controls);
                 animate();
             }
 
             window.onload=initWebGL;
 
         </script>
+
+        <!-- Menu callbacks. -->
+        <script>
+            var controls = new SceneControls();
+
+            function editFirstPartFloors() {
+                var amount = prompt("Ingresa el numero de pisos deseado.");
+                controls.setChangeFirstPartFloors(amount);
+            }
+
+            function editSecondPartFloors() {
+                var amount = prompt("Ingresa el numero de pisos deseado.");
+                controls.setChangeSecondPartFloors(amount);
+            }
+
+            function editColumnsAmount() {
+                var amount = prompt("Ingresa el numero de columnas deseado.");
+                controls.setChangeColumnsAmount(amount);     
+            }
+        </script>
+
 
 
     </body>

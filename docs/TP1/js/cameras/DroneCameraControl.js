@@ -66,23 +66,17 @@ class DroneCameraControl {
     keyUpListener(e) {
         switch (e.key) {
             case "ArrowUp":
-            case "u":
             case "ArrowDown":
-            case "j": 
                 this.camState.xVelTarget=0;
                 break;
             
             case "ArrowLeft":
-            case "h":
             case "ArrowRight":
-            case "k": 
                 this.camState.zVelTarget=0;
                 break;  
 
             case "PageUp":
-            case "o":
             case "PageDown":
-            case "l":
                 this.camState.yVelTarget=0;
                 break;
 
@@ -103,23 +97,23 @@ class DroneCameraControl {
 
     keyDownListener(e) {
         switch (e.key) {
-            case "ArrowUp":  case "u":
+            case "ArrowUp":
                 this.camState.xVelTarget=-1;
                 break;
-            case "ArrowDown": case "j":
+            case "ArrowDown":
                 this.camState.xVelTarget=1;
                 break; 
-            case "ArrowLeft": case "h": 
+            case "ArrowLeft": 
                 this.camState.zVelTarget=1;
                 break;
-            case "ArrowRight": case "k":
+            case "ArrowRight":
                 this.camState.zVelTarget=-1;
                 break;   
 
-            case "PageUp": case "o":
+            case "PageUp":
                 this.camState.yVelTarget=1;
                 break;
-            case "PageDown": case "l":
+            case "PageDown":
                 this.camState.yVelTarget=-1;
                 break;        
 

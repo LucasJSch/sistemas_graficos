@@ -15,7 +15,7 @@ class BuildingFloors {
             transformMatrix = mat4.create();
         }
 
-        for (var i = 0; i < this.nFloors + 1; i++) {
+        for (var i = 0; i <= this.nFloors; i++) {
             var t = mat4.create();
             mat4.fromTranslation(t, [0.0, 0.0, i * this.height/this.nFloors]);
             var floor = new SingleBuildingFloor(this.glProgram, this.bsplineConcatenator, this.vColor, this.height, this.scale);

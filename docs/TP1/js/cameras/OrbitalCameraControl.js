@@ -18,7 +18,7 @@ function OrbitalCameraControl(initialPos){
     // Up vector of the camera.
     let upVector = [0.0, 0.0, 1.0];
 
-    let init_camera_pos = [radius , radius , radius];
+    let init_camera_pos = initialPos;
     var cameraPosition = init_camera_pos;
     var mouse = {x: 0, y: 0};
 
