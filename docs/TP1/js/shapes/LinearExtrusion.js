@@ -80,15 +80,11 @@ class LinearExtrusion {
 
             vec3.scale(central_point, direction_vector, level * lvl_step);
             vec3.add(central_point, this.vStartPos, central_point);
-        // If this is the las level, the central_pos should match with the end pos.
+        // If this is the last level, the central_pos should match with the end pos.
         } else {
             central_point = this.vEndPos;
         }
 
-        // console.log("direction_vector: " + direction_vector);
-        // console.log("Level step: " + lvl_step);
-        // console.log("Level: " + level);
-        // console.log("central_point: " + central_point);
         var pos_buffer = this.shapeGenerator.getPosBuffer(central_point);
         var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
         var color_buffer = this.shapeGenerator.getColorBuffer(central_point);

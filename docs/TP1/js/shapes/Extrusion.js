@@ -1,14 +1,15 @@
 class Extrusion {
-    // enableFillings fills the corner vertices between each level.
-    // I.e. it makes the a big unique surface.
-    // If you disable it, you'll see discrete shapes. 
-    // Curvegen must be a BezierConcatenator or a BsplineConcatenator.
-    constructor(glProgram, levels, shapeGen, curveGen, enableFillings=false) {
+    constructor(glProgram, levels, shapeGen, curveGen) {
         this.glProgram = glProgram;
         this.levels = levels;
+        this.n_cols = null;
         this.shapeGen = shapeGen;
         this.curveGen = curveGen;
-        this.enableFillings = enableFillings;
+        this.position_buffer = [];
+        this.normal_buffer = [];
+        this.color_buffer = [];
+
+        this.utils = new Utils();
     }
 
     draw(transformMatrix) {
@@ -20,37 +21,30 @@ class Extrusion {
         for (var level = 0; level < this.levels; level++) {
             var point = this.curveGen.getPoint(level * step);
             var normal = this.curveGen.getFirstDerivative(level * step);
-            var t = this.shapeGen.getTransformMatrix(normal, point);
-            var pre_t = this.shapeGen.getPreTransformMatrix();
-            if (this.enableFillings) {
-                // var startPos = vec3.create();
-                // var endPos = vec3.create();
-                // vec3.transformMat4(startPos, [0.0, 0.0, 0.0], t);
-                // vec3.transformMat4(endPos, [0.0, 0.0, this.shapeGen.getHeight()], t);
-                // mat4.mul(t, transformMatrix, t);
-                // mat4.mul(t, t, pre_t);
-                // extrusion.draw(t);
-            } else {
-                if (level == 1){
-                // mat4.mul(t, transformMatrix, t);
-                // mat4.mul(t, t, pre_t);
-                this.drawShape(t);
-                }
-            }
+            var buffers = this.generateBuffersForPositionAndNormal(point, normal);
+            this.n_cols = (buffers[0].length/3);
+            this.position_buffer = this.position_buffer.concat(buffers[0]);
+            this.normal_buffer = this.normal_buffer.concat(buffers[1]);
+            this.color_buffer = this.color_buffer.concat(buffers[2]);
         }
+
+        var grid = new Grid(this.glProgram, this.position_buffer, this.normal_buffer, this.color_buffer, this.levels, this.n_cols);
+        grid.draw();
     }
 
-    drawShape(transform) {
-        var pos_buf = this.shapeGen.getPosBuffer([0.0, 0.0, 0.0]);
-        var nrm_buf = this.shapeGen.getNormalBuffer([0.0, 0.0, 0.0]);
-        var clr_buf = this.shapeGen.getColorBuffer([0.0, 0.0, 0.0]);
+    generateBuffersForPositionAndNormal(position, normal) {
+        var pos_buffer = this.shapeGen.getPositionBuffer([0.0, 0.0, 0.0]);
+        var normal_buffer = this.shapeGen.getNormalBuffer([0.0, 0.0, 0.0]);
+        var color_buffer = this.shapeGen.getColorBuffer([0.0, 0.0, 0.0]);
 
-        var utils = new Utils();
-        // var delete1 = mat4.create();
-        // mat4.fromTranslation(delete1, [0.0, 0.0, 1.0]);
-        pos_buf = utils.TransformPosBuffer(transform, pos_buf);
+        var t = mat4.create();
+        mat4.targetTo(t, [0.0, 0.0, 0.0], normal, [0.0, 0.0, 1.0]);
+        var aux = mat4.create();
+        mat4.fromTranslation(aux, position);
+        mat4.mul(t, aux, t);
 
-        var grid = new TriangleStrip(this.glProgram, pos_buf, nrm_buf, clr_buf);
-        grid.draw();
+        pos_buffer = this.utils.TransformPosBuffer(t, pos_buffer)
+
+        return [pos_buffer, normal_buffer, color_buffer];
     }
 }
