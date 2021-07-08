@@ -59,7 +59,7 @@ class FloorShapeGenerator {
         
         var buffer = [];
 
-        let bspline_points = this.bsplineConcatenator.getNumberOfSplines();
+        let bspline_points = this.bsplineConcatenator.getNumberOfCurves();
         let step =  bspline_points / this.n_points;
         for (var i = 0; i < bspline_points; i+=step) {
             var p = this.bsplineConcatenator.getPoint(i);
@@ -79,7 +79,7 @@ class FloorShapeGenerator {
     // TODO: Fix this. This is incorrect.
     getNormalBuffer(central_pos) {
         var buffer = [];
-        let bspline_points = this.bsplineConcatenator.getNumberOfSplines();
+        let bspline_points = this.bsplineConcatenator.getNumberOfCurves();
         let step =  bspline_points / this.n_points;
         for (var i = 0; i < bspline_points; i+=step) {
             buffer.push(0.0);
@@ -91,7 +91,7 @@ class FloorShapeGenerator {
         
     getColorBuffer(central_pos) {
         var buffer = [];
-        let bspline_points = this.bsplineConcatenator.getNumberOfSplines();
+        let bspline_points = this.bsplineConcatenator.getNumberOfCurves();
         let step =  bspline_points / this.n_points;
         for (var i = 0; i < bspline_points; i+=step) {
             buffer.push(this.vColor[0]);

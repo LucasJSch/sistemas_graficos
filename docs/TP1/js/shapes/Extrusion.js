@@ -31,11 +31,26 @@ class Extrusion {
                 mat4.mul(t, t, pre_t);
                 extrusion.draw(t);
             } else {
-                var shape = this.shapeGen.getShape();
+                if (level == 1){
                 mat4.mul(t, transformMatrix, t);
                 mat4.mul(t, t, pre_t);
-                shape.draw(t);
+                this.drawShape(t);
+                }
             }
         }
+    }
+
+    drawShape(transform) {
+        var pos_buf = this.shapeGen.getPosBuffer([0.0, 0.0, 0.0]);
+        var nrm_buf = this.shapeGen.getNormalBuffer([0.0, 0.0, 0.0]);
+        var clr_buf = this.shapeGen.getColorBuffer([0.0, 0.0, 0.0]);
+
+        var utils = new Utils();
+        var delete1 = mat4.create();
+        mat4.fromTranslation(delete1, [0.0, 0.0, 1.0]);
+        pos_buf = utils.TransformPosBuffer(delete1, pos_buf);
+
+        var grid = new Grid(this.glProgram, pos_buf, nrm_buf, clr_buf, 50, 50);
+        grid.draw();
     }
 }

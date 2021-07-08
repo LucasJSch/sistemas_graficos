@@ -61,30 +61,35 @@ class ShapeGenerator {
     getColorBuffer(central_pos) {
         var buffer = [];
         var n = 1000;
-        for (var i = 0; i < n/5; i++) {
-            buffer.push(0.5);
-            buffer.push(0.0);
-            buffer.push(0.5);
-        }
+        // Rojo.
         for (var i = 0; i < n/5; i++) {
             buffer.push(1.0);
-            buffer.push(0.3);
-            buffer.push(0.5);
-        }
-        for (var i = 0; i < n/5; i++) {
-            buffer.push(1.0);
-            buffer.push(0.5);
+            buffer.push(0.0);
             buffer.push(0.0);
         }
+        // Amarillo.
         for (var i = 0; i < n/5; i++) {
-            buffer.push(0.0);
-            buffer.push(0.5);
             buffer.push(1.0);
+            buffer.push(1.0);
+            buffer.push(0.0);
         }
+        // Verde.
         for (var i = 0; i < n/5; i++) {
             buffer.push(0.0);
             buffer.push(1.0);
-            buffer.push(0.75);
+            buffer.push(0.0);
+        }
+        // Azul.
+        for (var i = 0; i < n/5; i++) {
+            buffer.push(0.0);
+            buffer.push(0.0);
+            buffer.push(1.0);
+        }
+        // Negro.
+        for (var i = 0; i < n/5; i++) {
+            buffer.push(0.0);
+            buffer.push(0.0);
+            buffer.push(0.0);
         }
         return buffer;
     }

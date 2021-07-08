@@ -57,7 +57,7 @@ class Building {
 
         // Generate column positions.
         var col_pos = [];
-        for (var i = 0; i < concatenator.getNumberOfSplines(); i++) {
+        for (var i = 0; i < concatenator.getNumberOfCurves(); i++) {
             var p = vec3.create();
             vec3.scale(p, concatenator.getPoint(i), 0.9);
             col_pos.push(p);
@@ -87,7 +87,7 @@ class Building {
 
         // Generate column positions.
         var col_pos = [];
-        for (var i = 0; i < concatenator.getNumberOfSplines(); i++) {
+        for (var i = 0; i < concatenator.getNumberOfCurves(); i++) {
             var p = vec3.create();
             vec3.scale(p, concatenator.getPoint(i), 0.9 * this.scaleFactorBetweenParts);
             col_pos.push(p);
