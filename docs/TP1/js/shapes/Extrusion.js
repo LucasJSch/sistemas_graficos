@@ -23,17 +23,17 @@ class Extrusion {
             var t = this.shapeGen.getTransformMatrix(normal, point);
             var pre_t = this.shapeGen.getPreTransformMatrix();
             if (this.enableFillings) {
-                var startPos = vec3.create();
-                var endPos = vec3.create();
-                vec3.transformMat4(startPos, [0.0, 0.0, 0.0], t);
-                vec3.transformMat4(endPos, [0.0, 0.0, this.shapeGen.getHeight()], t);
-                mat4.mul(t, transformMatrix, t);
-                mat4.mul(t, t, pre_t);
-                extrusion.draw(t);
+                // var startPos = vec3.create();
+                // var endPos = vec3.create();
+                // vec3.transformMat4(startPos, [0.0, 0.0, 0.0], t);
+                // vec3.transformMat4(endPos, [0.0, 0.0, this.shapeGen.getHeight()], t);
+                // mat4.mul(t, transformMatrix, t);
+                // mat4.mul(t, t, pre_t);
+                // extrusion.draw(t);
             } else {
                 if (level == 1){
-                mat4.mul(t, transformMatrix, t);
-                mat4.mul(t, t, pre_t);
+                // mat4.mul(t, transformMatrix, t);
+                // mat4.mul(t, t, pre_t);
                 this.drawShape(t);
                 }
             }
@@ -46,11 +46,11 @@ class Extrusion {
         var clr_buf = this.shapeGen.getColorBuffer([0.0, 0.0, 0.0]);
 
         var utils = new Utils();
-        var delete1 = mat4.create();
-        mat4.fromTranslation(delete1, [0.0, 0.0, 1.0]);
-        pos_buf = utils.TransformPosBuffer(delete1, pos_buf);
+        // var delete1 = mat4.create();
+        // mat4.fromTranslation(delete1, [0.0, 0.0, 1.0]);
+        pos_buf = utils.TransformPosBuffer(transform, pos_buf);
 
-        var grid = new Grid(this.glProgram, pos_buf, nrm_buf, clr_buf, 50, 50);
+        var grid = new TriangleStrip(this.glProgram, pos_buf, nrm_buf, clr_buf);
         grid.draw();
     }
 }

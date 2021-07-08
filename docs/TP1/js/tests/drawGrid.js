@@ -12,8 +12,8 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
 
 
     var central_pos = [0.0, 0.0, 0.0];
-    var n_rows = 100;
-    var n_cols = 100;
+    var n_rows = 5;
+    var n_cols = 5;
     var grid = new Grid(glProgram, fShapePos(central_pos), fShapeNormal(central_pos), fShapeColor(central_pos), n_rows, n_cols);
     grid.draw();
 }
@@ -49,7 +49,7 @@ function fShapeColor(central_pos) {
     var n = 10;
     for (var i = 0; i < 10; i++) {
         buffer.push(1.0);
-        buffer.push(0.0);
+        buffer.push(i/10);
         buffer.push(1.0);
     }
     return buffer;

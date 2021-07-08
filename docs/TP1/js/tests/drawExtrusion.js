@@ -14,7 +14,7 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     coord.draw();
 
     var levels = 5;
-    var shapeGen = new ShapeGen(glProgram);
+    var shapeGen = new ShapeGen2(glProgram);
     var bezier = new CubicBezierConcatenator([[0.0, 0.0, 0.0], [-2.0, 0.0, 0.0], [-2.0, -1.0, 0.0], [0.0, -1.0, 0.0], [0.0, -1.0, 0.0], [2.0, -1.0, 0.0], [2.0, 0.0, 0.0], [0.0, 0.0, 0.0]]);
     var extrusion = new Extrusion(glProgram, levels, shapeGen, bezier, /*enableFillings=*/false);
     var transf = mat4.create();
@@ -23,7 +23,7 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
 
 }
 
-class ShapeGen {
+class ShapeGen2 {
     constructor(glProgram) {
         this.vColor = [0.7, 0.4, 0.4];
     }
@@ -36,18 +36,19 @@ class ShapeGen {
         return 0.05;
     }
 
-    getTransformMatrix(normal, position=null) {
+    getTransformMatrix(normal, position) {
         var t = mat4.create();
-        mat4.targetTo(t, [0.0, 0.0, 0.0], normal, [0.0, 0.0, 1.0]);
-        var aux = mat4.create();
-        mat4.fromTranslation(aux, position);
-        mat4.mul(t, aux, t);
+        // mat4.targetTo(t, [0.0, 0.0, 0.0], normal, [0.0, 0.0, 1.0]);
+        // var aux = mat4.create();
+        // mat4.fromTranslation(aux, position);
+        mat4.fromTranslation(t, [0.0, 0.0, 1.0]);
+        // mat4.mul(t, aux, t);
         return t;
     }
     
     getPreTransformMatrix() {
         var t = mat4.create();
-        mat4.fromScaling(t, [0.9, 0.9, 0.9]);
+        // mat4.fromScaling(t, [2.0, 2.0, 2.0]);
         return t;
     }
 
@@ -57,7 +58,7 @@ class ShapeGen {
         var z_0 = central_pos[2];
         
         var buffer = [];
-        var n = 10;
+        var n = 5;
         for (var i = 0; i < n; i++) {
             buffer.push(x_0 + 0.5*Math.cos(i * 2.0 * Math.PI / n));
             buffer.push(y_0 + 0.5*Math.sin(i * 2.0 * Math.PI / n));
@@ -68,7 +69,7 @@ class ShapeGen {
         
     getNormalBuffer(central_pos) {
         var buffer = [];
-        var n = 10;
+        var n = 5;
         for (var i = 0; i < n; i++) {
             buffer.push(0.0);
             buffer.push(0.0);
@@ -79,7 +80,7 @@ class ShapeGen {
         
     getColorBuffer(central_pos) {
         var buffer = [];
-        var n = 10;
+        var n = 5;
         // Rojo.
         for (var i = 0; i < n/5; i++) {
             buffer.push(1.0);

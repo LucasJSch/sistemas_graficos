@@ -23,10 +23,10 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
 
 
     var levels = 60;
-    var height = 15;
+    var height = 5;
     var extrusion = new LinearExtrusion(glProgram, levels, /*vStartPos*/[0.0, 0.0, 0.0], /*vEndPos*/[0.0, 0.0, height], new ShapeGenerator(10, 5, [1.0, 0.0, 0.0]));
     var transf = mat4.create();
-    mat4.fromTranslation(transf, [0.0, 0.0, 0.0]);
+    mat4.fromTranslation(transf, [0.0, 0.0, 1.0]);
     extrusion.draw(transf);
 
 }
@@ -38,7 +38,7 @@ class ShapeGenerator {
         var z_0 = central_pos[2];
         
         var buffer = [];
-        var n = 1000;
+        var n = 100;
         for (var i = 0; i < n; i++) {
             buffer.push(x_0 + 0.5*Math.cos(i * 2.0 * Math.PI / n));
             buffer.push(y_0 + 0.5*Math.sin(i * 2.0 * Math.PI / n));
@@ -49,7 +49,7 @@ class ShapeGenerator {
         
     getNormalBuffer(central_pos) {
         var buffer = [];
-        var n = 1000;
+        var n = 100;
         for (var i = 0; i < n; i++) {
             buffer.push(0.0);
             buffer.push(0.0);
@@ -60,7 +60,7 @@ class ShapeGenerator {
         
     getColorBuffer(central_pos) {
         var buffer = [];
-        var n = 1000;
+        var n = 100;
         // Rojo.
         for (var i = 0; i < n/5; i++) {
             buffer.push(1.0);
