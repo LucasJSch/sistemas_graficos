@@ -59,6 +59,7 @@
         <script type="text/javascript" src="js/shapes/LinearExtrusionWithFillings.js"></script>
         <!-- Utils -->
         <script type="text/javascript" src="js/utils/Utils.js"></script>
+        <!-- Script to import the shaders in a single line (not working for now) -->
         <!-- <script>
             includeHTML('glsl/vertex-shader.html', document.getElementById('shader-vs'));
         </script>
@@ -75,19 +76,31 @@
             uniform mat4 modelMatrix;
             uniform mat4 viewMatrix;
             uniform mat4 projMatrix;
-
             uniform mat4 normalMatrix;
 
             varying vec3 vNormal;
             varying vec3 vPosWorld;
             varying vec3 vColor;
 
+            /********** Lighting ************/
+            varying highp vec3 vLighting;
+            /********************************/
+            
             void main(void) {
                 gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(aVertexPosition, 1.0);
-
-                vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;    //la posicion en coordenadas de mundo
-                vNormal=(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       //la normal en coordenadas de mundo
+                
+                vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;    // La posicion en coordenadas de mundo
+                vNormal=(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       // La normal en coordenadas de mundo
                 vColor = aVertexColor;
+                
+                
+                /********** Lighting ************/
+                highp vec3 directionalLightColor = vec3(1, 1, 1);
+                highp vec3 directionalVector = normalize(vec3(0.85, 0.8, 0.75));
+                highp vec3 ambientLight = vec3(0.9, 0.9, 0.9);
+                highp float directional = max(dot(vNormal.xyz, directionalVector), 0.0);
+                vLighting = /*ambientLight +*/ (directionalLightColor * directional);
+                /********************************/
             }
         </script>
 
@@ -97,13 +110,15 @@
             varying vec3 vPosWorld;
             varying vec3 vColor;
 
+            /********** Lighting ************/
+            varying highp vec3 vLighting;
+            /********************************/
+
             void main(void) {
 
-                vec3 lightVec=normalize(vec3(0.0,3.0,5.0)-vPosWorld);
-                vec3 diffColor=mix(vec3(0.7,0.7,0.7),vNormal,0.4);
-                vec3 color=dot(lightVec,vNormal)*diffColor+vec3(0.2,0.2,0.2);
-
-               gl_FragColor = vec4(vColor, 1.0);
+                /********** Lighting ************/
+                gl_FragColor = vec4(vColor.rgb * vLighting, 1.0);
+                /********************************/
             }
         </script>
         
