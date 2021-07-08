@@ -238,14 +238,14 @@
             }
             
             class listener666 {
-                execute() {
-                    console.log("listening");
+                execute(e) {
+                    console.log("listening666: " + e.key);
                 }
             }
 
             class listener667 {
-                execute() {
-                    console.log("listening 667");
+                execute(e) {
+                    console.log("listening 667: " + e.key);
                 }
             }
 
@@ -253,8 +253,8 @@
                 var listen = new listener666();
                 var listen2 = new listener667();
                 keyobardListener = new KeyboardListener();
-                keyobardListener.registerKeyDownListener('k', listen);
-                keyobardListener.registerKeyUpListener('k', listen2);
+                keyobardListener.registerKeyDownListener(listen);
+                keyobardListener.registerKeyUpListener(listen2);
                 keyobardListener.initialize();
             }
 
