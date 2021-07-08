@@ -241,16 +241,12 @@
                 orbitalControl.update();
                 viewMatrix = orbitalControl.getMatrix();
                 
-                // rotate_angle += 0.01;
+                
                 mat4.identity(modelMatrix);
-                // mat4.rotate(modelMatrix,modelMatrix, rotate_angle, [0.0, 0.0, 1.0]);
-
-
                 mat4.identity(normalMatrix);
                 mat4.multiply(normalMatrix,viewMatrix,modelMatrix);
                 mat4.invert(normalMatrix,normalMatrix);
                 mat4.transpose(normalMatrix,normalMatrix);
-
             }
             
             function tick(){

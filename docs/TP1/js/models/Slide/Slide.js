@@ -18,7 +18,11 @@ class Slide {
 
         this.generateBezierConcatenator();
         var extrusion = new Extrusion(this.glProgram, this.extrusion_levels, this.slide_shapeGen, this.bezier_concatenator);
-        extrusion.draw(transformMatrix);
+        var t_extrusion = mat4.create();
+        mat4.fromTranslation(t_extrusion, [0.0, 0.0, 0.5]);
+        mat4.mul(t_extrusion, transformMatrix, t_extrusion);
+        extrusion.draw(t_extrusion);
+
         this.drawColumns(transformMatrix);
     }
 
