@@ -240,14 +240,14 @@ class Crane {
         mat4.mul(this.weight_transf, weight_t, this.weight_transf);
         mat4.mul(this.weight_transf, craneBox_r, this.weight_transf);
 
-        mat4.fromTranslation(aux, [-0.2, 1.0, -0.3]);
-        mat4.mul(this.screw_transf, this.screw_transf, aux);
-        mat4.mul(this.screw_transf, long_elevation_r, this.screw_transf);
-        mat4.invert(aux, aux);
-        mat4.mul(this.screw_transf, aux, this.screw_transf);
         mat4.mul(this.screw_transf, screw_s, this.screw_transf);
         mat4.mul(this.screw_transf, screw_r, this.screw_transf);
         mat4.mul(this.screw_transf, screw_t, this.screw_transf);
+        mat4.fromTranslation(aux, [0.0, 0.0, -13.2]);
+        mat4.mul(this.screw_transf, aux, this.screw_transf);
+        mat4.mul(this.screw_transf, long_elevation_r, this.screw_transf);
+        mat4.invert(aux, aux);
+        mat4.mul(this.screw_transf, aux, this.screw_transf);
         mat4.mul(this.screw_transf, craneBox_r, this.screw_transf);
 
         mat4.mul(this.craneLoad_transf, craneLoad_t, craneLoad_r);
