@@ -34,15 +34,11 @@ class SceneControls {
     }
 
     setRotateCraneCabinPositive() {
-        if (this.craneCabinRotation < 16) {
             this.craneCabinRotation += 1;
-        }
     }
 
     setRotateCraneCabinNegative() {
-        if (this.craneCabinRotation > -16) {
             this.craneCabinRotation -= 1;
-        }
     }
 
     setRotateCraneLongPositive() {

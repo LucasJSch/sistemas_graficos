@@ -94,15 +94,11 @@ class Crane {
     }
 
     rotateCabinPositive() {
-        if (this.craneBox_rotation < Math.PI/2.0) {
             this.craneBox_rotation += 0.1;
-        }
     }
 
     rotateCabinNegative() {
-        if (this.craneBox_rotation > -Math.PI/2.0) {
             this.craneBox_rotation -= 0.1;
-        }
     }
 
     elevateCrane() {
