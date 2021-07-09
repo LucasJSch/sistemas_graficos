@@ -76,7 +76,7 @@ class Building {
         mat4.fromScaling(scaleMatrix, [7.0, 6.5, 1.0]);
         mat4.fromTranslation(transMatrix, [2.0, 1.0, 0.0]);
         var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.firstPartLevels, this.cubic_cyl_gen, this.firstPartHeight, scaleMatrix, transMatrix);
-        windows.draw(transformMatrix);
+        // windows.draw(transformMatrix);
     }
 
     drawSecondPart(transformMatrix, concatenator) {
@@ -106,7 +106,7 @@ class Building {
         mat4.fromScaling(scaleMatrix, [7.0 * this.scaleFactorBetweenParts, 6.5 * this.scaleFactorBetweenParts, 1.0]);
         mat4.fromTranslation(transMatrix, [2.0, 1.0, 0.0]);
         var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.secondPartLevels, this.cubic_cyl_gen, this.secondPartHeight, scaleMatrix, transMatrix);
-        windows.draw(transformMatrix);
+        // windows.draw(transformMatrix);
     }
 }
 
@@ -115,7 +115,8 @@ class CubicCylinderGenerator {
         this.pointsPerLongSide = pointsPerLongSide;
         this.pointsPerShortSide = pointsPerShortSide;
         this.totalPoints = 2*(pointsPerShortSide+1) + 2*(pointsPerLongSide+1) + 1;
-        this.vColor = vColor;
+        // this.vColor = vColor;
+        this.vColor = [0.0, 0.0, 0.0];
         this.longSideLength = 4.0;
         this.shortSideLength = 2.0;
     }

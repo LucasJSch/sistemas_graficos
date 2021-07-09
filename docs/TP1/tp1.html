@@ -105,10 +105,15 @@
             uniform mat4 projMatrix;
             uniform mat4 normalMatrix;
 
+            
             varying vec3 vNormal;
             varying vec3 vPosWorld;
             varying vec3 vColor;
+            
+            /*********** Textures ***********/
+            uniform sampler2D uSampler;
             varying vec2 vUV;
+            /********************************/
 
             /********** Lighting ************/
             //varying highp vec3 vLighting;
@@ -120,7 +125,11 @@
                 vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;    // La posicion en coordenadas de mundo
                 vNormal=(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       // La normal en coordenadas de mundo
                 vColor = aVertexColor;
+
+                /*********** Textures ***********/
                 vUV = aVertexUV;
+                vec4 textureColor = texture2D(uSampler, vec2(vUV.s, vUV.t));         
+                /********************************/
                 
                 
                 /********** Lighting ************/
@@ -138,7 +147,12 @@
             varying vec3 vNormal;
             varying vec3 vPosWorld;
             varying vec3 vColor;
+
+            /*********** Textures ***********/
+            uniform sampler2D uSampler;
             varying vec2 vUV;
+            /********************************/
+
 
             /********** Lighting ************/
             //varying highp vec3 vLighting;
@@ -150,7 +164,7 @@
                 //gl_FragColor = vec4(vColor.rgb * vLighting, 1.0);
                 /********************************/
 
-                gl_FragColor = vec4(vColor.rgb, 1.0);
+                gl_FragColor = vec4(vColor.rgb, 1.0) + texture2D(uSampler, vec2(vUV.s, vUV.t));
             }
         </script>
         
@@ -176,8 +190,11 @@
             var camera = new Camera();
             camera.initialize();
          
-            function initWebGL(){
+            var global;
 
+            function initWebGL(globalR){
+
+                global = globalR;
                 canvas = document.getElementById("my-canvas");  
 
                 try{
@@ -219,11 +236,6 @@
                 
                 mat4.identity(modelMatrix);
                 mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
-
-                // This defines the camera position.
-                mat4.identity(viewMatrix);
-                mat4.translate(viewMatrix,viewMatrix, [0.0, -0.0, -30.0]);
-                mat4.rotate(viewMatrix,viewMatrix, -Math.PI/2.5, [0.0, 0.0, 0.0]);
             }
                     
                     
@@ -305,6 +317,28 @@
             }
         </script>
 
+        <!-- Texture loading.  -->
+        <script>
+        window.onload = function(){
+            var global = {};
+            // Carga de imagenes para que estén listas a la hora de armar las texturas.
+            global["urls"] = ["textures/elevator.jpg"];
+            // Diccionario global con las imagenes según sus paths.
+            global["imgs"] = {};
+            var cargadas = 0;
+            for (var i in global["urls"]){
+                global["imgs"][global["urls"][i]] = new Image();
+                global["imgs"][global["urls"][i]].crossOrigin = "anonymous";
+                global["imgs"][global["urls"][i]].onload = function(){
+                    cargadas++;
+                if (cargadas == global["urls"].length){
+                    initWebGL(global);
+                }
+              }
+            global["imgs"][global["urls"][i]].src = global["urls"][i];
+            }
+          }
+        </script>
 
 
     </body>
