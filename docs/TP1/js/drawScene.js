@@ -11,6 +11,9 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
+    var coordinates = new Coordinates(glProgram);
+    coordinates.draw();
+    
     // Slide
     // t_slide = mat4.create();
     // t_slide_scale = mat4.create();

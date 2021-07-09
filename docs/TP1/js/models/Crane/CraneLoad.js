@@ -22,7 +22,6 @@ class CraneLoad {
             transformMatrix = mat4.create();
         }
 
-        console.log(this.length_offset);
         this.createTransformationMatrices(transformMatrix);
         this.mainHolder.draw(this.mainHolder_transf);
         this.holder1.draw(this.holder1_transf);
