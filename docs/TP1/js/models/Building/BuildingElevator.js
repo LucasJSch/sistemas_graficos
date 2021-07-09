@@ -3,8 +3,8 @@ class BuildingElevator {
     // shapeGen: Defines the contour of the elevator.
     constructor(glProgram, texture, nFloors, shapeGen, height) {
         this.glProgram = glProgram;
-        this.rectangle = new LinearExtrusion(glProgram, nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, height], shapeGen);
-        this.texture = new TextureLoader("textures/elevator.jpg");
+        this.texture = new TextureLoader("textures/concrete.jpg");
+        this.rectangle = new LinearExtrusion(glProgram, nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, height], shapeGen, /*useFan=*/false, this.texture.getTexture());
     }
 
     draw(transformMatrix) {

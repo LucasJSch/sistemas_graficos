@@ -68,7 +68,7 @@ class Building {
 
         // Floor.
         var floors = new BuildingFloors(this.glProgram, this.firstPartLevels, concatenator, this.floorColor, this.firstPartHeight);
-        floors.draw(transformMatrix);
+        // floors.draw(transformMatrix);
 
         // Windows.
         var scaleMatrix = mat4.create();
@@ -98,7 +98,7 @@ class Building {
 
         // Floor.
         var floors = new BuildingFloors(this.glProgram, this.secondPartLevels, concatenator, this.floorColor, this.secondPartHeight, this.scaleFactorBetweenParts);
-        floors.draw(transformMatrix);
+        // floors.draw(transformMatrix);
 
         // Windows.
         var scaleMatrix = mat4.create();

@@ -3,7 +3,7 @@ class LinearExtrusion {
     // getPosBuffer(central_point), getNormalBuffer(central_point), getColorBuffer(central_point)
     // For a working example, see either the Cylinder class or the /tests/drawLinearExtrusion.js file.
     // TDOO: Add support for textures.
-    constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator, useFan=false) {
+    constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator, useFan=false, texture=null) {
         this.glProgram = glProgram;
         this.levels = levels;
         this.vStartPos = vStartPos;
@@ -15,6 +15,7 @@ class LinearExtrusion {
         this.normal_buffer = null;
         this.color_buffer = null;
         this.uv_buffer = null;
+        this.texture = texture;
 
         this.useFan = useFan;
     }
@@ -28,7 +29,7 @@ class LinearExtrusion {
         this.applyTransformation(transformMatrix);
 
         if (!this.useFan) {
-            var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer);
+            var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer, this.texture);
             grid.draw();
         } else {
             var fan = new Fan(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.top_uv_buffer);

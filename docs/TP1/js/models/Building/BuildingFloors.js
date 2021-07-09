@@ -4,7 +4,7 @@ class BuildingFloors {
     constructor(glProgram, nFloors, bsplineConcatenator, vColor, height, scale=1.0) {
         this.glProgram = glProgram;
         this.bsplineConcatenator = bsplineConcatenator;
-        this.vColor = [0.95, 0.95, 0.95];
+        this.vColor = [0.75, 0.75, 0.75];
         this.nFloors = nFloors;
         this.height = height;
         this.scale = scale;
