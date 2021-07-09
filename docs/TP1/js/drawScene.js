@@ -14,10 +14,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     var coordinates = new Coordinates(glProgram);
     coordinates.draw();
     
-    // var coordinates2 = new Coordinates(glProgram);
-    // var aux = mat4.create();
-    // mat4.fromTranslation(aux, [0.0, 12.0, 13.4]);
-    // coordinates2.draw(aux);
     // Slide
     t_slide = mat4.create();
     t_slide_scale = mat4.create();
