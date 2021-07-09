@@ -243,16 +243,31 @@ class Crane {
         mat4.mul(this.screw_transf, screw_s, this.screw_transf);
         mat4.mul(this.screw_transf, screw_r, this.screw_transf);
         mat4.mul(this.screw_transf, screw_t, this.screw_transf);
-        mat4.fromTranslation(aux, [0.0, 0.0, -13.2]);
+        mat4.fromTranslation(aux, [0.0, 0.0, -13.4 - second_base_contraction - cylinder_base_contraction]);
         mat4.mul(this.screw_transf, aux, this.screw_transf);
         mat4.mul(this.screw_transf, long_elevation_r, this.screw_transf);
         mat4.invert(aux, aux);
         mat4.mul(this.screw_transf, aux, this.screw_transf);
         mat4.mul(this.screw_transf, craneBox_r, this.screw_transf);
 
-        mat4.mul(this.craneLoad_transf, craneLoad_t, craneLoad_r);
-        mat4.mul(this.craneLoad_transf, this.craneLoad_transf, craneLoad_s);
+        mat4.mul(this.craneLoad_transf, craneLoad_s, this.craneLoad_transf);
         mat4.mul(this.craneLoad_transf, craneBox_r, this.craneLoad_transf);
+        mat4.mul(this.craneLoad_transf, craneLoad_t, this.craneLoad_transf);
+        mat4.fromTranslation(aux, [0.0, 0.0, -13.4 - second_base_contraction - cylinder_base_contraction]);
+        mat4.mul(this.craneLoad_transf, aux, this.craneLoad_transf);
+        mat4.mul(this.craneLoad_transf, long_elevation_r, this.craneLoad_transf);
+        mat4.invert(aux, aux);
+        mat4.mul(this.craneLoad_transf, aux, this.craneLoad_transf);
+        mat4.mul(this.craneLoad_transf, craneBox_r, this.craneLoad_transf);
+        // Another rotation to maintain the load perpendicular to the ground.
+        // Translate to the origin + rotation inverse of long_elevation_r
+        mat4.fromTranslation(aux , [0.0, -12.0, -13.4 - second_base_contraction - cylinder_base_contraction]);
+        mat4.mul(this.craneLoad_transf, aux, this.craneLoad_transf);
+        mat4.invert(aux, long_elevation_r);
+        mat4.mul(this.craneLoad_transf, aux, this.craneLoad_transf);
+        mat4.fromTranslation(aux , [0.0, 12.0, 13.4 + second_base_contraction + cylinder_base_contraction]);
+        mat4.mul(this.craneLoad_transf, aux, this.craneLoad_transf);
+
 
         mat4.mul(this.firstBase_transf, transformMatrix, this.firstBase_transf);
         mat4.mul(this.secondBase_transf, transformMatrix, this.secondBase_transf);

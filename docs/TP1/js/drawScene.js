@@ -14,6 +14,10 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     var coordinates = new Coordinates(glProgram);
     coordinates.draw();
     
+    var coordinates2 = new Coordinates(glProgram);
+    var aux = mat4.create();
+    mat4.fromTranslation(aux, [0.0, 12.0, 13.4]);
+    coordinates2.draw(aux);
     // Slide
     // t_slide = mat4.create();
     // t_slide_scale = mat4.create();
@@ -28,6 +32,10 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     // mat4.fromTranslation(t_crane, [20, 20, 0]);
     var crane = new Crane(glProgram, controls);
     crane.draw(t_crane);
+    // var t =mat4.create();
+    // mat4.fromTranslation(t, [0.0, 0.0, -3.0]);
+    // var craneLoad = new CraneLoad(glProgram, [0.0, 1.0, 0.0], [0.0, 1.0, 0.0]);
+    // craneLoad.draw(t);
 
     // Floor.
     // t_floor_s = mat4.create();
