@@ -3,9 +3,9 @@ class Camera {
         this.kOrbital = "orbital";
         this.kDrone = "drone";
         this.keyboardListener = new KeyboardListener();
-        this.initialOrbitalCamPos = [0.0, 0.0, 0.0];
+        this.initialOrbitalCamPos = [40.0, 40.0, 20.0];
         this.orbitalCam = new OrbitalCameraControl(this.initialOrbitalCamPos);
-        this.initialDroneCamPos = [0.0, 0.0, 0.0];
+        this.initialDroneCamPos = [40.0, 40.0, 40.0];
         this.droneCam = new DroneCameraControl(this.initialDroneCamPos);
         this.currentCam = this.kOrbital;
     }

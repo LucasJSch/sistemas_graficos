@@ -5,8 +5,9 @@ class DroneCameraControl {
         } else{
             this.initialPos = initialPos;
         }
-        this.rotationFactor = 0.01;
-        this.translationFactor = 0.01;
+        this.rotationFactor = 0.02;
+        this.translationFactor = 0.02;
+        this.inertiaFactor = 0.05;
         this.position = vec3.fromValues(initialPos[0], initialPos[1], initialPos[2]);
         this.rotation = vec3.create();
         this.worldMatrix = mat4.create();
@@ -60,19 +61,21 @@ class DroneCameraControl {
     }
 
     getMatrix() {
-        return this.worldMatrix;
+        let m = mat4.clone(this.worldMatrix);            
+        mat4.invert(m, m);
+        return m;
     }
 
     keyUpListener(e) {
         switch (e.key) {
             case "ArrowUp":
             case "ArrowDown":
-                this.camState.xVelTarget=0;
+                this.camState.zVelTarget=0;
                 break;
             
             case "ArrowLeft":
             case "ArrowRight":
-                this.camState.zVelTarget=0;
+                this.camState.xVelTarget=0;
                 break;  
 
             case "PageUp":
@@ -84,13 +87,13 @@ class DroneCameraControl {
                 this.camState.yRotVelTarget=0;
                 break;
             case "s":
-                this.camState.zRotVelTarget=0;
+                this.camState.yVelTarget=0;
                 break;                           
             case "d": 
                 this.camState.yRotVelTarget=0;
                 break;
             case "w": 
-                this.camState.zRotVelTarget=0;
+                this.camState.yVelTarget=0;
                 break;  
         } 
     }
@@ -98,16 +101,16 @@ class DroneCameraControl {
     keyDownListener(e) {
         switch (e.key) {
             case "ArrowUp":
-                this.camState.xVelTarget=-1;
+                this.camState.zVelTarget=this.translationFactor;
                 break;
             case "ArrowDown":
-                this.camState.xVelTarget=1;
+                this.camState.zVelTarget=-this.translationFactor;
                 break; 
             case "ArrowLeft": 
-                this.camState.zVelTarget=1;
+                this.camState.xVelTarget=this.translationFactor;
                 break;
             case "ArrowRight":
-                this.camState.zVelTarget=-1;
+                this.camState.xVelTarget=-this.translationFactor;
                 break;   
 
             case "PageUp":
@@ -124,10 +127,10 @@ class DroneCameraControl {
                 this.camState.yRotVelTarget=-this.rotationFactor;
                 break;
             case "s":
-                this.camState.zRotVelTarget=this.rotationFactor;
+                this.camState.yVelTarget=-this.translationFactor;
                 break;                                 
             case "w": 
-               this.camState.zRotVelTarget=-this.rotationFactor;
+               this.camState.yVelTarget=this.translationFactor;
                 break;
             case "r": 
                 this.rotation=vec3.create();

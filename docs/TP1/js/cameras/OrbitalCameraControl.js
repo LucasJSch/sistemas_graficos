@@ -9,7 +9,7 @@ function OrbitalCameraControl(initialPos){
     var beta = Math.PI/2;
     var previousClientX = 0;
     var previousClientY = 0;
-    var radius = 10.0;
+    var radius = 40.0;
     var factorVelocidad = 0.01;
     var isMouseDown = false;
     var viewMatrix = mat4.create();
