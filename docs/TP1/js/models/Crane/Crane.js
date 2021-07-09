@@ -277,5 +277,7 @@ class Crane {
         mat4.mul(this.weight_transf, transformMatrix, this.weight_transf);
         mat4.mul(this.screw_transf, transformMatrix, this.screw_transf);
         mat4.mul(this.craneLoad_transf, transformMatrix, this.craneLoad_transf);
+
+        global["craneBoxTransformation"] = this.craneBox_transf;
     }
 }

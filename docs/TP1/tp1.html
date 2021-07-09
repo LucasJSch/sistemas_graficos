@@ -72,6 +72,7 @@
         <script type="text/javascript" src="js/models/Slide/Slide.js"></script>
         <script type="text/javascript" src="js/models/Slide/SlideShapeGenerator.js"></script>
         <!-- Cameras -->
+        <script type="text/javascript" src="js/cameras/CraneOperatorCamera.js"></script>
         <script type="text/javascript" src="js/cameras/DroneCameraControl.js"></script>
         <script type="text/javascript" src="js/cameras/OrbitalCameraControl.js"></script>
         <script type="text/javascript" src="js/cameras/Camera.js"></script>
@@ -283,6 +284,7 @@
             function animate(){
                 camera.update();
                 viewMatrix = camera.getMatrix();
+                // console.log(viewMatrix);
                 
                 mat4.identity(modelMatrix);
                 mat4.identity(normalMatrix);
@@ -376,7 +378,7 @@
             kl.initialize();
         </script>
 
-        <!-- Textures loading.  -->
+        <!-- Textures loading before the program starts.  -->
         <script>
         window.onload = function(){
             var global = {};
@@ -396,6 +398,10 @@
               }
             global["imgs"][global["urls"][i]].src = global["urls"][i];
             }
+
+            // A little dirty hack to listen to the crane operator position for the camera.
+            // It's kind of a 'pubsub framework' but very poorly done.
+            global["craneBoxTransformation"] = [];
           }
         </script>
 

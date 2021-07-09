@@ -29,13 +29,12 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
 
     // Crane.
     t_crane = mat4.create();
+    var t_crane_2 = mat4.create();
     mat4.fromTranslation(t_crane, [20, 20, 0]);
+    mat4.fromRotation(t_crane_2, Math.PI, [0.0, 0.0, 1.0]);
+    mat4.mul(t_crane, t_crane, t_crane_2);
     var crane = new Crane(glProgram, controls);
     crane.draw(t_crane);
-    var t =mat4.create();
-    mat4.fromTranslation(t, [0.0, 0.0, -3.0]);
-    var craneLoad = new CraneLoad(glProgram, [0.0, 1.0, 0.0], [0.0, 1.0, 0.0]);
-    craneLoad.draw(t);
 
     // Floor.
     t_floor_s = mat4.create();
