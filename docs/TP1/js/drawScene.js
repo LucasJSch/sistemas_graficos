@@ -14,44 +14,44 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     var coordinates = new Coordinates(glProgram);
     coordinates.draw();
     
-    var coordinates2 = new Coordinates(glProgram);
-    var aux = mat4.create();
-    mat4.fromTranslation(aux, [0.0, 12.0, 13.4]);
-    coordinates2.draw(aux);
+    // var coordinates2 = new Coordinates(glProgram);
+    // var aux = mat4.create();
+    // mat4.fromTranslation(aux, [0.0, 12.0, 13.4]);
+    // coordinates2.draw(aux);
     // Slide
-    // t_slide = mat4.create();
-    // t_slide_scale = mat4.create();
-    // mat4.fromScaling(t_slide_scale, [2.0, 2.0, 2.5]);
-    // mat4.fromTranslation(t_slide, [-20.0, 20.0, 0.0]);
-    // mat4.mul(t_slide, t_slide, t_slide_scale);
-    // var slide = new Slide(glProgram);
-    // slide.draw(t_slide);
+    t_slide = mat4.create();
+    t_slide_scale = mat4.create();
+    mat4.fromScaling(t_slide_scale, [2.0, 2.0, 2.5]);
+    mat4.fromTranslation(t_slide, [-20.0, 20.0, 0.0]);
+    mat4.mul(t_slide, t_slide, t_slide_scale);
+    var slide = new Slide(glProgram);
+    slide.draw(t_slide);
 
     // Crane.
     t_crane = mat4.create();
-    // mat4.fromTranslation(t_crane, [20, 20, 0]);
+    mat4.fromTranslation(t_crane, [20, 20, 0]);
     var crane = new Crane(glProgram, controls);
     crane.draw(t_crane);
-    // var t =mat4.create();
-    // mat4.fromTranslation(t, [0.0, 0.0, -3.0]);
-    // var craneLoad = new CraneLoad(glProgram, [0.0, 1.0, 0.0], [0.0, 1.0, 0.0]);
-    // craneLoad.draw(t);
+    var t =mat4.create();
+    mat4.fromTranslation(t, [0.0, 0.0, -3.0]);
+    var craneLoad = new CraneLoad(glProgram, [0.0, 1.0, 0.0], [0.0, 1.0, 0.0]);
+    craneLoad.draw(t);
 
     // Floor.
-    // t_floor_s = mat4.create();
-    // t_floor_t = mat4.create();
-    // mat4.fromScaling(t_floor_s, [1000.0, 1000.0, 0.0]);
-    // mat4.fromTranslation(t_floor_t, [-0.5, -0.5, 0.0]);
-    // mat4.mul(t_floor_t, t_floor_s, t_floor_t);
-    // var floor = new Plane(glProgram, [0.721, 0.737, 0.580]);
-    // floor.draw(t_floor_t);
+    t_floor_s = mat4.create();
+    t_floor_t = mat4.create();
+    mat4.fromScaling(t_floor_s, [1000.0, 1000.0, 0.0]);
+    mat4.fromTranslation(t_floor_t, [-0.5, -0.5, 0.0]);
+    mat4.mul(t_floor_t, t_floor_s, t_floor_t);
+    var floor = new Plane(glProgram, [0.721, 0.737, 0.580]);
+    floor.draw(t_floor_t);
 
     // Building.
-    // var firstPartFloors = controls.firstPartFloors;
-    // var secondPartFloors = controls.secondPartFloors;
-    // var columnsLongSide = columnsLongSide = controls.buildingColumnsAmount / 2;
-    // var columnsShortSide = controls.buildingColumnsAmount - columnsLongSide;
+    var firstPartFloors = controls.firstPartFloors;
+    var secondPartFloors = controls.secondPartFloors;
+    var columnsLongSide = columnsLongSide = controls.buildingColumnsAmount / 2;
+    var columnsShortSide = controls.buildingColumnsAmount - columnsLongSide;
 
-    // var building = new Building(glProgram, firstPartFloors, secondPartFloors, columnsLongSide, columnsShortSide);
-    // building.draw();
+    var building = new Building(glProgram, firstPartFloors, secondPartFloors, columnsLongSide, columnsShortSide);
+    building.draw();
 }

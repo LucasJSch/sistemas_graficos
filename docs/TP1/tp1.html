@@ -322,7 +322,7 @@
 
             var kl = new KeyboardListener();
 
-            var ff = (function(e) {
+            var sceneActionsListener = (function(e) {
                 switch (e.key) {
                     // Rotar alrededor de F hacia arriba.
                     case "i":
@@ -372,7 +372,7 @@
                         break;
                 } 
             });
-            kl.registerKeyDownListener(ff);
+            kl.registerKeyDownListener(sceneActionsListener);
             kl.initialize();
         </script>
 

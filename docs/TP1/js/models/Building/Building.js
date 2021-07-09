@@ -68,7 +68,7 @@ class Building {
 
         // Floor.
         var floors = new BuildingFloors(this.glProgram, this.firstPartLevels, concatenator, this.floorColor, this.firstPartHeight);
-        // floors.draw(transformMatrix);
+        floors.draw(transformMatrix);
 
         // Windows.
         var scaleMatrix = mat4.create();
@@ -76,7 +76,7 @@ class Building {
         mat4.fromScaling(scaleMatrix, [7.0, 6.5, 1.0]);
         mat4.fromTranslation(transMatrix, [2.0, 1.0, 0.0]);
         var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.firstPartLevels, this.cubic_cyl_gen, this.firstPartHeight, scaleMatrix, transMatrix);
-        // windows.draw(transformMatrix);
+        windows.draw(transformMatrix);
     }
 
     drawSecondPart(transformMatrix, concatenator) {
@@ -98,7 +98,7 @@ class Building {
 
         // Floor.
         var floors = new BuildingFloors(this.glProgram, this.secondPartLevels, concatenator, this.floorColor, this.secondPartHeight, this.scaleFactorBetweenParts);
-        // floors.draw(transformMatrix);
+        floors.draw(transformMatrix);
 
         // Windows.
         var scaleMatrix = mat4.create();
@@ -106,7 +106,7 @@ class Building {
         mat4.fromScaling(scaleMatrix, [7.0 * this.scaleFactorBetweenParts, 6.5 * this.scaleFactorBetweenParts, 1.0]);
         mat4.fromTranslation(transMatrix, [2.0, 1.0, 0.0]);
         var windows = new BuildingWindows(this.glProgram, /*texture=*/null, this.secondPartLevels, this.cubic_cyl_gen, this.secondPartHeight, scaleMatrix, transMatrix);
-        // windows.draw(transformMatrix);
+        windows.draw(transformMatrix);
     }
 }
 
@@ -116,7 +116,7 @@ class CubicCylinderGenerator {
         this.pointsPerShortSide = pointsPerShortSide;
         this.totalPoints = 2*(pointsPerShortSide+1) + 2*(pointsPerLongSide+1) + 1;
         // this.vColor = vColor;
-        this.vColor = [0.0, 0.0, 0.0];
+        this.vColor = [0.0, 0.0, 0.3];
         this.longSideLength = 4.0;
         this.shortSideLength = 2.0;
     }
@@ -182,6 +182,11 @@ class CubicCylinderGenerator {
     }
 
     getUVBuffer(topPos) {
+        return [];
+    }
+
+    // TODO: Enable this again once textures are working.
+    notWorking_getUVBuffer(topPos) {
         var buffer = [];
         for (var i = 0; i <= this.pointsPerLongSide; i++) {
             buffer.push(i / this.pointsPerLongSide);

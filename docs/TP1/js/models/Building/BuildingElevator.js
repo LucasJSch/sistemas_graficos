@@ -4,7 +4,7 @@ class BuildingElevator {
     constructor(glProgram, texture, nFloors, shapeGen, height) {
         this.glProgram = glProgram;
         this.texture = new TextureLoader("textures/concrete.jpg");
-        this.rectangle = new LinearExtrusion(glProgram, nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, height], shapeGen, /*useFan=*/false, this.texture.getTexture());
+        this.rectangle = new LinearExtrusion(glProgram, nFloors, /*vStartPos=*/[0.0, 0.0, 0.0], /*vEndPos=*/[0.0, 0.0, height], shapeGen, /*useFan=*/false, /*texture=*/null);
     }
 
     draw(transformMatrix) {

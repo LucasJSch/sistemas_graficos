@@ -3,7 +3,7 @@ class Slide {
     constructor(glProgram) {
         this.glProgram = glProgram;
         this.height = 5.0;
-        this.extrusion_levels = 50;
+        this.extrusion_levels = 100;
         this.slide_repetitions = 5;
         this.slide_color = [0.9778, 0.5511, 0.2622];
         this.bezier_points = [[0.0, 0.0, 0.0], [-2.0, 0.0, 0.2], [-2.0, -1.0, 0.4], [0.0, -1.0, 0.6], [0.0, -1.0, 0.6], [2.0, -1.0, 0.8], [2.0, 0.0, 1.0], [0.0, 0.0, 1.2]]; 

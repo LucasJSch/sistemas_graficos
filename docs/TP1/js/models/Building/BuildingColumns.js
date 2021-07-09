@@ -19,6 +19,7 @@ class BuildingColumns {
             var cyl = new Cylinder(this.glProgram, this.vColor);
             mat4.fromTranslation(t, this.columns_positions[i]);
             mat4.mul(t, t, this.scale_matrix);
+            mat4.mul(t, transformMatrix, t);
             cyl.draw(t);
         }
     }

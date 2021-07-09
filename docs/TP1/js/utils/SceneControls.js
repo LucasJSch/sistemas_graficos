@@ -1,7 +1,7 @@
 class SceneControls {
     constructor() {
-        this.firstPartFloors = 5;
-        this.secondPartFloors = 10;
+        this.firstPartFloors = 2;
+        this.secondPartFloors = 3;
         this.buildingColumnsAmount = 10;
         this.craneLongRotation = 0;
         this.craneLoadLevel = 0;
@@ -10,49 +10,62 @@ class SceneControls {
     }
 
     setChangeFirstPartFloors(n) {
-        this.changeFirstPartFloors = true;
         this.firstPartFloors = n;
     }
 
     setChangeSecondPartFloors(n) {
-        this.changeSecondPartFloors = true;
         this.secondPartFloors = n;
     }
 
     setChangeColumnsAmount(n) {
-        this.changeBuildingColumns = true;
         this.buildingColumnsAmount = n;
     }
 
     setElevateCraneLoad() {
-        this.craneLoadLevel -= 1;
+        if (this.craneLoadLevel > -20) {
+            this.craneLoadLevel -= 1;
+        }
     }
 
     setLowerCraneLoad() {
+        if (this.craneLoadLevel < 10) {
         this.craneLoadLevel += 1;
+        }
     }
 
     setRotateCraneCabinPositive() {
-        this.craneCabinRotation += 1;
+        if (this.craneCabinRotation < 16) {
+            this.craneCabinRotation += 1;
+        }
     }
 
     setRotateCraneCabinNegative() {
-        this.craneCabinRotation -= 1;
+        if (this.craneCabinRotation > -16) {
+            this.craneCabinRotation -= 1;
+        }
     }
 
     setRotateCraneLongPositive() {
-        this.craneLongRotation += 1;
+        if (this.craneLongRotation < 10) {
+            this.craneLongRotation += 1;
+        }
     }
 
     setRotateCraneLongNegative() {
-        this.craneLongRotation -= 1;
+        if (this.craneLongRotation > -5) {
+            this.craneLongRotation -= 1;
+        }
     }
 
     setContractCrane() {
-        this.craneContraction += 1;
+        if (this.craneContraction < 30) {
+            this.craneContraction += 1;
+        }
     }
 
     setExpandCrane() {
+        if (this.craneContraction > -1) {
         this.craneContraction -= 1;
+        }
     }
 }
