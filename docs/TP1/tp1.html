@@ -168,6 +168,7 @@
 
                 gl_FragColor = vec4(vColor.rgb, 1.0) + vec4(textureColor.xyz, 0.0);
                 //gl_FragColor =  vec4(vUV.s, vUV.t, 0.0, 1.0);
+                //gl_FragColor = vec4(vColor.rgb, 1.0);
             }
         </script>
         
@@ -318,23 +319,80 @@
                 var amount = prompt("Ingresa el numero de columnas deseado.");
                 controls.setChangeColumnsAmount(amount);     
             }
+
+            var kl = new KeyboardListener();
+
+            var ff = (function(e) {
+                switch (e.key) {
+                    // Rotar alrededor de F hacia arriba.
+                    case "i":
+                    case "I":
+                        controls.setRotateCraneLongPositive();
+                        break;
+                    // Rotar alrededor de F hacia abajo.
+                    case "k":
+                    case "K":
+                        controls.setRotateCraneLongNegative();
+                        break;  
+
+                    // Expandir columna ABC.
+                    case "q":
+                    case "Q":
+                        console.log("expand");
+                        controls.setExpandCrane();
+                        break;
+
+                    // Contraer columna ABC.
+                    case "a": 
+                    case "A": 
+                        console.log("contract");
+                        controls.setContractCrane();
+                        break;
+
+                    // Rotar cabina.
+                    case "j":
+                    case "J":
+                        controls.setRotateCraneCabinPositive();
+                        break;  
+
+                    // Rotar cabina.
+                    case "l":
+                    case "L":
+                        controls.setRotateCraneCabinNegative();
+                            break;             
+
+                    // Extender cable G.
+                    case "w": 
+                    case "W": 
+                        controls.setLowerCraneLoad();
+                    break;
+                    
+                    // Contraer cable G.
+                    case "s": 
+                    case "S": 
+                        controls.setElevateCraneLoad();
+                        break;
+                } 
+            });
+            kl.registerKeyDownListener(ff);
+            kl.initialize();
         </script>
 
-        <!-- Texture loading.  -->
+        <!-- Textures loading.  -->
         <script>
         window.onload = function(){
             var global = {};
-            // Carga de imagenes para que estén listas a la hora de armar las texturas.
+            // Loads images so that they're ready before starting the program.
             global["urls"] = ["textures/concrete.jpg"];
-            // Diccionario global con las imagenes según sus paths.
+            // Global dict with the images according to paths.
             global["imgs"] = {};
-            var cargadas = 0;
+            var loaded = 0;
             for (var i in global["urls"]){
                 global["imgs"][global["urls"][i]] = new Image();
                 global["imgs"][global["urls"][i]].crossOrigin = "anonymous";
                 global["imgs"][global["urls"][i]].onload = function(){
-                    cargadas++;
-                if (cargadas == global["urls"].length){
+                    loaded++;
+                if (loaded == global["urls"].length){
                     initWebGL(global);
                 }
               }

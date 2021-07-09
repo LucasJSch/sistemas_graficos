@@ -13,6 +13,8 @@ class CraneLoad {
         this.holder3_transf = mat4.create();
         this.holder4 = new Cylinder(glProgram, vThreadsColor);
         this.holder4_transf = mat4.create();
+
+        this.length_offset = 0.0;
     }
 
     draw(transformMatrix) {
@@ -30,11 +32,15 @@ class CraneLoad {
     }
 
     elevate() {
-
+        if (this.length_offset > 0) {
+            this.length_offset -= 0.1;
+        }
     }
 
-    elevate() {
-
+    lower() {
+        if (this.length_offset < 2.0) {
+            this.length_offset += 0.1;
+        }
     }
     
     createTransformationMatrices(transformMatrix) {
@@ -43,13 +49,13 @@ class CraneLoad {
         // Scaling matrices:
         var mainHolder_s = mat4.create();
         this.mainHolder_transf = mainHolder_s;
-        mat4.fromScaling(mainHolder_s,  [0.01, 0.01, 3.0]);
+        mat4.fromScaling(mainHolder_s,  [0.01, 0.01, 3.0 + this.length_offset]);
         var secondary_holders_s = mat4.create();
         mat4.fromScaling(secondary_holders_s,  [0.01, 0.01, 2.0]);
 
         // Translation matrices:
         var secondary_holders_t = mat4.create();
-        mat4.fromTranslation(secondary_holders_t, [0.0, 0.0, -1.0]);
+        mat4.fromTranslation(secondary_holders_t, [0.0, 0.0, -1.0 - + this.length_offset]);
         
         // Secondary holders are distinguished from one another by their rotations.
         // They have the same translation and scaling.

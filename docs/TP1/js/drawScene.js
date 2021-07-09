@@ -23,7 +23,7 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     // Crane.
     t_crane = mat4.create();
     mat4.fromTranslation(t_crane, [20, 20, 0]);
-    var crane = new Crane(glProgram);
+    var crane = new Crane(glProgram, controls);
     crane.draw(t_crane);
 
     // Floor.
@@ -34,7 +34,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     mat4.mul(t_floor_t, t_floor_s, t_floor_t);
     var floor = new Plane(glProgram, [0.721, 0.737, 0.580]);
     floor.draw(t_floor_t);
-
 
     // Building.
     var firstPartFloors = controls.firstPartFloors;

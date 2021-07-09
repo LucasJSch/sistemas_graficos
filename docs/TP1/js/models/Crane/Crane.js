@@ -1,6 +1,6 @@
 class Crane {
         // Draws a crane.
-    constructor(glProgram) {
+    constructor(glProgram, sceneControls) {
         this.yellowColor = [0.88, 0.8, 0.0275];
         this.grayColor = [0.48627451, 0.48627451, 0.48627451];
         this.loadColor = [0.48627451, 0.52627451, 0.48627451];
@@ -22,9 +22,12 @@ class Crane {
         this.craneLoad = new CraneLoad(glProgram, this.grayColor, this.loadColor);
         this.craneLoad_transf = mat4.create();
 
+        // Zero is maximum height.
+        this.crane_contraction = 0.0;
         this.craneBox_rotation = 0.0;
         this.long_elevation = 0.0;
         this.load_elevation = 0.0;
+        this.applySceneControls(sceneControls);
     }
 
     draw(transformMatrix) {
@@ -43,8 +46,63 @@ class Crane {
         this.craneLoad.draw(this.craneLoad_transf);
     }
 
-    rotateCabin() {
-        this.craneBox_rotation += 0.1;
+    applySceneControls(sceneControls) {
+        if (sceneControls == null) {
+            return;
+        }
+        for (var i = 0; i < Math.abs(sceneControls.craneLongRotation); i++) {
+            if (sceneControls.craneLongRotation > 0) {
+                this.elevateCrane();
+            } else {
+                this.lowerCrane();
+            }
+        }
+        for (var i = 0; i < Math.abs(sceneControls.craneLoadLevel); i++) {
+            if (sceneControls.craneLoadLevel > 0) {
+                this.elevateLoad();
+            } else {
+                this.lowerLoad();
+            }
+        }
+        for (var i = 0; i < Math.abs(sceneControls.craneCabinRotation); i++) {
+            if (sceneControls.craneCabinRotation > 0) {
+                this.rotateCabinPositive();
+            } else {
+                this.rotateCabinNegative();
+            }
+        } 
+        for (var i = 0; i < Math.abs(sceneControls.craneContraction); i++) {
+            if (sceneControls.craneContraction > 0) {
+                this.contractHeight();
+            } else {
+                this.expandHeight();
+            }
+        } 
+    }
+
+    // Expand ABC.
+    expandHeight() {
+        if (this.crane_contraction < 0) {
+            this.crane_contraction += 0.1;
+        }
+    }
+
+    contractHeight() {
+        if (this.crane_contraction > -3.0) {
+            this.crane_contraction -= 0.1;
+        }
+    }
+
+    rotateCabinPositive() {
+        if (this.craneBox_rotation < Math.PI/2.0) {
+            this.craneBox_rotation += 0.1;
+        }
+    }
+
+    rotateCabinNegative() {
+        if (this.craneBox_rotation > -Math.PI/2.0) {
+            this.craneBox_rotation -= 0.1;
+        }
     }
 
     elevateCrane() {
@@ -106,16 +164,6 @@ class Crane {
         var screw_t = mat4.create();
         var craneLoad_t = mat4.create();
 
-        // Description of actions for each body:
-        // firstBase: Scale
-        // secondBase: Scale, translate respect to firstBase.
-        // cylinderBase: Scale, translate respect to secondBase.
-        // craneBox: Scale, translate respect to cylinderBase.
-        // long: Scale, rotate, translate respect to craneBox.
-        // weight: Scale, rotate, translate respect to long.
-        // screw: Scale, rotate, translate respect to long.
-        // craneLoad: Scale, translate respect to screw.
-
         // Scaling.
         mat4.fromScaling(firstBase_s,  [1.25, 1.25, 5.0]);
         mat4.scale(secondBase_s, firstBase_s, [0.8, 0.8, 0.8]);
@@ -130,8 +178,19 @@ class Crane {
         mat4.fromRotation(screw_r, Math.PI/2.0, [0.0, 1.0, 0.0]);
 
         // Translations.
-        mat4.fromTranslation(secondBase_t, [0.0, 0.0, 4.9]);
-        mat4.fromTranslation(cylinderBase_t, [0.0, 0.0, 4.0]);
+        var second_base_contraction = 0.0;
+        var cylinder_base_contraction = 0.0;
+        if (this.crane_contraction < 0) {
+            if (this.crane_contraction < -1.5) {
+                cylinder_base_contraction = this.crane_contraction;
+                second_base_contraction = this.crane_contraction + 1.5;
+            } else {
+                cylinder_base_contraction = this.crane_contraction;
+                second_base_contraction = 0.0;               
+            }
+        }
+        mat4.fromTranslation(secondBase_t, [0.0, 0.0, 4.9 + second_base_contraction]);
+        mat4.fromTranslation(cylinderBase_t, [0.0, 0.0, 4.0 + cylinder_base_contraction]);
         mat4.mul(cylinderBase_t, secondBase_t, cylinderBase_t);
         mat4.fromTranslation(craneBox_t, [0.0, 0.0, 3.0]);
         mat4.mul(craneBox_t, cylinderBase_t, craneBox_t);
