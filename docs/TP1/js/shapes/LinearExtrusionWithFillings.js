@@ -1,6 +1,7 @@
 class LinearExtrusionWithFillings {
     constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator) {
         this.glProgram = glProgram;
+        this.shapeGenerator = shapeGenerator;
         this.extrusion = new LinearExtrusion(glProgram, levels, vStartPos, vEndPos, shapeGenerator);
         this.levels = levels;
 
@@ -15,8 +16,14 @@ class LinearExtrusionWithFillings {
         for (var level = 0; level < this.levels; level++) {
             var buffers = this.extrusion.generateBuffersForLevel(level);
             var posBuf = buffers[0];
-            var nrmBuf = buffers[1];
             var clrBuf = buffers[2];
+            var nrmBuf = [];
+            if (level == 0) { // bottom
+                nrmBuf = this.shapeGenerator.getNormalBufferBottom();
+            }
+            if (level == 1) { // top
+                nrmBuf = this.shapeGenerator.getNormalBufferTop();
+            }
 
             // Add center pos at the beginning as the fan's center.
             posBuf.unshift(buffers[3][2]);
@@ -27,12 +34,12 @@ class LinearExtrusionWithFillings {
             posBuf.push(posBuf[4]);
             posBuf.push(posBuf[5]);
 
-            nrmBuf.unshift(buffers[1][2]);
-            nrmBuf.unshift(buffers[1][2]);
-            nrmBuf.unshift(buffers[1][2]);
-            nrmBuf.unshift(buffers[1][2]);
-            nrmBuf.unshift(buffers[1][2]);
-            nrmBuf.unshift(buffers[1][2]);
+            nrmBuf.unshift(nrmBuf[0]);
+            nrmBuf.unshift(nrmBuf[1]);
+            nrmBuf.unshift(nrmBuf[2]);
+            nrmBuf.unshift(nrmBuf[0]);
+            nrmBuf.unshift(nrmBuf[1]);
+            nrmBuf.unshift(nrmBuf[2]);
 
             clrBuf.unshift(buffers[2][0]);
             clrBuf.unshift(buffers[2][1]);
