@@ -29,18 +29,14 @@
 var superficie3D;
 var mallaDeTriangulos;
 
-var filas=100;
-var columnas=100;
-
-
 function crearGeometria(){
         
     if (forma == "Plano") {
         superficie3D = new Plano(3,3);
     } else if (forma == "Esfera") {
-        superficie3D = new Esfera(3,3);
+        superficie3D = new Esfera(3);
     } else if (forma == "TuboSenoidal") {
-        superficie3D = new TuboSenoidal(3,3);
+        superficie3D = new TuboSenoidal(1,1,1,1);
     }
     mallaDeTriangulos=generarSuperficie(superficie3D, filas, columnas);
     
@@ -94,12 +90,11 @@ function Esfera(radio){
 function TuboSenoidal(amp_onda, long_onda, radio, altura){
 
     this.getPosicion=function(u,v){
-        theta = 2 * Math.PI * u;
-        phi = Math.PI * v;
-        
-        x = Math.cos(theta) * Math.sin(phi) * radio;
-        y = Math.sin(theta) * Math.sin(phi) * radio;
-        z = -Math.cos(phi) * radio;
+
+        x = 2 * Math.PI * u + amp_onda * Math.cos(2*Math.PI*v );
+        y = v * altura;
+        z = 2 * Math.PI * u + amp_onda * Math.sin(2*Math.PI*v);
+
         return [x,y,z];
     }
 
