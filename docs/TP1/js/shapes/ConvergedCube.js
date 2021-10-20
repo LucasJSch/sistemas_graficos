@@ -33,10 +33,14 @@ class ConvergedCube {
         top_pos_buffer.push(this.vCentralTopPos[1]);
         top_pos_buffer.push(this.vCentralTopPos[2]);
         top_pos_buffer = top_pos_buffer.concat(this.shapeGen.getPosBuffer(this.vCentralTopPos));
-        var top_normal_buffer = this.shapeGen.getNormalBuffer(this.vCentralTopPos);
-        top_normal_buffer.push(top_normal_buffer[0]);
-        top_normal_buffer.push(top_normal_buffer[1]);
-        top_normal_buffer.push(top_normal_buffer[2]);
+
+        var top_normal_buffer = [];
+        for (var i = 0; i < top_pos_buffer.length+1; i++) {
+            top_normal_buffer.push(0.0);
+            top_normal_buffer.push(0.0);
+            top_normal_buffer.push(1.0);
+        }
+
         var top_color_buffer = this.shapeGen.getColorBuffer(this.vCentralTopPos);
         top_color_buffer.push(top_color_buffer[0]);
         top_color_buffer.push(top_color_buffer[1]);
@@ -48,10 +52,14 @@ class ConvergedCube {
         bottom_pos_buffer.push(this.vCentralBottomPos[1]);
         bottom_pos_buffer.push(this.vCentralBottomPos[2]);
         bottom_pos_buffer = bottom_pos_buffer.concat(this.shapeGen.getPosBuffer(this.vCentralBottomPos));
-        var bottom_normal_buffer = this.shapeGen.getNormalBuffer(this.vCentralBottomPos);
-        bottom_normal_buffer.push(bottom_normal_buffer[0]);
-        bottom_normal_buffer.push(bottom_normal_buffer[1]);
-        bottom_normal_buffer.push(bottom_normal_buffer[2]);
+
+        var top_normal_buffer = [];
+        for (var i = 0; i < bottom_pos_buffer.length+1; i++) {
+            top_normal_buffer.push(0.0);
+            top_normal_buffer.push(0.0);
+            top_normal_buffer.push(-1.0);
+        }
+
         var bottom_color_buffer = this.shapeGen.getColorBuffer(this.vCentralBottomPos);
         bottom_color_buffer.push(bottom_color_buffer[0]);
         bottom_color_buffer.push(bottom_color_buffer[1]);

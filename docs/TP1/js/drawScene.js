@@ -24,13 +24,13 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     // slide.draw(t_slide);
 
     // // Crane.
-    // t_crane = mat4.create();
-    // var t_crane_2 = mat4.create();
-    // mat4.fromTranslation(t_crane, [20, 20, 0]);
-    // mat4.fromRotation(t_crane_2, Math.PI, [0.0, 0.0, 1.0]);
-    // mat4.mul(t_crane, t_crane, t_crane_2);
-    // var crane = new Crane(glProgram, controls);
-    // crane.draw(t_crane);
+    t_crane = mat4.create();
+    var t_crane_2 = mat4.create();
+    mat4.fromTranslation(t_crane, [20, 20, 0]);
+    mat4.fromRotation(t_crane_2, Math.PI, [0.0, 0.0, 1.0]);
+    mat4.mul(t_crane, t_crane, t_crane_2);
+    var crane = new Crane(glProgram, controls);
+    crane.draw(t_crane);
 
     // // Floor.
     // t_floor_s = mat4.create();
@@ -42,11 +42,11 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     // floor.draw(t_floor_t);
 
     // // Building.
-    var firstPartFloors = controls.firstPartFloors;
-    var secondPartFloors = controls.secondPartFloors;
-    var columnsLongSide = columnsLongSide = controls.buildingColumnsAmount / 2;
-    var columnsShortSide = controls.buildingColumnsAmount - columnsLongSide;
+    // var firstPartFloors = controls.firstPartFloors;
+    // var secondPartFloors = controls.secondPartFloors;
+    // var columnsLongSide = columnsLongSide = controls.buildingColumnsAmount / 2;
+    // var columnsShortSide = controls.buildingColumnsAmount - columnsLongSide;
 
-    var building = new Building(glProgram, firstPartFloors, secondPartFloors, columnsLongSide, columnsShortSide);
-    building.draw();
+    // var building = new Building(glProgram, firstPartFloors, secondPartFloors, columnsLongSide, columnsShortSide);
+    // building.draw();
 }
