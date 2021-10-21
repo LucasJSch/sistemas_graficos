@@ -14,4 +14,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     var coordinates = new Coordinates(glProgram);
     coordinates.draw();
 
+    var capsule = new Capsule(glProgram);
+    capsule.draw();
 }

@@ -1,15 +1,23 @@
 class Extrusion {
-    constructor(glProgram, levels, shapeGen, curveGen) {
+    // shapeGenerator is an instance of a class that has 3 methods:
+    // getPosBuffer(central_point), getNormalBuffer(central_point), getColorBuffer(central_point)
+    // For a working example, see either the Cylinder class or the /tests/drawLinearExtrusion.js file.
+    // TDOO: Add support for textures.
+    constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator, useFan=false, texture=null) {
         this.glProgram = glProgram;
         this.levels = levels;
+        this.vStartPos = vStartPos;
+        this.vEndPos = vEndPos;
+        this.shapeGenerator = shapeGenerator;
+        this.n_rows = levels;
         this.n_cols = null;
-        this.shapeGen = shapeGen;
-        this.curveGen = curveGen;
-        this.position_buffer = [];
-        this.normal_buffer = [];
-        this.color_buffer = [];
+        this.pos_buffer = null;
+        this.normal_buffer = null;
+        this.color_buffer = null;
+        this.uv_buffer = null;
+        this.texture = texture;
 
-        this.utils = new Utils();
+        this.useFan = useFan;
     }
 
     draw(transformMatrix) {
@@ -17,35 +25,74 @@ class Extrusion {
             transformMatrix = mat4.create();
         }
 
-        var step = this.curveGen.getNumberOfCurves() / this.levels;
-        for (var level = 0; level < this.levels; level++) {
-            var point = this.curveGen.getPoint(level * step);
-            var normal = this.curveGen.getFirstDerivative(level * step);
-            var buffers = this.generateBuffersForPositionAndNormal(point, normal, transformMatrix);
-            this.n_cols = (buffers[0].length/3);
-            this.position_buffer = this.position_buffer.concat(buffers[0]);
-            this.normal_buffer = this.normal_buffer.concat(buffers[1]);
-            this.color_buffer = this.color_buffer.concat(buffers[2]);
-        }
+        this.createBuffers();
+        this.applyTransformation(transformMatrix);
 
-        var grid = new Grid(this.glProgram, this.position_buffer, this.normal_buffer, this.color_buffer, this.levels, this.n_cols);
-        grid.draw();
+        if (!this.useFan) {
+            var grid = new Grid(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer, this.texture);
+            grid.draw();
+        } else {
+            var fan = new Fan(this.glProgram, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.top_uv_buffer);
+            fan.draw();          
+        }
     }
 
-    generateBuffersForPositionAndNormal(position, normal, transformMatrix) {
-        var pos_buffer = this.shapeGen.getPositionBuffer([0.0, 0.0, 0.0]);
-        var normal_buffer = this.shapeGen.getNormalBuffer([0.0, 0.0, 0.0]);
-        var color_buffer = this.shapeGen.getColorBuffer([0.0, 0.0, 0.0]);
+    applyTransformation(transformMatrix) {
+        var utils = new Utils();
+        this.pos_buffer = utils.TransformPosBuffer(transformMatrix, this.pos_buffer);
+    }
 
-        var t = mat4.create();
-        mat4.targetTo(t, [0.0, 0.0, 0.0], normal, [0.0, 0.0, 1.0]);
-        var aux = mat4.create();
-        mat4.fromTranslation(aux, position);
-        mat4.mul(t, aux, t);
-        mat4.mul(t, transformMatrix, t);
+    createBuffers() {
+        this.pos_buffer = [];
+        this.normal_buffer = [];
+        this.color_buffer = [];
+        this.uv_buffer = [];
+        for (var level = 0; level < this.levels; level++) {
+            var buffers = this.generateBuffersForLevel(level);
+            this.n_cols = (buffers[0].length/3);
+            this.pos_buffer = this.pos_buffer.concat(buffers[0]);
+            this.normal_buffer = this.normal_buffer.concat(buffers[1]);
+            this.color_buffer = this.color_buffer.concat(buffers[2]);
+            this.uv_buffer = this.uv_buffer.concat(buffers[4]);
+        }
+    }
 
-        pos_buffer = this.utils.TransformPosBuffer(t, pos_buffer)
+    generateBuffersForLevel(level) {
+        if (level > this.levels) {
+            console.log("ERROR: Level received: " + level);
+            console.log("ERROR: Max allowed level: " + this.levels);
 
-        return [pos_buffer, normal_buffer, color_buffer];
+        }
+        // Get central point of level.
+        var direction_vector = vec3.create();
+        var minus_start_pos = vec3.create();
+        var central_point = vec3.create();
+        var topPos = false;
+
+        // If this is the first level, the central_pos should match with the start pos.
+        if (level == 0) {
+            central_point = this.vStartPos;
+        }
+        // If this is not the last nor the first level, compute the current pos.
+        else if (level != (this.levels -1)) {
+            var lvl_step = vec3.distance(this.vStartPos, this.vEndPos) / (this.levels-1);
+            vec3.scale(minus_start_pos, this.vStartPos, -1.0);
+            vec3.add(direction_vector, this.vEndPos, minus_start_pos);
+            vec3.normalize(direction_vector, direction_vector);
+
+            vec3.scale(central_point, direction_vector, level * lvl_step);
+            vec3.add(central_point, this.vStartPos, central_point);
+        // If this is the last level, the central_pos should match with the end pos.
+        } else {
+            central_point = this.vEndPos;
+            topPos = true;
+        }
+
+        var pos_buffer = this.shapeGenerator.getPosBuffer(central_point);
+        var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
+        var color_buffer = this.shapeGenerator.getColorBuffer(central_point);
+        var uv_buffer = this.shapeGenerator.getUVBuffer(topPos);
+
+        return [pos_buffer, normal_buffer, color_buffer, central_point, uv_buffer];
     }
 }
