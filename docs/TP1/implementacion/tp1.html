@@ -30,18 +30,37 @@
     </head>
     <body>
         <div class="navbar">
-            <a onclick="editFirstPartFloors()">Cantidad de pisos primer tramo </a>
-            <a onclick="editSecondPartFloors()">Cantidad de pisos segundo tramo </a>
-            <a onclick="editColumnsAmount()">Cantidad de columnas del edificio </a>
         </div>
     	<center>    		            
             <canvas id="my-canvas" width="1000" height="800">
             	Your browser does not support the HTML5 canvas element.
     		</canvas>
     	</center>
-
+        <!-- Third party libs -->
+        <script type="text/javascript" src="js/libs/includeHTML.js"></script>
+        <script type="text/javascript" src="js/libs/gl-matrix.js"></script>
+        <script type="text/javascript" src="js/libs/three.min.js"></script>
+        <script type="text/javascript" src="js/libs/jquery.min.js"></script>
+        <script type="text/javascript" src="js/libs/random.js"></script>
         <!-- Interface between this script and JS classes -->
         <script type="text/javascript" src="js/drawScene.js"></script>
+        <!-- Shapes -->
+        <script type="text/javascript" src="js/shapes/basic_shapes/Fan.js"></script>
+        <script type="text/javascript" src="js/shapes/basic_shapes/Grid.js"></script>
+        <script type="text/javascript" src="js/shapes/Plane.js"></script>
+        <script type="text/javascript" src="js/shapes/Extrusion.js"></script>
+        <script type="text/javascript" src="js/shapes/LinearExtrusion.js"></script>
+        <script type="text/javascript" src="js/shapes/Cylinder.js"></script>
+        <script type="text/javascript" src="js/shapes/Cube.js"></script>
+        <script type="text/javascript" src="js/shapes/ConvergedCube.js"></script>
+        <script type="text/javascript" src="js/models/Coordinates.js"></script>
+        <!-- Utils -->
+        <script type="text/javascript" src="js/utils/Utils.js"></script>
+        <!-- Cameras -->
+        <script type="text/javascript" src="js/cameras/CraneOperatorCamera.js"></script>
+        <script type="text/javascript" src="js/cameras/DroneCameraControl.js"></script>
+        <script type="text/javascript" src="js/cameras/OrbitalCameraControl.js"></script>
+        <script type="text/javascript" src="js/cameras/Camera.js"></script>
         <div src="glsl/vertex-shader.html"></div> -->
         
         <script id="shader-vs" type="x-shader/x-vertex">
@@ -133,9 +152,10 @@
             var normalMatrix = mat4.create();
             var rotate_angle = -Math.PI/2;
             
+            
             var camera = new Camera();
             camera.initialize();
-         
+
             var global;
 
             function initWebGL(globalR){
@@ -164,10 +184,9 @@
            
 
             function setupWebGL(){
-                /******** Experimental ******/
-                // gl.enable(gl.BLEND);
-                // gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
                 /********************* ******/
+                var camera = new Camera();
+                camera.initialize();
 
                 gl.enable(gl.DEPTH_TEST);
                 //set the clear color
@@ -225,7 +244,6 @@
             function animate(){
                 camera.update();
                 viewMatrix = camera.getMatrix();
-                // console.log(viewMatrix);
                 
                 mat4.identity(modelMatrix);
                 mat4.identity(normalMatrix);
@@ -236,7 +254,7 @@
             
             function tick(){
                 requestAnimationFrame(tick);
-                drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix, controls);
+                drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix);
                 animate();
             }
 

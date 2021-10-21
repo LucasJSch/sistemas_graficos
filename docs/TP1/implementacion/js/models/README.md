@@ -1,0 +1,1 @@
+The classes in this folder represent high level/abstract objects, such as a car, a monkey, a mug, etc.
