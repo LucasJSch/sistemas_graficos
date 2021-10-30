@@ -1,19 +1,20 @@
-class Capsule {
-    // Draws the capsule.
+class NucleusCube {
+    // Draws a cube with Bezier-defined surfaces
     constructor(glProgram) {
         this.glProgram = glProgram;
-        this.color = [0.823529412, 0.662745098, 0.53333333];
-        this.bezier_points = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.5], [0.0, 0.0, 0.5],
-                              [0.0, 0.0, 0.5], [0.0, 0.0, 0.75], [0.0, 0.0, 0.75], [0.0, -0.3, 0.9],
-                              [0.0, -0.3, 0.9], [0.0, -1.0, 0.9], [0.0, -2.0, 0.8], [0.0, -2.3, 0.5],
-                              [0.0, -2.3, 0.5], [0.0, -2.3, 0.5], [0.0, -2.4, 0.25], [0.0, -2.4, 0.25],
-                              [0.0, -2.4, 0.25], [0.0, -2.4, 0.25], [0.0, -2.5, 0.1], [0.0, -2.5, 0.1]];
+        this.color = [0.690196078, 0.298039216, 0.611764706];
+        this.bezier_points = [[0.5, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.5, 0.0],
+                              [1.0, 0.5, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 0.0], [0.5, 1.0, 0.0],
+                              [0.5, 1.0, 0.0], [0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.5, 0.0],
+                              [0.0, 0.5, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.5, 0.0, 0.0]];
         this.bezier_concatenator = null;
-
-        this.n_rows = 48.0;
-        this.diferencial_rotacion = 2.0 * Math.PI / this.n_rows;
-        this.ptos_longitudinal = 20.0;
+        // Puntos a obtener del concatenador de Bezier.
+        this.ptos_longitudinal = 100;
+        // Vector a trasladar los ptos para generar el segundo lado del cubo.
         this.n_points_bezier = this.bezier_points.length / 4.0;
+        this.n_levels = 2.0;
+        this.cube_length = 1.0;
+        this.diferencial_traslacion = this.cube_length / this.n_levels;
 
         this.pos_buf = [];
         this.nrm_buf = [];
@@ -25,12 +26,12 @@ class Capsule {
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
-        }
 
+        }
         this.generateBezierConcatenator();
         this.generateBuffers();
 
-        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
+        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels, /*n_cols=*/this.ptos_longitudinal+1);
         grid.draw(transformMatrix);
     }
 
@@ -50,12 +51,15 @@ class Capsule {
             ptos_base.push(aux[1]);
             ptos_base.push(aux[2]);
         }
+        ptos_base.push(ptos_base[0]);
+        ptos_base.push(ptos_base[1]);
+        ptos_base.push(ptos_base[2]);
 
-        var t_rotacion = mat4.create();
-        for (var rotacion = 0.0; rotacion <= 2.0 * Math.PI; rotacion += this.diferencial_rotacion) {
-            mat4.fromRotation(t_rotacion, rotacion, [0.0, -1.0, 0.0]);
-            const ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, ptos_base);
-            for (var elem of ptos_rotados) {
+        var t_traslacion = mat4.create();
+        for (var t = 0.0; t <= this.cube_length; t += this.diferencial_traslacion) {
+            mat4.fromTranslation(t_traslacion, [0.0, 0.0, t]);
+            const ptos_trasladados = this.utils.TransformPosBuffer(t_traslacion, ptos_base);
+            for (var elem of ptos_trasladados) {
                 this.pos_buf.push(elem);
             }
         }
