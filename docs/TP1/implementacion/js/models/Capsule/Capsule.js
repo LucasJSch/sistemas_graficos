@@ -3,13 +3,24 @@ class Capsule {
     constructor(glProgram) {
         this.glProgram = glProgram;
         this.color = [0.823529412, 0.662745098, 0.53333333];
-        this.shapeGen = new CapsuleSG(this.color);
-        this.vCentralTopPos = [0.0, 0.0, 5.0];
-        this.vCentralBottomPos = [0.0, 0.0, 0.0];
-        this.aleron = new CapsuleAleron(glProgram);
-        this.sides = null;
-        this.bottom = null;
-        this.top = null;
+        this.bezier_points = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.5], [0.0, 0.0, 0.5],
+                              [0.0, 0.0, 0.5], [0.0, 0.0, 0.75], [0.0, 0.0, 0.75], [0.0, -0.3, 0.9],
+                              [0.0, -0.3, 0.9], [0.0, -1.0, 0.9], [0.0, -2.0, 0.8], [0.0, -2.3, 0.5],
+                              [0.0, -2.3, 0.5], [0.0, -2.3, 0.5], [0.0, -2.4, 0.25], [0.0, -2.4, 0.25],
+                              [0.0, -2.4, 0.25], [0.0, -2.4, 0.25], [0.0, -2.5, 0.1], [0.0, -2.5, 0.1]];
+        this.bezier_concatenator = null;
+        this.extrusion_levels = 100;
+
+        this.n_rows = 48.0;
+        this.diferencial_rotacion = 2.0 * Math.PI / this.n_rows;
+        this.ptos_longitudinal = 20.0;
+        this.n_points_bezier = this.bezier_points.length / 4.0;
+
+        this.pos_buf = [];
+        this.nrm_buf = [];
+        this.clr_buf = [];
+
+        this.utils = new Utils();
     }
 
     draw(transformMatrix) {
@@ -17,108 +28,55 @@ class Capsule {
             transformMatrix = mat4.create();
         }
 
-        this.sides = new Extrusion(this.glProgram, /*levels=*/12, this.vCentralBottomPos, this.vCentralTopPos, this.shapeGen);
-        this.top = new Cylinder(this.glProgram, this.color);
-        this.bottom = new Cylinder(this.glProgram, this.color);
+        this.generateBezierConcatenator();
+        this.generateBuffers();
 
-        var bottom_t = mat4.create();
-        mat4.fromScaling(bottom_t, [0.5, 0.5, 0.02]);
-        mat4.multiply(bottom_t, transformMatrix, bottom_t);
-        
-        var top_t = mat4.create();
-        var aux = mat4.create();
-        mat4.fromTranslation(top_t, [0.0, 0.0, 4.98]);
-        mat4.multiply(top_t, top_t, mat4.fromScaling(aux, [0.4, 0.4, 0.02]));
-        mat4.multiply(top_t, transformMatrix, top_t);
-
-        this.sides.draw(transformMatrix);
-        this.top.draw(top_t);
-        this.bottom.draw(bottom_t);
-        this.aleron.draw(transformMatrix);
+        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows, /*n_cols=*/this.ptos_longitudinal);
+        grid.draw(transformMatrix);
     }
-}
 
-// Shape generator
-class CapsuleSG {
-    constructor(color) {
-        this.pointsPerCircle = 48;
-        this.vRadius = [0.5, 2.0, 1.9, 1.85, 1.8, 1.75, 1.7, 1.65, 1.6, 1.5, 1.0, 0.4];
-        this.levelCounter = 0;
-        this.vColor = color;
-    }
-    
-    getPosBuffer(central_pos) {
-        var x_0 = central_pos[0];
-        var y_0 =  central_pos[1];
-        var z_0 = central_pos[2];
-        
-        var buffer = [];
-        var radius = this.vRadius[this.levelCounter];
-        this.levelCounter += 1;
-        if (this.levelCounter >= this.vRadius.length) {
-            this.levelCounter = 0;
+    generateBezierConcatenator() {
+        var points = [];
+        for (var i = 0; i < this.bezier_points.length; i++) {
+            points.push([this.bezier_points[i][0], this.bezier_points[i][1], this.bezier_points[i][2]]);
         }
-        for (var i = 0; i < this.pointsPerCircle; i++) {
-            buffer.push(x_0 + radius*Math.cos(i * 2.0 * Math.PI / this.pointsPerCircle));
-            buffer.push(y_0 + radius*Math.sin(i * 2.0 * Math.PI / this.pointsPerCircle));
-            buffer.push(z_0);
-        }
-        // We need to connect the shape's end and beginning.
-        // Because of this we iterate in the other functions until pointsPerCircle + 1.
-        buffer.push(x_0 + radius*Math.cos(0));
-        buffer.push(y_0 + radius*Math.sin(0));
-        buffer.push(z_0);
-
-        return buffer;
-    }
-        
-    getNormalBuffer() {
-        var buffer = [];
-        for (var i = 0; i < this.pointsPerCircle + 1; i++) {
-            buffer.push(Math.cos(i * Math.PI * 2.0 / this.pointsPerCircle));
-            buffer.push(Math.sin(i * Math.PI * 2.0 / this.pointsPerCircle));
-            buffer.push(1.0);
-        }
-        return buffer;
-    }
-        
-    getColorBuffer(central_pos) {
-        var buffer = [];
-        for (var i = 0; i < this.pointsPerCircle + 1; i++) {
-            buffer.push(this.vColor[0]);
-            buffer.push(this.vColor[1]);
-            buffer.push(this.vColor[2]);
-        }
-        return buffer;
+        this.bezier_concatenator = new CubicBezierConcatenator(points);
     }
 
-    getUVBuffer() {
-        return [];
-    }
-}
-
-class CapsuleAleron {
-    // Aleron de la capsula.
-    constructor(glProgram) {
-        this.glProgram = glProgram;
-        this.color = [0.01, 0.01, 0.01];
-        this.shapeGen = new CapsuleSG(this.color);
-        this.vCentralTopPos = [0.0, 0.0, 0.0];
-        this.vCentralBottomPos = [0.0, 0.0, -1.0];
-        this.sides = null;
-    }
-
-    draw(transformMatrix) {
-        if (transformMatrix == null) {
-            transformMatrix = mat4.create();
+    generateBuffers() {
+        var ptos_base = [];
+        for (var i = 0; i < this.ptos_longitudinal; i++) {
+            var aux = this.bezier_concatenator.getPoint(this.n_points_bezier * i / this.ptos_longitudinal);
+            ptos_base.push(aux[0]);
+            ptos_base.push(aux[1]);
+            ptos_base.push(aux[2]);
         }
 
-        this.sides = new Extrusion(this.glProgram, /*levels=*/12, this.vCentralBottomPos, this.vCentralTopPos, this.shapeGen);
-        
-        var sides_t = mat4.create();
-        mat4.fromScaling(sides_t, [0.55, 0.55, 2.0]);
-        mat4.multiply(sides_t, transformMatrix, sides_t);
+        var t_rotacion = mat4.create();
+        for (var rotacion = 0.0; rotacion <= 2.0 * Math.PI; rotacion += this.diferencial_rotacion) {
+            mat4.fromRotation(t_rotacion, rotacion, [0.0, -1.0, 0.0]);
+            const ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, ptos_base);
+            for (var elem of ptos_rotados) {
+                this.pos_buf.push(elem);
+            }
+        }
 
-        this.sides.draw(sides_t);
+        for (var i = 0; i < this.pos_buf.length; i += 3) {
+            this.clr_buf.push(this.color[0]);
+            this.clr_buf.push(this.color[1]);
+            this.clr_buf.push(this.color[2]);
+
+            // Genero normal cada 3 puntos (i.e. 1 por triangulo)
+            if (i < 6) {
+                continue;
+            }
+            var nrm = this.utils.GetTriangNormal(
+                [this.pos_buf[i-6], this.pos_buf[i-5], this.pos_buf[i-4]],
+                [this.pos_buf[i-3], this.pos_buf[i-2], this.pos_buf[i-1]],
+                [this.pos_buf[i], this.pos_buf[i+1], this.pos_buf[i+2]]);
+            this.nrm_buf.push(nrm[0]);
+            this.nrm_buf.push(nrm[1]);
+            this.nrm_buf.push(nrm[2]);
+        }
     }
 }
