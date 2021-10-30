@@ -3,14 +3,21 @@ class Capsule2 {
     constructor(glProgram) {
         this.glProgram = glProgram;
         this.color = [0.823529412, 0.662745098, 0.53333333];
-        this.vCentralTopPos = [0.0, 0.0, 5.0];
-        this.vCentralBottomPos = [0.0, 0.0, 0.0];
-        this.bezier_points = [[0.0, 0.0, 0.0], [-2.0, 0.0, 0.2], [-2.0, -1.0, 0.4], [0.0, -1.0, 0.6], [0.0, -1.0, 0.6], [2.0, -1.0, 0.8], [2.0, 0.0, 1.0], [0.0, 0.0, 1.2]]; 
+        this.bezier_points = [[0.0, 0.0, 0.0], [0.0, -0.1, 0.5], [0.0, -0.1, 0.5], [0.0, -2.0, 0.9], [0.0, -2.0, 0.9], [0.0, -2.0, 0.85], [0.0, -5.0, 0.6], [0.0, -8.0, 0.1]];
         this.bezier_concatenator = null;
-        this.slide_shapeGen = new SlideShapeGenerator(this.color);
+        this.slide_shapeGen = new CapsuleSG(this.color);
         this.extrusion_levels = 100;
-        this.height = 5.0;
-        this.slide_repetitions = 5;
+
+        this.n_rows = 48.0;
+        this.diferencial_rotacion = 2.0 * Math.PI / this.n_rows;
+        this.ptos_longitudinal = 20.0;
+        this.n_points_bezier = this.bezier_points.length / 4.0;
+
+        this.pos_buf = [];
+        this.nrm_buf = [];
+        this.clr_buf = [];
+
+        this.utils = new Utils();
     }
 
     draw(transformMatrix) {
@@ -19,36 +26,53 @@ class Capsule2 {
         }
 
         this.generateBezierConcatenator();
-        console.log("scheink");
-        console.log(this.bezier_concatenator);
-        console.log(this.bezier_concatenator.getNumberOfCurves());
-        var extrusion = new Extrusion(this.glProgram, this.extrusion_levels, this.slide_shapeGen, this.bezier_concatenator);
-        // var t_extrusion = mat4.create();
-        // mat4.fromTranslation(t_extrusion, [0.0, 0.0, 0.5]);
-        // mat4.mul(t_extrusion, transformMatrix, t_extrusion);
-        // extrusion.draw(t_extrusion);
+        this.generateBuffers();
+
+        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows, /*n_cols=*/this.ptos_longitudinal);
+        grid.draw(transformMatrix);
     }
 
     generateBezierConcatenator() {
         var points = [];
-        var height_step = this.height / this.slide_repetitions;
-        for (var rep = 0; rep < this.slide_repetitions; rep++) {
-            var current_height = rep * height_step;
-            points.push([this.bezier_points[0][0], this.bezier_points[0][1], this.bezier_points[0][2] + current_height]);
-            points.push([this.bezier_points[1][0], this.bezier_points[1][1], this.bezier_points[1][2] + current_height]);
-            points.push([this.bezier_points[2][0], this.bezier_points[2][1], this.bezier_points[2][2] + current_height]);
-            points.push([this.bezier_points[3][0], this.bezier_points[3][1], this.bezier_points[3][2] + current_height]);
-            points.push([this.bezier_points[4][0], this.bezier_points[4][1], this.bezier_points[4][2] + current_height]);
-            points.push([this.bezier_points[5][0], this.bezier_points[5][1], this.bezier_points[5][2] + current_height]);
-            points.push([this.bezier_points[6][0], this.bezier_points[6][1], this.bezier_points[6][2] + current_height]);
-            points.push([this.bezier_points[7][0], this.bezier_points[7][1], this.bezier_points[7][2] + current_height]);
+        for (var i = 0; i < this.bezier_points.length; i++) {
+            points.push([this.bezier_points[i][0], this.bezier_points[i][1], this.bezier_points[i][2]]);
+        }
+        this.bezier_concatenator = new CubicBezierConcatenator(points);
+    }
+
+    generateBuffers() {
+        var ptos_base = [];
+        for (var i = 0; i < this.ptos_longitudinal; i++) {
+            var aux = this.bezier_concatenator.getPoint(this.n_points_bezier * i / this.ptos_longitudinal);
+            ptos_base.push(aux[0]);
+            ptos_base.push(aux[1]);
+            ptos_base.push(aux[2]);
         }
 
-        this.bezier_concatenator = new CubicBezierConcatenator(points);
+        var t_rotacion = mat4.create();
+        for (var rotacion = 0.0; rotacion <= 2.0 * Math.PI; rotacion += this.diferencial_rotacion) {
+            mat4.fromRotation(t_rotacion, rotacion, [0.0, -1.0, 0.0]);
+            const ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, ptos_base);
+            for (var elem of ptos_rotados) {
+                this.pos_buf.push(elem);
+                //&&&&&&&&&&&&&&&&&&&&&&&&&& TODO: Change this
+                this.nrm_buf.push(1.0);
+                this.clr_buf.push(0.5);
+                //&&&&&&&&&&&&&&&&&&&&&&&&&&
+            }
+        }
+
+        // for (var i = 0; i < ptos_base.length; i++) {
+        //     this.pos_buf.push(this.pos_buf[i]);
+        //     this.nrm_buf.push(1.0);
+        //     this.clr_buf.push(0.5);
+        // }
+
+        console.log(this.pos_buf.length);
     }
 }
 
-class SlideShapeGenerator {
+class CapsuleSG {
     constructor(vColor) {
         this.vColor = vColor;
         this.resolution = 50;
@@ -58,10 +82,8 @@ class SlideShapeGenerator {
         this.y_offset = 0.0;
     }
 
-    getPositionBuffer(central_pos) {
-        var x_0 = central_pos[0];
-        var y_0 =  central_pos[1];
-        var z_0 = central_pos[2];
+    // Percentage va de [0; 1]
+    getPositionBuffer(percentage) {
         
         var buffer = [];
         for (var i = 0; i < this.resolution-1; i++) {
@@ -76,25 +98,13 @@ class SlideShapeGenerator {
 
         return buffer;
     }
-        
-    // TODO: Fix this. This is incorrect.
+
+    // No es necesario ya que lo usamos para sup. de rev.
     getNormalBuffer(central_pos) {
-        var buffer = [];
-        for (var i = 0; i < this.resolution; i++) {
-            buffer.push(0.0);
-            buffer.push(0.0);
-            buffer.push(1.0);
-        }
-        return buffer;
+        return [];
     }
-        
+
     getColorBuffer(central_pos) {
-        var buffer = [];
-        for (var i = 0; i < this.resolution; i++) {
-            buffer.push(this.vColor[0]);
-            buffer.push(this.vColor[1]);
-            buffer.push(this.vColor[2]);
-        }
-        return buffer;
+        return this.vColor;
     }
 }
