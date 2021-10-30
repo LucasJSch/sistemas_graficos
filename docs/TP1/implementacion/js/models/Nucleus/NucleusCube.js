@@ -31,7 +31,7 @@ class NucleusCube {
         this.generateBezierConcatenator();
         this.generateBuffers();
 
-        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels, /*n_cols=*/this.ptos_longitudinal+1);
+        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels + 1, /*n_cols=*/this.ptos_longitudinal+1);
         grid.draw(transformMatrix);
     }
 
