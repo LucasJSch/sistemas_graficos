@@ -6,8 +6,6 @@ class SolarPanel {
         this.cylinder_color = [0.873529412, 0.712745098, 0.58333333];
         this.cylinder = new Cylinder(glProgram, this.cylinder_color);
         this.plane = new Cube(glProgram, this.plane_color);
-
-        this.utils = new Utils();
     }
 
     draw(transformMatrix) {

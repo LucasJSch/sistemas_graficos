@@ -9,8 +9,6 @@ class Panels {
         this.cylinder_length = 8.0 + (this.n_panels_per_side - 4.0) * this.panel_dist;
         this.cylinder = new Cylinder(glProgram, this.cylinder_color);
         this.panel_rotation_rad = Math.PI / 4.0;
-
-        this.utils = new Utils();
     }
 
     draw(transformMatrix) {

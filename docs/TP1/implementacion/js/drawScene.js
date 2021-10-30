@@ -14,6 +14,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     var coordinates = new Coordinates(glProgram);
     coordinates.draw();
 
-    var panels = new Panels(glProgram);
-    panels.draw();
+    var planet = new Planet(glProgram);
+    planet.draw();
 }
