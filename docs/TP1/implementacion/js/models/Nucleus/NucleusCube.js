@@ -20,7 +20,16 @@ class NucleusCube {
         this.nrm_buf = [];
         this.clr_buf = [];
 
+        this.top_pos_buf = [];
+        this.top_nrm_buf = [];
+        this.top_clr_buf = [];
+
+        this.bottom_pos_buf = [];
+        this.bottom_nrm_buf = [];
+        this.bottom_clr_buf = [];
+
         this.utils = new Utils();
+        this.ptos_base = [];
     }
 
     draw(transformMatrix) {
@@ -29,10 +38,17 @@ class NucleusCube {
 
         }
         this.generateBezierConcatenator();
-        this.generateBuffers();
+        this.generateBasePts();
+        this.generateSideBuffers();
+        this.generateTopBottomBuffers();
 
-        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels + 1, /*n_cols=*/this.ptos_longitudinal+1);
-        grid.draw(transformMatrix);
+        var sides_grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels + 1, /*n_cols=*/this.ptos_longitudinal+1);
+        var top_grid = new Grid(this.glProgram, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
+        var bottom_grid = new Grid(this.glProgram, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
+
+        sides_grid.draw(transformMatrix);
+        top_grid.draw(transformMatrix);
+        bottom_grid.draw(transformMatrix);
     }
 
     generateBezierConcatenator() {
@@ -43,22 +59,23 @@ class NucleusCube {
         this.bezier_concatenator = new CubicBezierConcatenator(points);
     }
 
-    generateBuffers() {
-        var ptos_base = [];
+    generateBasePts() {
         for (var i = 0; i < this.ptos_longitudinal; i++) {
             var aux = this.bezier_concatenator.getPoint(this.n_points_bezier * i / this.ptos_longitudinal);
-            ptos_base.push(aux[0]);
-            ptos_base.push(aux[1]);
-            ptos_base.push(aux[2]);
+            this.ptos_base.push(aux[0]);
+            this.ptos_base.push(aux[1]);
+            this.ptos_base.push(aux[2]);
         }
-        ptos_base.push(ptos_base[0]);
-        ptos_base.push(ptos_base[1]);
-        ptos_base.push(ptos_base[2]);
+        this.ptos_base.push(this.ptos_base[0]);
+        this.ptos_base.push(this.ptos_base[1]);
+        this.ptos_base.push(this.ptos_base[2]);
+    }
 
+    generateSideBuffers() {
         var t_traslacion = mat4.create();
         for (var t = 0.0; t <= this.cube_length; t += this.diferencial_traslacion) {
             mat4.fromTranslation(t_traslacion, [0.0, 0.0, t]);
-            const ptos_trasladados = this.utils.TransformPosBuffer(t_traslacion, ptos_base);
+            const ptos_trasladados = this.utils.TransformPosBuffer(t_traslacion, this.ptos_base);
             for (var elem of ptos_trasladados) {
                 this.pos_buf.push(elem);
             }
@@ -80,6 +97,40 @@ class NucleusCube {
             this.nrm_buf.push(nrm[0]);
             this.nrm_buf.push(nrm[1]);
             this.nrm_buf.push(nrm[2]);
+        }
+    }
+
+    generateTopBottomBuffers() {
+        for (var elem of this.ptos_base) {
+            this.bottom_pos_buf.push(elem);
+        }
+
+        var t_traslacion = mat4.create();
+        mat4.fromTranslation(t_traslacion, [0.0, 0.0, this.cube_length]);
+        this.top_pos_buf = this.utils.TransformPosBuffer(t_traslacion, this.ptos_base);
+
+        for (var i = 0; i < this.bottom_pos_buf.length; i += 3) {
+            this.bottom_clr_buf.push(this.color[0]);
+            this.bottom_clr_buf.push(this.color[1]);
+            this.bottom_clr_buf.push(this.color[2]);
+            this.top_clr_buf.push(this.color[0]);
+            this.top_clr_buf.push(this.color[1]);
+            this.top_clr_buf.push(this.color[2]);
+
+            // Genero normal cada 3 puntos (i.e. 1 por triangulo)
+            if (i < 6) {
+                continue;
+            }
+            var nrm = this.utils.GetTriangNormal(
+                [this.bottom_pos_buf[i-6], this.bottom_pos_buf[i-5], this.bottom_pos_buf[i-4]],
+                [this.bottom_pos_buf[i-3], this.bottom_pos_buf[i-2], this.bottom_pos_buf[i-1]],
+                [this.bottom_pos_buf[i], this.bottom_pos_buf[i+1], this.bottom_pos_buf[i+2]]);
+            this.bottom_nrm_buf.push(nrm[0]);
+            this.bottom_nrm_buf.push(nrm[1]);
+            this.bottom_nrm_buf.push(nrm[2]);
+            this.top_nrm_buf.push(-nrm[0]);
+            this.top_nrm_buf.push(-nrm[1]);
+            this.top_nrm_buf.push(-nrm[2]);
         }
     }
 }
