@@ -20,7 +20,7 @@ class ConvergedCube {
         }
 
         this.shapeGen = new ConvergedCubeShapeGenerator(this.vColor, this.vCentralTopPos, this.vCentralBottomPos, this.scaleFactor);
-        this.sides = new LinearExtrusion(this.glProgram, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
+        this.sides = new Extrusion(this.glProgram, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
         this.createTopAndBottomFans();
         this.sides.draw(transformMatrix);
         this.top_fan.draw(transformMatrix);
@@ -53,11 +53,11 @@ class ConvergedCube {
         bottom_pos_buffer.push(this.vCentralBottomPos[2]);
         bottom_pos_buffer = bottom_pos_buffer.concat(this.shapeGen.getPosBuffer(this.vCentralBottomPos));
 
-        var top_normal_buffer = [];
+        var bottom_normal_buffer = [];
         for (var i = 0; i < bottom_pos_buffer.length+1; i++) {
-            top_normal_buffer.push(0.0);
-            top_normal_buffer.push(0.0);
-            top_normal_buffer.push(-1.0);
+            bottom_normal_buffer.push(0.0);
+            bottom_normal_buffer.push(0.0);
+            bottom_normal_buffer.push(-1.0);
         }
 
         var bottom_color_buffer = this.shapeGen.getColorBuffer(this.vCentralBottomPos);

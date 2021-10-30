@@ -31,7 +31,7 @@ class Capsule {
         this.generateBezierConcatenator();
         this.generateBuffers();
 
-        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows, /*n_cols=*/this.ptos_longitudinal);
+        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         grid.draw(transformMatrix);
     }
 
