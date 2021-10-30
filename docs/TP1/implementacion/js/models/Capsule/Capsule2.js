@@ -57,7 +57,6 @@ class Capsule2 {
             }
         }
 
-        //&&&&&&&&&&&&&&&&&&&&&&&&&& TODO: Change this
         for (var i = 0; i < this.pos_buf.length; i += 3) {
             this.clr_buf.push(this.color[0]);
             this.clr_buf.push(this.color[1]);
@@ -75,6 +74,5 @@ class Capsule2 {
             this.nrm_buf.push(nrm[1]);
             this.nrm_buf.push(nrm[2]);
         }
-        //&&&&&&&&&&&&&&&&&&&&&&&&&&
     }
 }
