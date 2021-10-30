@@ -5,7 +5,6 @@ class Capsule2 {
         this.color = [0.823529412, 0.662745098, 0.53333333];
         this.bezier_points = [[0.0, 0.0, 0.0], [0.0, -0.1, 0.5], [0.0, -0.1, 0.5], [0.0, -2.0, 0.9], [0.0, -2.0, 0.9], [0.0, -2.0, 0.85], [0.0, -5.0, 0.6], [0.0, -8.0, 0.1]];
         this.bezier_concatenator = null;
-        this.slide_shapeGen = new CapsuleSG(this.color);
         this.extrusion_levels = 100;
 
         this.n_rows = 48.0;
@@ -55,56 +54,27 @@ class Capsule2 {
             const ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, ptos_base);
             for (var elem of ptos_rotados) {
                 this.pos_buf.push(elem);
-                //&&&&&&&&&&&&&&&&&&&&&&&&&& TODO: Change this
-                this.nrm_buf.push(1.0);
-                this.clr_buf.push(0.5);
-                //&&&&&&&&&&&&&&&&&&&&&&&&&&
             }
         }
 
-        // for (var i = 0; i < ptos_base.length; i++) {
-        //     this.pos_buf.push(this.pos_buf[i]);
-        //     this.nrm_buf.push(1.0);
-        //     this.clr_buf.push(0.5);
-        // }
+        //&&&&&&&&&&&&&&&&&&&&&&&&&& TODO: Change this
+        for (var i = 0; i < this.pos_buf.length; i += 3) {
+            this.clr_buf.push(this.color[0]);
+            this.clr_buf.push(this.color[1]);
+            this.clr_buf.push(this.color[2]);
 
-        console.log(this.pos_buf.length);
-    }
-}
-
-class CapsuleSG {
-    constructor(vColor) {
-        this.vColor = vColor;
-        this.resolution = 50;
-        this.x_radius = 0.25;
-        this.y_radius = 0.5;
-        this.x_offset = 0.75;
-        this.y_offset = 0.0;
-    }
-
-    // Percentage va de [0; 1]
-    getPositionBuffer(percentage) {
-        
-        var buffer = [];
-        for (var i = 0; i < this.resolution-1; i++) {
-            buffer.push(x_0 + this.x_radius*Math.cos(-i * 2.0 * Math.PI / (this.resolution*2)) + this.x_offset);
-            buffer.push(y_0 + this.y_radius*Math.sin(-i * 2.0 * Math.PI / (this.resolution*2)) + this.y_offset);
-            buffer.push(z_0);
+            // Genero normal cada 3 puntos (i.e. 1 por triangulo)
+            if (i < 6) {
+                continue;
+            }
+            var nrm = this.utils.GetTriangNormal(
+                [this.pos_buf[i-6], this.pos_buf[i-5], this.pos_buf[i-4]],
+                [this.pos_buf[i-3], this.pos_buf[i-2], this.pos_buf[i-1]],
+                [this.pos_buf[i], this.pos_buf[i+1], this.pos_buf[i+2]]);
+            this.nrm_buf.push(nrm[0]);
+            this.nrm_buf.push(nrm[1]);
+            this.nrm_buf.push(nrm[2]);
         }
-
-        buffer.push(buffer[0]);
-        buffer.push(buffer[1]);
-        buffer.push(buffer[2]);
-
-        return buffer;
-    }
-
-    // No es necesario ya que lo usamos para sup. de rev.
-    getNormalBuffer(central_pos) {
-        return [];
-    }
-
-    getColorBuffer(central_pos) {
-        return this.vColor;
+        //&&&&&&&&&&&&&&&&&&&&&&&&&&
     }
 }
