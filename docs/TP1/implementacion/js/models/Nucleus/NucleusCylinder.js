@@ -3,10 +3,8 @@ class NucleusCylinder {
     constructor(glProgram, bezier_points, length) {
         this.glProgram = glProgram;
         this.color = [0.0, 1.0, 0.0];
-        // this.cylinder_length = length;
-        this.cylinder_length = 3.0;
-        this.bezier_points = [[0.0, 0.0, 1.0], [this.cylinder_length / 3.0, 2.0, 1.0], [this.cylinder_length * 2.0 / 3.0, 2.0, 1.0], [this.cylinder_length, 0.0, 1.0]];
-        // this.bezier_points = bezier_points;
+        this.cylinder_length = length;
+        this.bezier_points = bezier_points;
         this.bezier_concatenator = null;
 
         this.n_rows = 48.0;
@@ -37,8 +35,9 @@ class NucleusCylinder {
 
         this.generateBezierConcatenator();
         this.generateBasePts();
-        this.generateSideBuffers(transformMatrix);
-        this.generateTopBottomBuffers(transformMatrix);
+        this.generateSideBuffers();
+        this.generateTopBottomBuffers();
+        this.applyTransformMatrix(transformMatrix);
 
         var sides_grid = new Grid(this.glProgram, this.sides_pos_buf, this.sides_nrm_buf, this.sides_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         var top_grid = new Grid(this.glProgram, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0));
@@ -46,6 +45,13 @@ class NucleusCylinder {
         sides_grid.draw();
         top_grid.draw();
         bottom_grid.draw();
+    }
+
+    applyTransformMatrix(transformMatrix) {
+        // TODO: Transform normal buf.
+        this.sides_pos_buf = this.utils.TransformPosBuffer(transformMatrix, this.sides_pos_buf);
+        this.top_pos_buf = this.utils.TransformPosBuffer(transformMatrix, this.top_pos_buf);
+        this.bottom_pos_buf = this.utils.TransformPosBuffer(transformMatrix, this.bottom_pos_buf);
     }
 
     generateBezierConcatenator() {
@@ -65,8 +71,7 @@ class NucleusCylinder {
         }
     }
 
-    generateSideBuffers(transformMatrix) {
-        // TODO: Use transformMatrix.
+    generateSideBuffers() {
         var t_rotacion = mat4.create();
         for (var rotacion = 0.0; rotacion <= 2.0 * Math.PI; rotacion += this.diferencial_rotacion) {
             mat4.fromRotation(t_rotacion, rotacion, [1.0, 0.0, 0.0]);
@@ -95,8 +100,7 @@ class NucleusCylinder {
         }
     }
 
-    generateTopBottomBuffers(transformMatrix) {
-        // TODO: Use transformMatrix.
+    generateTopBottomBuffers() {
         var base_point = [this.sides_pos_buf[0], this.sides_pos_buf[1], this.sides_pos_buf[2]];
         var t_rotacion = mat4.create();
         for (var rotacion = 0.0; rotacion <= 2.0 * Math.PI; rotacion += this.diferencial_rotacion) {
@@ -111,7 +115,7 @@ class NucleusCylinder {
         this.bottom_pos_buf.push(this.bottom_pos_buf[2]);
 
         var t_traslacion = mat4.create();
-        mat4.fromTranslation(t_traslacion, [this.cylinder_length - 0.075, 0.0, 0.0]);
+        mat4.fromTranslation(t_traslacion, [this.cylinder_length, 0.0, 0.0]);
         this.top_pos_buf = this.utils.TransformPosBuffer(t_traslacion, this.bottom_pos_buf);
 
         for (var i = 0; i < this.bottom_pos_buf.length; i += 3) {

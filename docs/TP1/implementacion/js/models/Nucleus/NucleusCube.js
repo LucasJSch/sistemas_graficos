@@ -41,6 +41,7 @@ class NucleusCube {
         this.generateBasePts();
         this.generateSideBuffers();
         this.generateTopBottomBuffers();
+        this.applyTransformMatrix(transformMatrix);
 
         var sides_grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels + 1, /*n_cols=*/this.ptos_longitudinal+1);
         var top_grid = new Grid(this.glProgram, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
@@ -49,6 +50,13 @@ class NucleusCube {
         sides_grid.draw(transformMatrix);
         top_grid.draw(transformMatrix);
         bottom_grid.draw(transformMatrix);
+    }
+
+    applyTransformMatrix(transformMatrix) {
+        // TODO: Transform normal buf.
+        this.pos_buf = this.utils.TransformPosBuffer(transformMatrix, this.pos_buf);
+        this.top_pos_buf = this.utils.TransformPosBuffer(transformMatrix, this.top_pos_buf);
+        this.bottom_pos_buf = this.utils.TransformPosBuffer(transformMatrix, this.bottom_pos_buf);
     }
 
     generateBezierConcatenator() {
