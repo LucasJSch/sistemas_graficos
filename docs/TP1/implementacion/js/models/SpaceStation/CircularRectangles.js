@@ -1,17 +1,18 @@
-class CircularCylinder {
+class CircularRectangles {
     constructor(glProgram) {
         this.glProgram = glProgram;
         this.color = [1.0, 0.0, 0.0];
         // The curve in this case is the shape to draw multiple times.
-        // Use odd numbers here.
-        this.n_curves = 51.0;
+        this.n_curves_per_section = 12.0;
         this.radius = 0.3;
-        this.n_points_per_curve = 50.0;
+        this.n_points_per_curve = 11.0;
         this.distance_from_zero = 5.0;
 
-        this.pos_buf = [];
-        this.nrm_buf = [];
-        this.clr_buf = [];
+        // Integer bigger than 3.
+        this.n_sections = 4.0;
+        this.angular_length_per_section = Math.PI / this.n_sections;
+
+        this.grids = [];
 
         this.base_shape_pos = null;
 
@@ -23,19 +24,25 @@ class CircularCylinder {
             transformMatrix = mat4.create();
         }
 
-        for (var angle = 0.0; angle <= 2.0 * Math.PI; angle += 2.0 * Math.PI / this.n_curves) {
-            var pos = this.getShapePosBuf(angle);
-            for (var elem of pos) {
-                this.pos_buf.push(elem);
+        for (var section = 1.0; section <= this.n_sections; section++) {
+            var init_angle = (section - 1.0) * this.angular_length_per_section * 2.0;
+            var end_angle = init_angle + this.angular_length_per_section;
+            var pos_buf = [];
+            var clr_buf = [];
+            var nrm_buf = [];
+            for (var angle = init_angle; angle <= end_angle; angle += this.angular_length_per_section / this.n_curves_per_section) {
+                var aux  = this.getShapePosBuf(angle);
                 // TODO: Use correct clr and nrm.
-                this.clr_buf.push(0.5);
-                this.nrm_buf.push(0.33);
+                for (var elem of aux) {
+                    pos_buf.push(elem);
+                }
             }
+            this.grids.push(new Grid(this.glProgram, pos_buf, nrm_buf, clr_buf, /*n_rows=*/this.n_curves_per_section + 0.0, /*n_cols=*/this.n_points_per_curve + 1.0));
         }
 
-
-        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_curves + 1.0, /*n_cols=*/this.n_points_per_curve + 1.0);
-        grid.draw(transformMatrix);
+        for (var grid of this.grids) {
+            grid.draw(transformMatrix);
+        }
     }
 
     getShapePosBuf(angleToRotate) {
