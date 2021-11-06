@@ -172,7 +172,7 @@
             var viewMatrix = mat4.create();
             var projMatrix = mat4.create();
             var normalMatrix = mat4.create();
-            var rotate_angle = -Math.PI/2;
+            var rotacion_anillo = 0;
             
             
             var camera = new Camera();
@@ -189,7 +189,7 @@
                     gl = canvas.getContext("webgl");      
 
                 }catch(e){
-                    alert(  "Error: Your browser does not appear to support WebGL.");
+                    alert("Error: Your browser does not appear to support WebGL.");
                 }
 
                 if(gl) {
@@ -200,7 +200,7 @@
                     tick();
 
                 } else{    
-                    alert(  "Error: Your browser does not appear to support WebGL.");
+                    alert("Error: Your browser does not appear to support WebGL.");
                 }
 
             }
@@ -272,6 +272,9 @@
             }
 
             function animate(){
+                rotacion_anillo += 0.1 * vel_rotacion_anillo;
+
+
                 camera.update();
                 viewMatrix = camera.getMatrix();
                 
@@ -291,7 +294,7 @@
                           normalMatrix,
                           n_paneles_solares,
                           angulo_paneles,
-                          vel_rotacion_anillo,
+                          rotacion_anillo,
                           n_secciones_nucleo);
                 animate();
             }

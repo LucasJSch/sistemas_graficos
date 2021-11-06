@@ -12,8 +12,13 @@ class Grid {
         this.texture = texture;
     }
 
-    draw() {
+    draw(transformMatrix) {
+        if (transformMatrix == null) {
+            transformMatrix = mat4.create();
+        }
+        
         this.createIndexBuffer();
+        this.applyTransformation(transformMatrix);
         this.setupBuffers();
 
         gl.drawElements(gl.TRIANGLE_STRIP, this.index_buffer.length, gl.UNSIGNED_SHORT, 0);
@@ -96,4 +101,9 @@ class Grid {
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
    }
+
+   applyTransformation(transformMatrix) {
+    var utils = new Utils();
+    this.position_buffer = utils.TransformPosBuffer(transformMatrix, this.position_buffer);
+}
 }

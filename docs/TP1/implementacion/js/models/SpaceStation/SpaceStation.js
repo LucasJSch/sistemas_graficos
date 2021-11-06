@@ -1,8 +1,9 @@
 class SpaceStation {
-    constructor(glProgram, n_sections, n_solar_panels, panels_angle) {
+    constructor(glProgram, n_sections, n_solar_panels, panels_angle, ring_rotation) {
         this.glProgram = glProgram;
         this.n_sections = n_sections;
         this.n_solar_panels = n_solar_panels;
+        this.ring_rotation = ring_rotation;
 
         this.rectangles = new CircularRectangles(glProgram, this.n_sections);
         this.columns = new CraneColumns(glProgram, this.n_sections);
@@ -40,8 +41,11 @@ class SpaceStation {
         mat4.mul(center_cyl_t, aux, center_cyl_t);
         mat4.mul(center_cyl_t, transformMatrix, center_cyl_t);
 
-        this.rectangles.draw(transformMatrix);
-        this.columns.draw(transformMatrix);
+        mat4.fromRotation(aux, this.ring_rotation, [0.0, 1.0, 0.0]);
+        mat4.mul(aux, transformMatrix, aux);
+
+        this.rectangles.draw(aux);
+        this.columns.draw(aux);
         this.cylinder.draw(transformMatrix);
         this.panels.draw(t_panels);
         this.center_cylinder.draw(center_cyl_t);

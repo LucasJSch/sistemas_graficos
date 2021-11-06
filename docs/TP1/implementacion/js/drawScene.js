@@ -1,5 +1,5 @@
 // This function serves as an interface between the main js script that initializes the environment and the JS classes.
-function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix, n_paneles_solares, angulo_paneles, vel_rotacion_anillo, n_secciones_nucleo) {
+function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix, n_paneles_solares, angulo_paneles, rotacion_anillo, n_secciones_nucleo) {
 
     var modelMatrixUniform = gl.getUniformLocation(glProgram, "modelMatrix");
     var viewMatrixUniform  = gl.getUniformLocation(glProgram, "viewMatrix");
@@ -15,7 +15,7 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     // var coordinates = new Coordinates(glProgram);
     // coordinates.draw();
 
-    var space_station = new SpaceStation(glProgram, n_secciones_nucleo, n_paneles_solares, angulo_paneles);
+    var space_station = new SpaceStation(glProgram, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
     space_station.draw();
 
     var planet = new Planet(glProgram);
