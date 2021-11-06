@@ -25,7 +25,10 @@ class CircularRectangles {
         }
 
         for (var section = 1.0; section <= this.n_sections; section++) {
-            var init_angle = (section - 1.0) * this.angular_length_per_section * 2.0 - this.angular_length_per_section;
+            // var section = 1.0;
+            var init_angle = (section - 1.0) * this.angular_length_per_section * 2.0;
+            // Correccion para que gire igual que las columnas de la estacion espacial.
+            init_angle -= Math.PI / 2.0 + this.angular_length_per_section / 2.0;
             var end_angle = init_angle + this.angular_length_per_section;
             var pos_buf = [];
             var clr_buf = [];
