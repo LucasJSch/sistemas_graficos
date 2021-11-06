@@ -79,6 +79,7 @@
         <script type="text/javascript" src="js/cameras/OrbitalCameraControl.js"></script>
         <script type="text/javascript" src="js/cameras/Camera.js"></script>
         
+        <script src="js/libs/dat.gui.js"></script>
         <script id="shader-vs" type="x-shader/x-vertex">
 
             precision highp float;
@@ -155,6 +156,9 @@
             var vec3=glMatrix.vec3;
             var vec4=glMatrix.vec4;
 
+            var distanciaCamara=1.73;
+            var modo = "wireframe";
+
             var gl = null,
             canvas = null,
 
@@ -190,9 +194,10 @@
 
                     setupWebGL();
                     initShaders();
+                    initMenu(); 
                     tick();
 
-                }else{    
+                } else{    
                     alert(  "Error: Your browser does not appear to support WebGL.");
                 }
 
@@ -219,6 +224,11 @@
                 mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
             }
                     
+            function initMenu() {
+                var gui = new dat.GUI();
+                gui.add(window, "distanciaCamara",0.01,5).step(0.01);
+                gui.add(window, "modo",["wireframe","smooth","edges"]);
+            }
                     
             function initShaders() {
                 //get shader source
