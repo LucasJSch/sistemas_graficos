@@ -1,7 +1,7 @@
 class CraneColumn {
     constructor(glProgram) {
         this.glProgram = glProgram;
-        this.color = [1.0, 0.0, 0.0];
+        this.color = [0.392156863, 0.294117647, 0.31372549];
         
         this.left_column = new Cube(glProgram, this.color);
         this.right_column = new Cube(glProgram, this.color);
