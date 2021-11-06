@@ -156,8 +156,10 @@
             var vec3=glMatrix.vec3;
             var vec4=glMatrix.vec4;
 
-            var distanciaCamara=1.73;
-            var modo = "wireframe";
+            var n_paneles_solares = 4.0;
+            var angulo_paneles = 0.0;
+            var vel_rotacion_anillo = 0.0;
+            var n_secciones_nucleo = 2.0;
 
             var gl = null,
             canvas = null,
@@ -226,8 +228,10 @@
                     
             function initMenu() {
                 var gui = new dat.GUI();
-                gui.add(window, "distanciaCamara",0.01,5).step(0.01);
-                gui.add(window, "modo",["wireframe","smooth","edges"]);
+                gui.add(window, "n_paneles_solares", 1, 10).step(1);
+                gui.add(window, "angulo_paneles", 0, Math.PI * 2.0).step(0.1);
+                gui.add(window, "vel_rotacion_anillo", 0, 5.0).step(0.1);
+                gui.add(window, "n_secciones_nucleo", 2, 8).step(1);
             }
                     
             function initShaders() {
@@ -280,7 +284,15 @@
             
             function tick(){
                 requestAnimationFrame(tick);
-                drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix);
+                drawScene(glProgram,
+                          modelMatrix,
+                          viewMatrix,
+                          projMatrix,
+                          normalMatrix,
+                          n_paneles_solares,
+                          angulo_paneles,
+                          vel_rotacion_anillo,
+                          n_secciones_nucleo);
                 animate();
             }
 
