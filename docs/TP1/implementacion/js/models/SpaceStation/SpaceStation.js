@@ -1,10 +1,10 @@
 class SpaceStation {
     constructor(glProgram) {
         this.glProgram = glProgram;
-        this.n_rectangles = 4.0;
+        this.n_sections = 9.0;
 
-        this.rectangles = new CircularRectangles(glProgram, this.n_rectangles);
-        this.columns = new CraneColumns(glProgram, this.n_rectangles);
+        this.rectangles = new CircularRectangles(glProgram, this.n_sections);
+        this.columns = new CraneColumns(glProgram, this.n_sections);
     }
 
     draw(transformMatrix) {
@@ -12,7 +12,7 @@ class SpaceStation {
             transformMatrix = mat4.create();
         }
 
-        // this.rectangles.draw(transformMatrix);
+        this.rectangles.draw(transformMatrix);
         this.columns.draw(transformMatrix);
     }
 }
