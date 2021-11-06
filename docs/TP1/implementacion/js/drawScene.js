@@ -14,6 +14,6 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     var coordinates = new Coordinates(glProgram);
     coordinates.draw();
 
-    var rectangles = new SpaceStation(glProgram);
+    var rectangles = new Nucleus(glProgram);
     rectangles.draw();
 }

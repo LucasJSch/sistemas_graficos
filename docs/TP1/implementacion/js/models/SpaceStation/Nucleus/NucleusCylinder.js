@@ -2,7 +2,7 @@ class NucleusCylinder {
     // Draws a cylinder with Bezier-defined surfaces
     constructor(glProgram, bezier_points, length) {
         this.glProgram = glProgram;
-        this.color = [0.0, 1.0, 0.0];
+        this.color = [0.823529412, 0.662745098, 0.53333333];
         this.cylinder_length = length;
         this.bezier_points = bezier_points;
         this.bezier_concatenator = null;
