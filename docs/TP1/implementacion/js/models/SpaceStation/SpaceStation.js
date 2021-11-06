@@ -1,5 +1,5 @@
 class SpaceStation {
-    constructor(glProgram, n_sections, n_solar_panels) {
+    constructor(glProgram, n_sections, n_solar_panels, panels_angle) {
         this.glProgram = glProgram;
         this.n_sections = n_sections;
         this.n_solar_panels = n_solar_panels;
@@ -8,7 +8,7 @@ class SpaceStation {
         this.columns = new CraneColumns(glProgram, this.n_sections);
         this.cylinder = new CircularCylinder(glProgram);
         this.nucleus = new Nucleus(glProgram);
-        this.panels = new Panels(glProgram, n_solar_panels);
+        this.panels = new Panels(glProgram, n_solar_panels, panels_angle);
         this.center_cylinder = new Cylinder(glProgram, [0.0, 0.82, 0.12])
     }
 

@@ -15,7 +15,7 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix,
     // var coordinates = new Coordinates(glProgram);
     // coordinates.draw();
 
-    var space_station = new SpaceStation(glProgram, n_secciones_nucleo, n_paneles_solares);
+    var space_station = new SpaceStation(glProgram, n_secciones_nucleo, n_paneles_solares, angulo_paneles);
     space_station.draw();
 
     var planet = new Planet(glProgram);

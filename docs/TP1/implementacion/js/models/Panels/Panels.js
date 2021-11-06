@@ -1,7 +1,7 @@
 class Panels {
     // Draws the solar panels.
     // Must have at least 4 panels per side.
-    constructor(glProgram, n_solar_panels) {
+    constructor(glProgram, n_solar_panels, angle_panels) {
         this.glProgram = glProgram;
         this.cylinder_color = [0.794117647, 0.7, 0.809803922];
         this.n_panels_per_side = n_solar_panels;
@@ -9,7 +9,7 @@ class Panels {
         // this.cylinder_length = 8.0 + (this.n_panels_per_side - 4.0) * this.panel_dist;
         this.cylinder_length = this.getModelLength(this.n_panels_per_side);
         this.cylinder = new Cylinder(glProgram, this.cylinder_color);
-        this.panel_rotation_rad = Math.PI / 4.0;
+        this.panel_rotation_rad = angle_panels;
     }
 
     getModelLength(n_panels_per_side) {
