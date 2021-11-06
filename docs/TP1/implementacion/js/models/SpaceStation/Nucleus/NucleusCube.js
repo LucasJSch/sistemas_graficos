@@ -47,9 +47,9 @@ class NucleusCube {
         var top_grid = new Grid(this.glProgram, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
         var bottom_grid = new Grid(this.glProgram, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
 
-        sides_grid.draw(transformMatrix);
-        top_grid.draw(transformMatrix);
-        bottom_grid.draw(transformMatrix);
+        sides_grid.draw();
+        top_grid.draw();
+        bottom_grid.draw();
     }
 
     applyTransformMatrix(transformMatrix) {

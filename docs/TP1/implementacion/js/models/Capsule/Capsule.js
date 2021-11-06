@@ -3,6 +3,7 @@ class Capsule {
     constructor(glProgram) {
         this.glProgram = glProgram;
         this.color = [0.823529412, 0.662745098, 0.53333333];
+        this.color_aleron = [0.1, 0.1, 0.1];
         this.bezier_points = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.5], [0.0, 0.0, 0.5],
                               [0.0, 0.0, 0.5], [0.0, 0.0, 0.75], [0.0, 0.0, 0.75], [0.0, -0.3, 0.9],
                               [0.0, -0.3, 0.9], [0.0, -1.0, 0.9], [0.0, -2.0, 0.8], [0.0, -2.3, 0.5],
@@ -19,6 +20,10 @@ class Capsule {
         this.nrm_buf = [];
         this.clr_buf = [];
 
+        this.aleron_pos_buf = [];
+        this.aleron_nrm_buf = [];
+        this.aleron_clr_buf = [];
+
         this.utils = new Utils();
     }
 
@@ -30,8 +35,10 @@ class Capsule {
         this.generateBezierConcatenator();
         this.generateBuffers();
 
-        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
-        grid.draw(transformMatrix);
+        var capsula = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
+        var aleron = new Grid(this.glProgram, this.aleron_pos_buf, this.aleron_nrm_buf, this.aleron_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
+        capsula.draw(transformMatrix);
+        aleron.draw(transformMatrix);
     }
 
     generateBezierConcatenator() {
@@ -77,5 +84,18 @@ class Capsule {
             this.nrm_buf.push(nrm[1]);
             this.nrm_buf.push(nrm[2]);
         }
+
+        var t = mat4.create();
+        var aux = mat4.create();
+        mat4.fromScaling(t, [0.5, 0.5, 0.75]);
+        mat4.fromTranslation(aux, [0.0, 1.0, 0.0]);
+        mat4.mul(t, aux, t);
+        this.aleron_pos_buf = this.utils.TransformPosBuffer(t, this.pos_buf);
+        for (var i = 0; i < this.clr_buf.length; i+= 3) {
+            this.aleron_clr_buf.push(this.color_aleron[0]);
+            this.aleron_clr_buf.push(this.color_aleron[1]);
+            this.aleron_clr_buf.push(this.color_aleron[2]);
+        }
+        this.aleron_nrm_buf = Array.from(this.nrm_buf);
     }
 }
