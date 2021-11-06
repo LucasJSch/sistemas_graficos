@@ -1,15 +1,15 @@
 class CircularRectangles {
-    constructor(glProgram) {
+    constructor(glProgram, n_rectangles) {
         this.glProgram = glProgram;
         this.color = [1.0, 0.0, 0.0];
         // The curve in this case is the shape to draw multiple times.
         this.n_curves_per_section = 12.0;
-        this.radius = 0.3;
+        this.radius = 0.6;
         this.n_points_per_curve = 11.0;
         this.distance_from_zero = 5.0;
 
         // Integer bigger than 3.
-        this.n_sections = 4.0;
+        this.n_sections = n_rectangles;
         this.angular_length_per_section = Math.PI / this.n_sections;
 
         this.grids = [];
