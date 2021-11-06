@@ -2,11 +2,33 @@ class CraneColumn {
     constructor(glProgram) {
         this.glProgram = glProgram;
         this.color = [1.0, 0.0, 0.0];
-
+        
         this.left_column = new Cube(glProgram, this.color);
         this.right_column = new Cube(glProgram, this.color);
+        this.cyl = new Cylinder(this.glProgram, this.color, /*pointsPerCircle=*/10);
+
         this.cylinders_t = [];
         this.length = 32.2;
+        this.left_t;
+        this.right_t;
+        this.computeCommonTransformations();
+        this.generateIntermediateCylindersTransforms();
+    }
+
+    computeCommonTransformations() {
+        var aux_t = mat4.create();
+        var left_t = mat4.create();
+        mat4.fromScaling(left_t, [0.5, 0.5, this.length]);
+        mat4.fromTranslation(aux_t, [1.0, 0.0, 0.0]);
+        mat4.mul(left_t, aux_t, left_t);
+
+        var right_t = mat4.create();
+        mat4.fromScaling(right_t, [0.5, 0.5, this.length]);
+        mat4.fromTranslation(aux_t, [-1.0, 0.0, 0.0]);
+        mat4.mul(right_t, aux_t, right_t);
+
+        this.left_t = left_t;
+        this.right_t = right_t;
     }
 
     draw(transformMatrix) {
@@ -14,30 +36,16 @@ class CraneColumn {
             transformMatrix = mat4.create();
         }
 
-        var aux_t = mat4.create();
-
-        var left_t = mat4.create();
-        mat4.fromScaling(left_t, [0.5, 0.5, this.length]);
-        mat4.fromTranslation(aux_t, [1.0, 0.0, 0.0]);
-        mat4.mul(left_t, aux_t, left_t);
-        mat4.mul(left_t, transformMatrix, left_t);
-
-        var right_t = mat4.create();
-        mat4.fromScaling(right_t, [0.5, 0.5, this.length]);
-        mat4.fromTranslation(aux_t, [-1.0, 0.0, 0.0]);
-        mat4.mul(right_t, aux_t, right_t);
-        mat4.mul(right_t, transformMatrix, right_t);
-
-        this.generateIntermediateCylindersTransforms();
-
-        var cyl = new Cylinder(this.glProgram, this.color, /*pointsPerCircle=*/10);
+        mat4.mul(this.left_t, transformMatrix, this.left_t);
+        mat4.mul(this.right_t, transformMatrix, this.right_t);
+        
         for (var t of this.cylinders_t) {
             mat4.mul(t, transformMatrix, t);
-            cyl.draw(t);
+            this.cyl.draw(t);
         }
 
-        this.left_column.draw(left_t);
-        this.right_column.draw(right_t);
+        this.left_column.draw(this.left_t);
+        this.right_column.draw(this.right_t);
     }
 
     generateIntermediateCylindersTransforms() {

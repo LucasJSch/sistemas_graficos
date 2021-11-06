@@ -12,7 +12,7 @@ class SpaceStation {
             transformMatrix = mat4.create();
         }
 
-        this.rectangles.draw(transformMatrix);
+        // this.rectangles.draw(transformMatrix);
         this.columns.draw(transformMatrix);
     }
 }
