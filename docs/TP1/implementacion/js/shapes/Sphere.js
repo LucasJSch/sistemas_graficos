@@ -18,6 +18,10 @@ class Sphere {
         }
 
         this.generateBuffers();
+
+        // TODO: Change normal buffer as welll.
+        this.pos_buf = this.utils.TransformPosBuffer(transformMatrix, this.pos_buf);
+
         var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, this.n_rows, this.n_cols);
         grid.draw(transformMatrix);
     }

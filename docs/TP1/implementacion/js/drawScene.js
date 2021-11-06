@@ -11,9 +11,17 @@ function drawScene(glProgram, modelMatrix, viewMatrix, projMatrix, normalMatrix)
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var coordinates = new Coordinates(glProgram);
-    coordinates.draw();
+    var aux_t = mat4.create();
+    // var coordinates = new Coordinates(glProgram);
+    // coordinates.draw();
 
-    var rectangles = new SpaceStation(glProgram, 4);
-    rectangles.draw();
+    var space_station = new SpaceStation(glProgram, 4);
+    space_station.draw();
+
+    var planet = new Planet(glProgram);
+    var planet_t = mat4.create();
+    mat4.fromScaling(planet_t, [100.0, 100.0, 100.0])
+    mat4.fromTranslation(aux_t, [0.0, 0.0, -550.0]);
+    mat4.mul(planet_t, aux_t, planet_t);
+    planet.draw(planet_t);
 }
