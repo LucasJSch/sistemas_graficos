@@ -26,26 +26,22 @@ function drawScene(glProgram,
     coord.draw();
 
     var capsule = new Capsule(glProgram);
-    var capsule_t = mat4.create();
-    // mat4.fromRotation(aux_t, Math.PI, [1.0, 0.0, 0.0]);
-    // mat4.fromTranslation(capsule_t, [0.0, -15.0, 0.0]);
-    // mat4.mul(capsule_t, capsule_t, aux_t);
-    
-    mat4.fromRotation(aux_t, capsule_controls.roll_angle, [0.0, 0.0, 1.0]);
-    mat4.mul(capsule_t, capsule_t, aux_t);
-    
-    mat4.fromRotation(aux_t, capsule_controls.pitch_angle, [1.0, 0.0, 0.0]);
-    mat4.mul(capsule_t, capsule_t, aux_t);
     
     mat4.fromTranslation(aux_t, [capsule_controls.x, capsule_controls.y, capsule_controls.z]);
-    mat4.mul(capsule_t, capsule_t, aux_t);
+    mat4.mul(capsule_controls.current_t, capsule_controls.current_t, aux_t);
     
-    // mat4.fromRotation(aux_t, capsule_controls.roll_angle, [0.0, 0.0, 1.0]);
-    // mat4.mul(capsule_t, capsule_t, aux_t);
+    mat4.fromRotation(aux_t, capsule_controls.roll_angle, [0.0, 0.0, 1.0]);
+    mat4.mul(capsule_controls.current_t, capsule_controls.current_t, aux_t);
     
-    // mat4.fromRotation(aux_t, capsule_controls.pitch_angle, [1.0, 0.0, 0.0]);
-    // mat4.mul(capsule_t, capsule_t, aux_t);
-    
+    mat4.fromRotation(aux_t, capsule_controls.pitch_angle, [1.0, 0.0, 0.0]);
+    mat4.mul(capsule_controls.current_t, capsule_controls.current_t, aux_t);
+
+    capsule_controls.x = 0;
+    capsule_controls.y = 0;
+    capsule_controls.z = 0;
+    capsule_controls.roll_angle = 0;
+    capsule_controls.pitch_angle = 0;
+
     var space_station = new SpaceStation(glProgram, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
     
     var planet = new Planet(glProgram);
@@ -54,7 +50,7 @@ function drawScene(glProgram,
     mat4.fromTranslation(aux_t, [0.0, 0.0, -550.0]);
     mat4.mul(planet_t, aux_t, planet_t);
     
-    // space_station.draw();
-    // planet.draw(planet_t);
-    capsule.draw(capsule_t);
+    space_station.draw();
+    planet.draw(planet_t);
+    capsule.draw(capsule_controls.current_t);
 }

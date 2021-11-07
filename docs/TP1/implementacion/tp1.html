@@ -151,62 +151,6 @@
                 gl_FragColor = vec4(vColor.rgb * vLighting, 1.0);
             }
         </script>
-        
-        <!-- Menu callbacks. -->
-        <script>
-            var kl = new KeyboardListener();
-            var capsule_controls = new SceneControls();
-        
-            var sceneActionsListener = (function(e) {
-                switch (e.key) {
-                    case "a":
-                    case "A":
-                        capsule_controls.x -= 0.1;
-                        break;
-                    case "d":
-                    case "D":
-                        capsule_controls.x += 0.1;
-                        break;
-                    case "s":
-                    case "S":
-                        capsule_controls.z -= 0.1;
-                        break;  
-                    case "w": 
-                    case "W": 
-                        capsule_controls.z += 0.1;
-                        break;
-        
-                    case "q":
-                    case "Q":
-                        capsule_controls.y -= 0.1;
-                        break;  
-                    case "e":
-                    case "E":
-                        capsule_controls.y += 0.1;
-                        break;             
-        
-                    case "j": 
-                    case "J": 
-                        capsule_controls.roll_angle -= 0.1;
-                    break;
-                    case "l": 
-                    case "L": 
-                        capsule_controls.roll_angle += 0.1;
-                        break;
-                    
-                    case "i": 
-                    case "I": 
-                        capsule_controls.pitch_angle += 0.1;
-                        break;
-                    case "k": 
-                    case "K": 
-                        capsule_controls.pitch_angle -= 0.1;
-                        break;
-                } 
-            });
-            kl.registerKeyDownListener(sceneActionsListener);
-            kl.initialize();
-        </script>
 
         <script>
 
@@ -359,9 +303,69 @@
             }
 
             window.onload=initWebGL;
-
         </script>
 
+        <!-- Menu callbacks. -->
+        <script>
+                var aux_t = mat4.create();
+                var capsule_t = mat4.create();
+                mat4.fromRotation(aux_t, Math.PI, [1.0, 0.0, 0.0]);
+                mat4.fromTranslation(capsule_t, [0.0, -1.0, 0.0]);
+                mat4.mul(capsule_t, capsule_t, aux_t);
+
+            var kl = new KeyboardListener();
+            var capsule_controls = new SceneControls(capsule_t);
+
+            var sceneActionsListener = (function(e) {
+                switch (e.key) {
+                    case "a":
+                    case "A":
+                        capsule_controls.x -= 0.1;
+                        break;
+                    case "d":
+                    case "D":
+                        capsule_controls.x += 0.1;
+                        break;
+                    case "s":
+                    case "S":
+                        capsule_controls.z -= 0.1;
+                        break;  
+                    case "w": 
+                    case "W": 
+                        capsule_controls.z += 0.1;
+                        break;
+
+                    case "q":
+                    case "Q":
+                        capsule_controls.y -= 0.1;
+                        break;  
+                    case "e":
+                    case "E":
+                        capsule_controls.y += 0.1;
+                        break;             
+
+                    case "j": 
+                    case "J": 
+                        capsule_controls.roll_angle -= 0.1;
+                    break;
+                    case "l": 
+                    case "L": 
+                        capsule_controls.roll_angle += 0.1;
+                        break;
+                    
+                    case "i": 
+                    case "I": 
+                        capsule_controls.pitch_angle += 0.1;
+                        break;
+                    case "k": 
+                    case "K": 
+                        capsule_controls.pitch_angle -= 0.1;
+                        break;
+                } 
+            });
+            kl.registerKeyDownListener(sceneActionsListener);
+            kl.initialize();
+        </script>
 
     </body>
 </html>
