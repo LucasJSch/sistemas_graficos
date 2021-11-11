@@ -76,9 +76,7 @@
         <script type="text/javascript" src="js/utils/KeyboardListener.js"></script>
         <script type="text/javascript" src="js/utils/SceneControls.js"></script>
         <!-- Cameras -->
-        <script type="text/javascript" src="js/cameras/CraneOperatorCamera.js"></script>
-        <script type="text/javascript" src="js/cameras/DroneCameraControl.js"></script>
-        <script type="text/javascript" src="js/cameras/OrbitalCameraControl.js"></script>
+        <script type="text/javascript" src="js/cameras/SpaceStationCamera.js"></script>
         <script type="text/javascript" src="js/cameras/Camera.js"></script>
         
         <script src="js/libs/dat.gui.js"></script>
@@ -279,7 +277,10 @@
 
                 camera.update();
                 viewMatrix = camera.getMatrix();
-                
+                // aux = mat4.create();
+                // mat4.fromRotation(aux, -Math.PI/2.0, [0.0, 0.0, 1.0]);
+                // mat4.mul(viewMatrix, aux, viewMatrix);
+
                 mat4.identity(modelMatrix);
                 mat4.identity(normalMatrix);
                 mat4.multiply(normalMatrix, viewMatrix, modelMatrix);

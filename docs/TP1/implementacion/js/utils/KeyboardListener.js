@@ -3,6 +3,7 @@ class KeyboardListener {
     constructor() {
         this.keydown_listeners = [];
         this.keyup_listeners = [];
+        this.mouse_wheel_listeners = [];
     }
 
     registerKeyDownListener(listener) {
@@ -11,6 +12,10 @@ class KeyboardListener {
     
     registerKeyUpListener(listener) {
         this.keyup_listeners.push(listener);
+    }
+
+    registerMouseWheelListener(listener) {
+        this.mouse_wheel_listeners.push(listener);
     }
 
     initialize() {
@@ -31,6 +36,15 @@ class KeyboardListener {
                 }
             }
         });
+
+        var mousewheel_listeners = this.mouse_wheel_listeners;
+        document.addEventListener("wheel", function(e) {
+            if (mousewheel_listeners != null) {
+                for (var i = 0; i < mousewheel_listeners.length; i++) {
+                    mousewheel_listeners[i](e);
+                }
+            }
+        });   
     }
 
 }

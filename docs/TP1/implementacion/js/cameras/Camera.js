@@ -3,44 +3,39 @@ class Camera {
         this.kSpaceStation = "estacion_espacial";
         this.kSolarPanel = "paneles_solares";
         this.kCapsule = "capsula";
-        this.initialSpaceStationCamPos = [40.0, 40.0, 20.0];
+        this.initialSpaceStationCamPos = [40.0, 0.0, 0.0];
+        this.initialSpaceStationCamRot = [Math.PI/2.0, Math.PI/2.0, 0.0];
         this.initialSolarPanelCamPos = [40.0, 40.0, 40.0];
         this.initialCapsuleCamPos = [40.0, 40.0, 40.0];
 
         this.keyboardListener = new KeyboardListener();
         
-        this.spaceStationCam = new SpaceStationCam(this.initialSpaceStationCamPos);
-        this.solarPanelCam = new DroneCameraControl(this.initialDroneCamPos);
-        this.capsuleCam = new CraneOperatorCamera(this.initialCapsuleCamPos);
+        this.spaceStationCam = new SpaceStationCamera(this.initialSpaceStationCamPos, this.initialSpaceStationCamRot);
+        // this.solarPanelCam = new DroneCameraControl(this.initialDroneCamPos);
+        // this.capsuleCam = new CraneOperatorCamera(this.initialCapsuleCamPos);
         
         this.currentCam = this.kSpaceStation;
     }
 
     initialize() {
         // Register cameras for keyboard events.
-        var drone_cam = this.spaceStationCam;
-        var listener_drone_up = (function(e) {
-            drone_cam.keyUpListener(e);
+        var space_station_cam = this.spaceStationCam;
+        var listener_space_station_up = (function(e) {
+            space_station_cam.keyUpListener(e);
         });
-        var listener_drone_down = (function(e) {
-            drone_cam.keyDownListener(e);
+        var listener_space_station_down = (function(e) {
+            space_station_cam.keyDownListener(e);
         });
-        this.keyboardListener.registerKeyUpListener(listener_drone_up);
-        this.keyboardListener.registerKeyDownListener(listener_drone_down);
+        var listener_space_station_wheel = (function(e) {
+            space_station_cam.mouseWheelListener(e);
+        });
+        this.keyboardListener.registerKeyUpListener(listener_space_station_up);
+        this.keyboardListener.registerKeyDownListener(listener_space_station_down);
+        this.keyboardListener.registerMouseWheelListener(listener_space_station_wheel);
 
-        var orbital_cam = this.solarPanelCam;
-        var listener_orbital_up = (function(e) {
-            orbital_cam.keyUpListener(e);
-        });
-        var listener_orbital_down = (function(e) {
-            orbital_cam.keyDownListener(e);
-        });
-        this.keyboardListener.registerKeyUpListener(listener_orbital_up);
-        this.keyboardListener.registerKeyDownListener(listener_orbital_down);
+        // TODO: Same with Panels and Capsule.
 
-        
         // Register this class' logic for choosing cameras.
-
         var t = this;
         var listener_camera_down = (function(e) {
             t.chooseCamera(e);
@@ -52,25 +47,25 @@ class Camera {
 
     getMatrix() {
         if (this.currentCam == this.kSpaceStation) {
-            return this.orbitalCam.getMatrix();
+            return this.spaceStationCam.getMatrix();
         }
         if (this.currentCam == this.kSolarPanel) {
-            return this.droneCam.getMatrix();
+            // return this.droneCam.getMatrix();
         }
         if (this.currentCam == this.kCapsule) {
-            return this.craneCam.getMatrix();
+            // return this.craneCam.getMatrix();
         }
     }
 
     update() {
         if (this.currentCam == this.kSpaceStation) {
-            return this.orbitalCam.update();
+            return this.spaceStationCam.update();
         }
         if (this.currentCam == this.kSolarPanel) {
-            return this.droneCam.update();
+            // return this.droneCam.update();
         }
         if (this.currentCam == this.kCapsule) {
-            return this.craneCam.update();
+            // return this.craneCam.update();
         }
     }
 
