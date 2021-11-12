@@ -1,5 +1,5 @@
 class Camera {
-    constructor() {
+    constructor(capsule_controls) {
         this.kSpaceStation = "estacion_espacial";
         this.kSolarPanel = "paneles_solares";
         this.kCapsule = "capsula";
@@ -11,8 +11,8 @@ class Camera {
         this.keyboardListener = new KeyboardListener();
         
         this.spaceStationCam = new SpaceStationCamera(this.initialSpaceStationCamPos, this.initialSpaceStationCamRot);
-        // this.solarPanelCam = new DroneCameraControl(this.initialDroneCamPos);
-        // this.capsuleCam = new CraneOperatorCamera(this.initialCapsuleCamPos);
+        this.capsuleCam = new CapsuleCamera(capsule_controls);
+        this.genericCam = new GenericCamera();
         
         this.currentCam = this.kSpaceStation;
     }
@@ -50,10 +50,10 @@ class Camera {
             return this.spaceStationCam.getMatrix();
         }
         if (this.currentCam == this.kSolarPanel) {
-            // return this.droneCam.getMatrix();
+            return this.genericCam.getMatrix();
         }
         if (this.currentCam == this.kCapsule) {
-            // return this.craneCam.getMatrix();
+            return this.capsuleCam.getMatrix();
         }
     }
 
@@ -62,10 +62,10 @@ class Camera {
             return this.spaceStationCam.update();
         }
         if (this.currentCam == this.kSolarPanel) {
-            // return this.droneCam.update();
+            return this.genericCam.update();
         }
         if (this.currentCam == this.kCapsule) {
-            // return this.craneCam.update();
+            return this.capsuleCam.update();
         }
     }
 

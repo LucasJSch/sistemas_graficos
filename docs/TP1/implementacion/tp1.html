@@ -76,8 +76,10 @@
         <script type="text/javascript" src="js/utils/KeyboardListener.js"></script>
         <script type="text/javascript" src="js/utils/SceneControls.js"></script>
         <!-- Cameras -->
-        <script type="text/javascript" src="js/cameras/SpaceStationCamera.js"></script>
         <script type="text/javascript" src="js/cameras/Camera.js"></script>
+        <script type="text/javascript" src="js/cameras/CapsuleCamera.js"></script>
+        <script type="text/javascript" src="js/cameras/GenericCamera.js"></script>
+        <script type="text/javascript" src="js/cameras/SpaceStationCamera.js"></script>
         
         <script src="js/libs/dat.gui.js"></script>
         <script id="shader-vs" type="x-shader/x-vertex">
@@ -151,11 +153,74 @@
         </script>
 
         <script>
-
             var mat4=glMatrix.mat4;
             var vec3=glMatrix.vec3;
             var vec4=glMatrix.vec4;
+        </script>
 
+        <!-- Menu callbacks. -->
+        <script>
+            var aux_t = mat4.create();
+            var capsule_t = mat4.create();
+            mat4.fromRotation(aux_t, Math.PI, [1.0, 0.0, 0.0]);
+            mat4.fromTranslation(capsule_t, [0.0, -13.0, 0.0]);
+            mat4.mul(capsule_t, capsule_t, aux_t);
+
+        var kl = new KeyboardListener();
+        var capsule_controls = new SceneControls(capsule_t);
+
+        var sceneActionsListener = (function(e) {
+            switch (e.key) {
+                case "a":
+                case "A":
+                    capsule_controls.x -= 0.1;
+                    break;
+                case "d":
+                case "D":
+                    capsule_controls.x += 0.1;
+                    break;
+                case "s":
+                case "S":
+                    capsule_controls.z -= 0.1;
+                    break;  
+                case "w": 
+                case "W": 
+                    capsule_controls.z += 0.1;
+                    break;
+
+                case "q":
+                case "Q":
+                    capsule_controls.y -= 0.1;
+                    break;  
+                case "e":
+                case "E":
+                    capsule_controls.y += 0.1;
+                    break;             
+
+                case "j": 
+                case "J": 
+                    capsule_controls.roll_angle -= 0.1;
+                break;
+                case "l": 
+                case "L": 
+                    capsule_controls.roll_angle += 0.1;
+                    break;
+                
+                case "i": 
+                case "I": 
+                    capsule_controls.pitch_angle += 0.1;
+                    break;
+                case "k": 
+                case "K": 
+                    capsule_controls.pitch_angle -= 0.1;
+                    break;
+            } 
+        });
+        kl.registerKeyDownListener(sceneActionsListener);
+        kl.initialize();
+        </script>
+
+        <script>
             var n_paneles_solares = 4.0;
             var angulo_paneles = 0.0;
             var vel_rotacion_anillo = 0.0;
@@ -175,7 +240,7 @@
             var rotacion_anillo = 0;
             
             
-            var camera = new Camera();
+            var camera = new Camera(capsule_controls);
             camera.initialize();
 
             var global;
@@ -277,9 +342,6 @@
 
                 camera.update();
                 viewMatrix = camera.getMatrix();
-                // aux = mat4.create();
-                // mat4.fromRotation(aux, -Math.PI/2.0, [0.0, 0.0, 1.0]);
-                // mat4.mul(viewMatrix, aux, viewMatrix);
 
                 mat4.identity(modelMatrix);
                 mat4.identity(normalMatrix);
@@ -304,68 +366,6 @@
             }
 
             window.onload=initWebGL;
-        </script>
-
-        <!-- Menu callbacks. -->
-        <script>
-                var aux_t = mat4.create();
-                var capsule_t = mat4.create();
-                mat4.fromRotation(aux_t, Math.PI, [1.0, 0.0, 0.0]);
-                mat4.fromTranslation(capsule_t, [0.0, -1.0, 0.0]);
-                mat4.mul(capsule_t, capsule_t, aux_t);
-
-            var kl = new KeyboardListener();
-            var capsule_controls = new SceneControls(capsule_t);
-
-            var sceneActionsListener = (function(e) {
-                switch (e.key) {
-                    case "a":
-                    case "A":
-                        capsule_controls.x -= 0.1;
-                        break;
-                    case "d":
-                    case "D":
-                        capsule_controls.x += 0.1;
-                        break;
-                    case "s":
-                    case "S":
-                        capsule_controls.z -= 0.1;
-                        break;  
-                    case "w": 
-                    case "W": 
-                        capsule_controls.z += 0.1;
-                        break;
-
-                    case "q":
-                    case "Q":
-                        capsule_controls.y -= 0.1;
-                        break;  
-                    case "e":
-                    case "E":
-                        capsule_controls.y += 0.1;
-                        break;             
-
-                    case "j": 
-                    case "J": 
-                        capsule_controls.roll_angle -= 0.1;
-                    break;
-                    case "l": 
-                    case "L": 
-                        capsule_controls.roll_angle += 0.1;
-                        break;
-                    
-                    case "i": 
-                    case "I": 
-                        capsule_controls.pitch_angle += 0.1;
-                        break;
-                    case "k": 
-                    case "K": 
-                        capsule_controls.pitch_angle -= 0.1;
-                        break;
-                } 
-            });
-            kl.registerKeyDownListener(sceneActionsListener);
-            kl.initialize();
         </script>
 
     </body>

@@ -20,11 +20,10 @@ function drawScene(glProgram,
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var aux_t = mat4.create();
-
     var coord = new Coordinates(glProgram);
     coord.draw();
 
+    var aux_t = mat4.create();
     var capsule = new Capsule(glProgram);
     
     mat4.fromTranslation(aux_t, [capsule_controls.x, capsule_controls.y, capsule_controls.z]);
