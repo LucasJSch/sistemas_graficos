@@ -7,9 +7,9 @@ class NucleusCylinder {
         this.bezier_points = bezier_points;
         this.bezier_concatenator = null;
 
-        this.n_rows = 48.0;
+        this.n_rows = 18.0;
         this.diferencial_rotacion = 2.0 * Math.PI / this.n_rows;
-        this.ptos_longitudinal = 40.0;
+        this.ptos_longitudinal = 20.0;
         this.n_points_bezier = this.bezier_points.length / 4.0;
 
         this.sides_pos_buf = [];

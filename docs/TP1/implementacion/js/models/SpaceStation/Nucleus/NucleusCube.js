@@ -9,7 +9,7 @@ class NucleusCube {
                               [0.0, 0.5, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.5, 0.0, 0.0]];
         this.bezier_concatenator = null;
         // Puntos a obtener del concatenador de Bezier.
-        this.ptos_longitudinal = 100;
+        this.ptos_longitudinal = 40;
         // Vector a trasladar los ptos para generar el segundo lado del cubo.
         this.n_points_bezier = this.bezier_points.length / 4.0;
         this.n_levels = 2.0;

@@ -4,9 +4,9 @@ class CircularCylinder {
         this.color = [1.0, 0.0, 0.0];
         // The curve in this case is the shape to draw multiple times.
         // Use odd numbers here.
-        this.n_curves = 51.0;
+        this.n_curves = 43.0;
         this.radius = 0.3;
-        this.n_points_per_curve = 50.0;
+        this.n_points_per_curve = 10.0;
         this.distance_from_zero = 5.0;
 
         this.pos_buf = [];
