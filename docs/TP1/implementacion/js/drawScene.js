@@ -31,7 +31,7 @@ function drawScene(glProgram,
     var planet = new Planet(glProgram);
     var planet_t = mat4.create();
     mat4.fromScaling(planet_t, [50.0, 50.0, 10.0])
-    mat4.fromTranslation(aux_t, [0.0, 0.0, -60.0]);
+    mat4.fromTranslation(aux_t, [0.0, 0.0, -100.0]);
     mat4.mul(planet_t, aux_t, planet_t);
     
     space_station.draw();
