@@ -20,8 +20,8 @@ function drawScene(glProgram,
     gl.uniformMatrix4fv(projMatrixUniform, false, projMatrix);
     gl.uniformMatrix4fv(normalMatrixUniform, false, normalMatrix);
 
-    var coord = new Coordinates(glProgram);
-    coord.draw();
+    // var coord = new Coordinates(glProgram);
+    // coord.draw();
 
     var aux_t = mat4.create();
     var capsule = new Capsule(glProgram);

@@ -2,14 +2,14 @@ class SceneControls {
     constructor(initialPos) {
 
         this.MIN_Y=1;
-        this.initialPos = [40.0, 0.0, 0.0];
+        this.initialPos = [0.0, -10.0, 0.0];
+        this.initialRot = [Math.PI, 0.0, 0.0];
 
         this.DELTA_TRASLACION=0.5;        // velocidad de traslacion 
         this.DELTA_ROTACION=0.02;         // velocidad de rotacion
         this.FACTOR_INERCIA=0.05;
 
-        this.position=vec3.fromValues(initialPos[0],initialPos[1],initialPos[2]);
-        this.rotation=vec3.create();
+        this.position = vec3.fromValues(this.initialPos[0], this.initialPos[1], this.initialPos[2]);
 
         this.rotationMatrix=mat4.create();	
 
@@ -85,14 +85,12 @@ class SceneControls {
 
                     
             case "r": 
-                this.rotation=vec3.create();
                 this.position=vec3.fromValues(initialPos[0],initialPos[1],initialPos[2]);
                 this.camState=Object.assign({},camInitialState);
                 this.rotationMatrix=mat4.create();
                 break;
 
             case "t": 
-                this.rotation=vec3.create();                    
                 this.camState=Object.assign({},camInitialState);
                 break;                    
 
