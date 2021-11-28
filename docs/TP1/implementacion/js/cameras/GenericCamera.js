@@ -1,7 +1,7 @@
 
-function GenericCamera(initialPos){
+function GenericCamera(initialPos, targetPos, upV, camPosLambda){
     if (!initialPos) {
-        initialPos=[0.0, 0.0, 3.0];
+        initialPos = [0.0, 0.0, 3.0];
     }
     var alfa = 0;
     var beta = Math.PI/2;
@@ -12,13 +12,14 @@ function GenericCamera(initialPos){
     var isMouseDown = false;
     var viewMatrix = mat4.create();
     // The target that the camera is pointing to.
-    let targetPosition = [0.0, 0.0, 0.0];
+    let targetPosition = targetPos;
     // Up vector of the camera.
-    let upVector = [0.0, 0.0, 1.0];
+    let upVector = upV;
 
     let init_camera_pos = initialPos;
     var cameraPosition = init_camera_pos;
     var mouse = {x: 0, y: 0};
+    var time = 0.0;
 
     document.addEventListener("mousemove", function(e) {
         mouse.x = e.clientX || e.pageX; 
@@ -64,30 +65,31 @@ function GenericCamera(initialPos){
     });
 
     this.update = function() {
-        var deltaX=0;
-        var deltaY=0;
+        time += 0.02;
+        // var deltaX=0;
+        // var deltaY=0;
 
-        if (previousClientX) {
-            deltaX = mouse.x - previousClientX;
-        }
-        if (previousClientY) {
-            deltaY = mouse.y - previousClientY;
-        }
+        // if (previousClientX) {
+        //     deltaX = mouse.x - previousClientX;
+        // }
+        // if (previousClientY) {
+        //     // deltaY = mouse.y - previousClientY;
+        // }
 
-        previousClientX = mouse.x;
-        previousClientY = mouse.y;
+        // previousClientX = mouse.x;
+        // previousClientY = mouse.y;
 
-        alfa = alfa + deltaX * factorVelocidad;
-        beta = beta + deltaY * factorVelocidad;
+        angle = time;
 
-        if (beta < 0) {
-            beta = 0;
-        }
-        if (beta > Math.PI) {
-            beta = Math.PI;
-        }
+        // if (beta < 0) {
+        //     beta = 0;
+        // }
+        // if (beta > Math.PI) {
+        //     beta = Math.PI;
+        // }
 
-        cameraPosition = [radius * Math.sin(alfa) * Math.sin(beta), radius * Math.cos(beta), radius * Math.cos(alfa) * Math.sin(beta)];
+        // cameraPosition = [radius * Math.sin(alfa), radius * Math.cos(alfa), radius];
+        cameraPosition = camPosLambda(radius, angle);
     }
 
     this.getMatrix = function(){

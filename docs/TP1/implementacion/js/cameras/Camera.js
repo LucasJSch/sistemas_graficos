@@ -10,30 +10,21 @@ class Camera {
 
         this.keyboardListener = new KeyboardListener();
         
-        this.spaceStationCam = new SpaceStationCamera(this.initialSpaceStationCamPos, this.initialSpaceStationCamRot);
+        this.spaceStationCam = new GenericCamera(/*initialPos=*/[0.0, 0.0, 3.0],
+                                                 /*targetPosition=*/[0.0, 0.0, 0.0],
+                                                 /*upVector=*/[0.0, 0.0, 1.0],
+                                                 (radius, angle) => [radius * Math.sin(angle), radius * Math.cos(angle), radius]);
         this.capsuleCam = new CapsuleCamera(capsule_controls);
-        this.genericCam = new GenericCamera();
+        this.panelsCam = new GenericCamera(/*initialPos=*/[0.0, 10.0, 0.0],
+                                            /*targetPosition=*/[0.0, 10.0, 0.0],
+                                            /*upVector=*/[0.0, 0.0, 1.0],
+                                            (radius, angle) => [radius * Math.cos(angle), radius, radius * Math.sin(angle)]);
         
         this.currentCam = this.kSpaceStation;
         this.capsule_controls = capsule_controls;
     }
 
     initialize() {
-        // Register cameras for keyboard events.
-        var space_station_cam = this.spaceStationCam;
-        var listener_space_station_up = (function(e) {
-            space_station_cam.keyUpListener(e);
-        });
-        var listener_space_station_down = (function(e) {
-            space_station_cam.keyDownListener(e);
-        });
-        var listener_space_station_wheel = (function(e) {
-            space_station_cam.mouseWheelListener(e);
-        });
-        this.keyboardListener.registerKeyUpListener(listener_space_station_up);
-        this.keyboardListener.registerKeyDownListener(listener_space_station_down);
-        this.keyboardListener.registerMouseWheelListener(listener_space_station_wheel);
-
         // Register scene controls key events listeners.
         var capsule_controls = this.capsule_controls;
         var listener_scene_controls_up = (function(e) {
@@ -60,7 +51,7 @@ class Camera {
             return this.spaceStationCam.getMatrix();
         }
         if (this.currentCam == this.kSolarPanel) {
-            return this.genericCam.getMatrix();
+            return this.panelsCam.getMatrix();
         }
         if (this.currentCam == this.kCapsule) {
             return this.capsuleCam.getMatrix();
@@ -73,7 +64,7 @@ class Camera {
             return this.spaceStationCam.update();
         }
         if (this.currentCam == this.kSolarPanel) {
-            return this.genericCam.update();
+            return this.panelsCam.update();
         }
         if (this.currentCam == this.kCapsule) {
             return this.capsuleCam.update();
