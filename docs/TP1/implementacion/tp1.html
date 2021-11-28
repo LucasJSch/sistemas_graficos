@@ -166,58 +166,7 @@
             mat4.fromTranslation(capsule_t, [0.0, -13.0, 0.0]);
             mat4.mul(capsule_t, capsule_t, aux_t);
 
-        var kl = new KeyboardListener();
-        var capsule_controls = new SceneControls(capsule_t);
-
-        var sceneActionsListener = (function(e) {
-            switch (e.key) {
-                case "a":
-                case "A":
-                    capsule_controls.x -= 0.1;
-                    break;
-                case "d":
-                case "D":
-                    capsule_controls.x += 0.1;
-                    break;
-                case "s":
-                case "S":
-                    capsule_controls.z -= 0.1;
-                    break;  
-                case "w": 
-                case "W": 
-                    capsule_controls.z += 0.1;
-                    break;
-
-                case "q":
-                case "Q":
-                    capsule_controls.y -= 0.1;
-                    break;  
-                case "e":
-                case "E":
-                    capsule_controls.y += 0.1;
-                    break;             
-
-                case "j": 
-                case "J": 
-                    capsule_controls.roll_angle -= 0.1;
-                break;
-                case "l": 
-                case "L": 
-                    capsule_controls.roll_angle += 0.1;
-                    break;
-                
-                case "i": 
-                case "I": 
-                    capsule_controls.pitch_angle += 0.1;
-                    break;
-                case "k": 
-                case "K": 
-                    capsule_controls.pitch_angle -= 0.1;
-                    break;
-            } 
-        });
-        kl.registerKeyDownListener(sceneActionsListener);
-        kl.initialize();
+            var capsule_controls = new SceneControls(capsule_t);
         </script>
 
         <script>
@@ -273,8 +222,8 @@
 
             function setupWebGL(){
                 /********************* ******/
-                var camera = new Camera();
-                camera.initialize();
+                // var camera = new Camera();
+                // camera.initialize();
 
                 gl.enable(gl.DEPTH_TEST);
                 //set the clear color

@@ -15,6 +15,7 @@ class Camera {
         this.genericCam = new GenericCamera();
         
         this.currentCam = this.kSpaceStation;
+        this.capsule_controls = capsule_controls;
     }
 
     initialize() {
@@ -33,7 +34,16 @@ class Camera {
         this.keyboardListener.registerKeyDownListener(listener_space_station_down);
         this.keyboardListener.registerMouseWheelListener(listener_space_station_wheel);
 
-        // TODO: Same with Panels and Capsule.
+        // Register scene controls key events listeners.
+        var capsule_controls = this.capsule_controls;
+        var listener_scene_controls_up = (function(e) {
+            capsule_controls.keyUpListener(e);
+        });
+        var listener_scene_controls_down = (function(e) {
+            capsule_controls.keyDownListener(e);
+        });
+        this.keyboardListener.registerKeyUpListener(listener_scene_controls_up);
+        this.keyboardListener.registerKeyDownListener(listener_scene_controls_down);
 
         // Register this class' logic for choosing cameras.
         var t = this;
@@ -58,6 +68,7 @@ class Camera {
     }
 
     update() {
+        this.capsule_controls.update();
         if (this.currentCam == this.kSpaceStation) {
             return this.spaceStationCam.update();
         }
