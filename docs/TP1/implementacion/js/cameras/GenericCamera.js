@@ -64,32 +64,30 @@ function GenericCamera(initialPos){
     });
 
     this.update = function() {
-        if (isMouseDown) {
-            var deltaX=0;
-            var deltaY=0;
+        var deltaX=0;
+        var deltaY=0;
 
-            if (previousClientX) {
-                deltaX = mouse.x - previousClientX;
-            }
-            if (previousClientY) {
-                deltaY = mouse.y - previousClientY;
-            }
-
-            previousClientX = mouse.x;
-            previousClientY = mouse.y;
-
-            alfa = alfa + deltaX * factorVelocidad;
-            beta = beta + deltaY * factorVelocidad;
-
-            if (beta < 0) {
-                beta = 0;
-            }
-            if (beta > Math.PI) {
-                beta = Math.PI;
-            }
-
-            cameraPosition = [radius * Math.sin(alfa) * Math.sin(beta), radius * Math.cos(beta), radius * Math.cos(alfa) * Math.sin(beta)];
+        if (previousClientX) {
+            deltaX = mouse.x - previousClientX;
         }
+        if (previousClientY) {
+            deltaY = mouse.y - previousClientY;
+        }
+
+        previousClientX = mouse.x;
+        previousClientY = mouse.y;
+
+        alfa = alfa + deltaX * factorVelocidad;
+        beta = beta + deltaY * factorVelocidad;
+
+        if (beta < 0) {
+            beta = 0;
+        }
+        if (beta > Math.PI) {
+            beta = Math.PI;
+        }
+
+        cameraPosition = [radius * Math.sin(alfa) * Math.sin(beta), radius * Math.cos(beta), radius * Math.cos(alfa) * Math.sin(beta)];
     }
 
     this.getMatrix = function(){
