@@ -1,11 +1,5 @@
 class SceneControls {
     constructor(initialPos) {
-        // this.x = 0.0;
-        // this.y = 0.0;
-        // this.z = 0.0;
-        // this.roll_angle = 0;
-        // this.pitch_angle = 0;
-        // this.current_t = inital_t;
 
         this.MIN_Y=1;
         this.initialPos = [40.0, 0.0, 0.0];
@@ -13,10 +7,6 @@ class SceneControls {
         this.DELTA_TRASLACION=0.5;        // velocidad de traslacion 
         this.DELTA_ROTACION=0.02;         // velocidad de rotacion
         this.FACTOR_INERCIA=0.05;
-
-        // if (!initialPos) {
-        //     this.initialPos=[0,0,0];
-        // }
 
         this.position=vec3.fromValues(initialPos[0],initialPos[1],initialPos[2]);
         this.rotation=vec3.create();
