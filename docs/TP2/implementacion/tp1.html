@@ -1,47 +1,17 @@
 <!doctype html>
-<html>
-    <head>
-        <title></title>        
-        <style>
-            body{ background-color: grey; }
-            canvas{ background-color: white; }
-			textarea{ background-color: black; foreground-color: white;}
 
-            .navbar {
-                overflow: hidden;
-                background-color: #333;
-                font-family: Arial, Helvetica, sans-serif;
-            }
+<head>
+    <title>TP2 - Lucas Scheinkerman</title>
+    <link rel="icon" href="./favicon.png">
+    <meta name="description" content="Trabajo Practico 2 - Sistemas Graficos, FIUBA.">
 
-            .navbar a {
-                float: left;
-                font-size: 16px;
-                color: white;
-                text-align: center;
-                padding: 14px 16px;
-                text-decoration: none;
-            }
-
-            .navbar a:hover, .dropdown:hover .dropbtn {
-                background-color: grey;
-            }
-
-        </style>
-    </head>
-    <body>
-        <div class="navbar">
-        </div>
-    	<center>    		            
-            <canvas id="my-canvas" width="1000" height="800">
-            	Your browser does not support the HTML5 canvas element.
-    		</canvas>
-    	</center>
         <!-- Third party libs -->
         <script type="text/javascript" src="js/libs/includeHTML.js"></script>
         <script type="text/javascript" src="js/libs/gl-matrix.js"></script>
         <script type="text/javascript" src="js/libs/three.min.js"></script>
         <script type="text/javascript" src="js/libs/jquery.min.js"></script>
         <script type="text/javascript" src="js/libs/random.js"></script>
+        <script src="js/libs/dat.gui.js"></script>
         <!-- Interface between this script and JS classes -->
         <script type="text/javascript" src="js/drawScene.js"></script>
         <script type="text/javascript" src="js/Texture.js"></script>
@@ -81,243 +51,117 @@
         <script type="text/javascript" src="js/cameras/CapsuleCamera.js"></script>
         <script type="text/javascript" src="js/cameras/GenericCamera.js"></script>
         <script type="text/javascript" src="js/cameras/SpaceStationCamera.js"></script>
-        
-        <script src="js/libs/dat.gui.js"></script>
-        <script id="shader-vs" type="x-shader/x-vertex">
+        <!-- Modules -->
+        <script type="text/javascript" src="js/modules/main.js"></script>
+        <script type="text/javascript" src="js/modules/init-webgl.js"></script>
+        <script type="x-shader/x-vertex" src="js/modules/webgl-utils.js"></script>
+        <!-- Shaders -->
+        <script type="text/javascript" src="js/shaders/shader.js"></script>
+        <script type="x-shader/x-fragment" src="js/shaders/fragment-shader.glsl"></script>
+        <script type="x-shader/x-vertex" src="js/shaders/vertex-shader.glsl"></script>
+        <script type="x-shader/x-vertex" src="js/shaders/utils.glsl"></script>
 
-            precision highp float;
+    <style>
+        html {
+            height: 100%;
+        }
 
-            attribute vec3 aVertexPosition;
-            attribute vec3 aVertexNormal;
-            attribute vec3 aVertexColor;
-            attribute vec2 aVertexUV;
-
-            uniform mat4 modelMatrix;
-            uniform mat4 viewMatrix;
-            uniform mat4 projMatrix;
-            uniform mat4 normalMatrix;
-
-            
-            varying vec3 vNormal;
-            varying vec3 vPosWorld;
-            varying vec3 vColor;
-            varying highp vec3 vLighting;
-            
-            /*********** Textures ***********/
-            uniform sampler2D uSampler;
-            varying vec2 vUV;
-            /********************************/
-
-            void main(void) {
-                gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(aVertexPosition, 1.0);
-                
-                vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;    // La posicion en coordenadas de mundo
-                vNormal=(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       // La normal en coordenadas de mundo
-                vColor = aVertexColor;
-
-                /*********** Textures ***********/
-                vUV = aVertexUV;
-                vec4 textureColor = texture2D(uSampler, vec2(vUV.s, vUV.t));         
-                /********************************/
-                
-                /*********** Lighting ************/
-                highp vec3 ambientLight = vec3(0.4, 0.4, 0.4);
-                highp vec3 directionalLightColor = vec3(1, 1, 1);
-                highp vec3 directionalVector = normalize(vec3(0.0, 0.0, 1.0));
-                highp vec4 transformedNormal = normalMatrix * vec4(aVertexNormal, 1.0);
-                highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-                vLighting = ambientLight + (directionalLightColor * directional);
-                /********************************/
-            }
-        </script>
-
-        <script id="shader-fs" type="x-shader/x-fragment">
-            precision highp float;
-            varying vec3 vNormal;
-            varying vec3 vPosWorld;
-            varying vec3 vColor;
-            varying highp vec3 vLighting;
-            
-            /*********** Textures ***********/
-            uniform sampler2D uSampler;
-            varying vec2 vUV;
-            /********************************/
-            
-
-            
-            void main(void) {
-                vec4 textureColor = texture2D(uSampler, vec2(vUV.s, vUV.t));         
-                gl_FragColor = vec4(vColor.rgb * vLighting, 1.0);
-            }
-        </script>
-
-        <script>
-            var mat4=glMatrix.mat4;
-            var vec3=glMatrix.vec3;
-            var vec4=glMatrix.vec4;
-        </script>
-
-        <!-- Menu callbacks. -->
-        <script>
-            var aux_t = mat4.create();
-            var capsule_t = mat4.create();
-            mat4.fromRotation(aux_t, Math.PI, [1.0, 0.0, 0.0]);
-            mat4.fromTranslation(capsule_t, [0.0, -13.0, 0.0]);
-            mat4.mul(capsule_t, capsule_t, aux_t);
-
-            var capsule_controls = new SceneControls(capsule_t);
-        </script>
-
-        <script>
-            var n_paneles_solares = 4.0;
-            var angulo_paneles = 0.0;
-            var vel_rotacion_anillo = 0.0;
-            var n_secciones_nucleo = 2.0;
-
-            var gl = null,
-            canvas = null,
-
-            glProgram = null,
-            fragmentShader = null,
-            vertexShader = null;
-                
-            var modelMatrix = mat4.create();
-            var viewMatrix = mat4.create();
-            var projMatrix = mat4.create();
-            var normalMatrix = mat4.create();
-            var rotacion_anillo = 0;
-            
-            
-            var camera = new Camera(capsule_controls);
-            camera.initialize();
-
-            var global;
-
-            function initWebGL(globalR){
-
-                global = globalR;
-                canvas = document.getElementById("my-canvas");  
-
-                try{
-                    gl = canvas.getContext("webgl");      
-
-                }catch(e){
-                    alert("Error: Your browser does not appear to support WebGL.");
-                }
-
-                if(gl) {
-
-                    setupWebGL();
-                    initShaders();
-                    initMenu(); 
-                    initTextures();
-                    tick();
-
-                } else{    
-                    alert("Error: Your browser does not appear to support WebGL.");
-                }
-
-            }
-           
-
-            function setupWebGL(){
-                /********************* ******/
-
-                gl.enable(gl.DEPTH_TEST);
-                //set the clear color
-                gl.clearColor(0.1, 0.1, 0.2, 1.0);     
-                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     
-    
-                gl.viewport(0, 0, canvas.width, canvas.height);
-
-                // Matrix de Proyeccion Perspectiva
-
-                mat4.perspective(projMatrix,45, canvas.width / canvas.height, 0.1, 100.0);
-                
-                mat4.identity(modelMatrix);
-                mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
-            }
-                    
-            function initMenu() {
-                var gui = new dat.GUI();
-                gui.add(window, "n_paneles_solares", 1, 10).step(1);
-                gui.add(window, "angulo_paneles", 0, Math.PI * 2.0).step(0.1);
-                gui.add(window, "vel_rotacion_anillo", 0, 5.0).step(0.1);
-                gui.add(window, "n_secciones_nucleo", 2, 8).step(1);
-            }
-
-            function initTextures() {
-                var texture = new Texture("assets/textures/sun.jpg");
-            }
-                    
-            function initShaders() {
-                //get shader source
-                var fs_source = document.getElementById('shader-fs').innerHTML,
-                    vs_source = document.getElementById('shader-vs').innerHTML;
-
-                //compile shaders    
-                vertexShader = makeShader(vs_source, gl.VERTEX_SHADER);
-                fragmentShader = makeShader(fs_source, gl.FRAGMENT_SHADER);
-                
-                //create program
-                glProgram = gl.createProgram();
-                
-                //attach and link shaders to the program
-                gl.attachShader(glProgram, vertexShader);
-                gl.attachShader(glProgram, fragmentShader);
-                gl.linkProgram(glProgram);
-
-                if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
-                    alert("Unable to initialize the shader program.");
-                }
-                
-                //use program
-                gl.useProgram(glProgram);
-            }
-            
-            function makeShader(src, type){
-                //compile the vertex shader
-                var shader = gl.createShader(type);
-                gl.shaderSource(shader, src);
-                gl.compileShader(shader);
-
-                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                    console.log("Error compiling shader: " + gl.getShaderInfoLog(shader));
-                }
-                return shader;
-            }
-
-            function animate(){
-                rotacion_anillo += 0.1 * vel_rotacion_anillo;
+        body {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            ;
+        }
 
 
-                camera.update();
-                viewMatrix = camera.getMatrix();
+        .hud-desktop {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            border: 1px solid white;
+            padding: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.3);
+            min-height: 0px;
+            min-width: 200px;
+            text-align: left;
+            font-size: 1.23rem;
+        }
 
-                mat4.identity(modelMatrix);
-                mat4.identity(normalMatrix);
-                mat4.multiply(normalMatrix, viewMatrix, modelMatrix);
-                mat4.invert(normalMatrix, normalMatrix);
-                mat4.transpose(normalMatrix, normalMatrix);
-            }
-            
-            function tick(){
-                requestAnimationFrame(tick);
-                drawScene(glProgram,
-                          modelMatrix,
-                          viewMatrix,
-                          projMatrix,
-                          normalMatrix,
-                          n_paneles_solares,
-                          angulo_paneles,
-                          rotacion_anillo,
-                          n_secciones_nucleo,
-                          capsule_controls);
-                animate();
-            }
+        .hud-mobile {
+            position: absolute;
+            margin: auto 40vw;
+            bottom: 25px;
+            left: 0;
+            right: 0;
+            border: 1px solid grey;
+            padding: 2.5vw;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.3);
+            min-height: 1vw;
+            min-width: 0px;
+            text-align: center;
+            font-size: 1.23rem;
+            border-radius: 15px;
+        }
 
-            window.onload=initWebGL;
-        </script>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
 
-    </body>
+        .joystick {
+            width: 200px;
+            height: 200px;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .on {
+            background-color: grey !important;
+        }
+
+        .botonTouch {
+            /* width: 100px;
+            height: 100px; */
+            display: flex;
+            position: absolute;
+            bottom: 25px;
+            background: red;
+            user-select: none;
+            border: 1px solid grey;
+            padding: 3vw;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.3);
+            min-height: 3vw;
+            min-width: 0vw;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.23rem;
+            border-radius: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <canvas id="my-canvas">
+        Your browser does not support the HTML5 canvas element.
+    </canvas>
+
+    <div id="hud" class="hud-desktop"></div>
+
+    <script>
+        var $canvas = $("#my-canvas");
+        var aspect = $canvas.width() / $canvas.height();
+
+        $(document).ready(function () {
+            $("#hud").html("Iniciando escena...");
+            main();
+        })
+    </script>
+
+</body>
 </html>
