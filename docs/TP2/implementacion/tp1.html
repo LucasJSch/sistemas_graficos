@@ -44,6 +44,7 @@
         <script type="text/javascript" src="js/libs/random.js"></script>
         <!-- Interface between this script and JS classes -->
         <script type="text/javascript" src="js/drawScene.js"></script>
+        <script type="text/javascript" src="js/Texture.js"></script>
         <!-- Shapes -->
         <script type="text/javascript" src="js/shapes/basic_shapes/Fan.js"></script>
         <script type="text/javascript" src="js/shapes/basic_shapes/Grid.js"></script>
@@ -209,6 +210,7 @@
                     setupWebGL();
                     initShaders();
                     initMenu(); 
+                    initTextures();
                     tick();
 
                 } else{    
@@ -242,6 +244,10 @@
                 gui.add(window, "angulo_paneles", 0, Math.PI * 2.0).step(0.1);
                 gui.add(window, "vel_rotacion_anillo", 0, 5.0).step(0.1);
                 gui.add(window, "n_secciones_nucleo", 2, 8).step(1);
+            }
+
+            function initTextures() {
+                var texture = new Texture("assets/textures/sun.jpg");
             }
                     
             function initShaders() {
