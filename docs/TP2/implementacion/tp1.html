@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+    <head>
+        <title></title>        
+        <style>
+            body{ background-color: grey; }
+            canvas{ background-color: white; }
+			textarea{ background-color: black; foreground-color: white;}
+
+            .navbar {
+                overflow: hidden;
+                background-color: #333;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .navbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+            .navbar a:hover, .dropdown:hover .dropbtn {
+                background-color: grey;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="navbar">
+        </div>
+    	<center>    		            
+            <canvas id="my-canvas" width="1000" height="800">
+            	Your browser does not support the HTML5 canvas element.
+    		</canvas>
+    	</center>
+        <!-- Third party libs -->
+        <script type="text/javascript" src="js/libs/includeHTML.js"></script>
+        <script type="text/javascript" src="js/libs/gl-matrix.js"></script>
+        <script type="text/javascript" src="js/libs/three.min.js"></script>
+        <script type="text/javascript" src="js/libs/jquery.min.js"></script>
+        <script type="text/javascript" src="js/libs/random.js"></script>
+        <!-- Interface between this script and JS classes -->
+        <script type="text/javascript" src="js/drawScene.js"></script>
+        <!-- Shapes -->
+        <script type="text/javascript" src="js/shapes/basic_shapes/Fan.js"></script>
+        <script type="text/javascript" src="js/shapes/basic_shapes/Grid.js"></script>
+        <script type="text/javascript" src="js/shapes/Plane.js"></script>
+        <script type="text/javascript" src="js/shapes/Extrusion.js"></script>
+        <script type="text/javascript" src="js/shapes/SupBarrido.js"></script>
+        <script type="text/javascript" src="js/shapes/Cylinder.js"></script>
+        <script type="text/javascript" src="js/shapes/Cube.js"></script>
+        <script type="text/javascript" src="js/shapes/ConvergedCube.js"></script>
+        <script type="text/javascript" src="js/shapes/Sphere.js"></script>
+        <!-- Models -->
+        <script type="text/javascript" src="js/models/Coordinates.js"></script>
+        <script type="text/javascript" src="js/models/Capsule/Capsule.js"></script>
+        <script type="text/javascript" src="js/models/Panels/Panels.js"></script>
+        <script type="text/javascript" src="js/models/Panels/SolarPanel.js"></script>
+        <script type="text/javascript" src="js/models/Planet/Planet.js"></script>
+        <script type="text/javascript" src="js/models/SpaceStation/Nucleus/Nucleus.js"></script>
+        <script type="text/javascript" src="js/models/SpaceStation/Nucleus/NucleusCube.js"></script>
+        <script type="text/javascript" src="js/models/SpaceStation/Nucleus/NucleusCylinder.js"></script>
+        <script type="text/javascript" src="js/models/SpaceStation/CircularCylinder.js"></script>
+        <script type="text/javascript" src="js/models/SpaceStation/CircularRectangles.js"></script>
+        <script type="text/javascript" src="js/models/SpaceStation/CraneColumn.js"></script>
+        <script type="text/javascript" src="js/models/SpaceStation/CraneColumns.js"></script>
+        <script type="text/javascript" src="js/models/SpaceStation/SpaceStation.js"></script>
+        <!-- Curves -->
+        <script type="text/javascript" src="js/curves/BezierConcatenator.js"></script>
+        <script type="text/javascript" src="js/curves/Bezier.js"></script>
+        <!-- Utils -->
+        <script type="text/javascript" src="js/utils/Utils.js"></script>
+        <script type="text/javascript" src="js/utils/KeyboardListener.js"></script>
+        <script type="text/javascript" src="js/utils/SceneControls.js"></script>
+        <!-- Cameras -->
+        <script type="text/javascript" src="js/cameras/Camera.js"></script>
+        <script type="text/javascript" src="js/cameras/CapsuleCamera.js"></script>
+        <script type="text/javascript" src="js/cameras/GenericCamera.js"></script>
+        <script type="text/javascript" src="js/cameras/SpaceStationCamera.js"></script>
+        
+        <script src="js/libs/dat.gui.js"></script>
+        <script id="shader-vs" type="x-shader/x-vertex">
+
+            precision highp float;
+
+            attribute vec3 aVertexPosition;
+            attribute vec3 aVertexNormal;
+            attribute vec3 aVertexColor;
+            attribute vec2 aVertexUV;
+
+            uniform mat4 modelMatrix;
+            uniform mat4 viewMatrix;
+            uniform mat4 projMatrix;
+            uniform mat4 normalMatrix;
+
+            
+            varying vec3 vNormal;
+            varying vec3 vPosWorld;
+            varying vec3 vColor;
+            varying highp vec3 vLighting;
+            
+            /*********** Textures ***********/
+            uniform sampler2D uSampler;
+            varying vec2 vUV;
+            /********************************/
+
+            void main(void) {
+                gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(aVertexPosition, 1.0);
+                
+                vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;    // La posicion en coordenadas de mundo
+                vNormal=(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       // La normal en coordenadas de mundo
+                vColor = aVertexColor;
+
+                /*********** Textures ***********/
+                vUV = aVertexUV;
+                vec4 textureColor = texture2D(uSampler, vec2(vUV.s, vUV.t));         
+                /********************************/
+                
+                /*********** Lighting ************/
+                highp vec3 ambientLight = vec3(0.4, 0.4, 0.4);
+                highp vec3 directionalLightColor = vec3(1, 1, 1);
+                highp vec3 directionalVector = normalize(vec3(0.0, 0.0, 1.0));
+                highp vec4 transformedNormal = normalMatrix * vec4(aVertexNormal, 1.0);
+                highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
+                vLighting = ambientLight + (directionalLightColor * directional);
+                /********************************/
+            }
+        </script>
+
+        <script id="shader-fs" type="x-shader/x-fragment">
+            precision highp float;
+            varying vec3 vNormal;
+            varying vec3 vPosWorld;
+            varying vec3 vColor;
+            varying highp vec3 vLighting;
+            
+            /*********** Textures ***********/
+            uniform sampler2D uSampler;
+            varying vec2 vUV;
+            /********************************/
+            
+
+            
+            void main(void) {
+                vec4 textureColor = texture2D(uSampler, vec2(vUV.s, vUV.t));         
+                gl_FragColor = vec4(vColor.rgb * vLighting, 1.0);
+            }
+        </script>
+
+        <script>
+            var mat4=glMatrix.mat4;
+            var vec3=glMatrix.vec3;
+            var vec4=glMatrix.vec4;
+        </script>
+
+        <!-- Menu callbacks. -->
+        <script>
+            var aux_t = mat4.create();
+            var capsule_t = mat4.create();
+            mat4.fromRotation(aux_t, Math.PI, [1.0, 0.0, 0.0]);
+            mat4.fromTranslation(capsule_t, [0.0, -13.0, 0.0]);
+            mat4.mul(capsule_t, capsule_t, aux_t);
+
+            var capsule_controls = new SceneControls(capsule_t);
+        </script>
+
+        <script>
+            var n_paneles_solares = 4.0;
+            var angulo_paneles = 0.0;
+            var vel_rotacion_anillo = 0.0;
+            var n_secciones_nucleo = 2.0;
+
+            var gl = null,
+            canvas = null,
+
+            glProgram = null,
+            fragmentShader = null,
+            vertexShader = null;
+                
+            var modelMatrix = mat4.create();
+            var viewMatrix = mat4.create();
+            var projMatrix = mat4.create();
+            var normalMatrix = mat4.create();
+            var rotacion_anillo = 0;
+            
+            
+            var camera = new Camera(capsule_controls);
+            camera.initialize();
+
+            var global;
+
+            function initWebGL(globalR){
+
+                global = globalR;
+                canvas = document.getElementById("my-canvas");  
+
+                try{
+                    gl = canvas.getContext("webgl");      
+
+                }catch(e){
+                    alert("Error: Your browser does not appear to support WebGL.");
+                }
+
+                if(gl) {
+
+                    setupWebGL();
+                    initShaders();
+                    initMenu(); 
+                    tick();
+
+                } else{    
+                    alert("Error: Your browser does not appear to support WebGL.");
+                }
+
+            }
+           
+
+            function setupWebGL(){
+                /********************* ******/
+
+                gl.enable(gl.DEPTH_TEST);
+                //set the clear color
+                gl.clearColor(0.1, 0.1, 0.2, 1.0);     
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     
+    
+                gl.viewport(0, 0, canvas.width, canvas.height);
+
+                // Matrix de Proyeccion Perspectiva
+
+                mat4.perspective(projMatrix,45, canvas.width / canvas.height, 0.1, 100.0);
+                
+                mat4.identity(modelMatrix);
+                mat4.rotate(modelMatrix,modelMatrix, -1.57078, [1.0, 0.0, 0.0]);
+            }
+                    
+            function initMenu() {
+                var gui = new dat.GUI();
+                gui.add(window, "n_paneles_solares", 1, 10).step(1);
+                gui.add(window, "angulo_paneles", 0, Math.PI * 2.0).step(0.1);
+                gui.add(window, "vel_rotacion_anillo", 0, 5.0).step(0.1);
+                gui.add(window, "n_secciones_nucleo", 2, 8).step(1);
+            }
+                    
+            function initShaders() {
+                //get shader source
+                var fs_source = document.getElementById('shader-fs').innerHTML,
+                    vs_source = document.getElementById('shader-vs').innerHTML;
+
+                //compile shaders    
+                vertexShader = makeShader(vs_source, gl.VERTEX_SHADER);
+                fragmentShader = makeShader(fs_source, gl.FRAGMENT_SHADER);
+                
+                //create program
+                glProgram = gl.createProgram();
+                
+                //attach and link shaders to the program
+                gl.attachShader(glProgram, vertexShader);
+                gl.attachShader(glProgram, fragmentShader);
+                gl.linkProgram(glProgram);
+
+                if (!gl.getProgramParameter(glProgram, gl.LINK_STATUS)) {
+                    alert("Unable to initialize the shader program.");
+                }
+                
+                //use program
+                gl.useProgram(glProgram);
+            }
+            
+            function makeShader(src, type){
+                //compile the vertex shader
+                var shader = gl.createShader(type);
+                gl.shaderSource(shader, src);
+                gl.compileShader(shader);
+
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.log("Error compiling shader: " + gl.getShaderInfoLog(shader));
+                }
+                return shader;
+            }
+
+            function animate(){
+                rotacion_anillo += 0.1 * vel_rotacion_anillo;
+
+
+                camera.update();
+                viewMatrix = camera.getMatrix();
+
+                mat4.identity(modelMatrix);
+                mat4.identity(normalMatrix);
+                mat4.multiply(normalMatrix, viewMatrix, modelMatrix);
+                mat4.invert(normalMatrix, normalMatrix);
+                mat4.transpose(normalMatrix, normalMatrix);
+            }
+            
+            function tick(){
+                requestAnimationFrame(tick);
+                drawScene(glProgram,
+                          modelMatrix,
+                          viewMatrix,
+                          projMatrix,
+                          normalMatrix,
+                          n_paneles_solares,
+                          angulo_paneles,
+                          rotacion_anillo,
+                          n_secciones_nucleo,
+                          capsule_controls);
+                animate();
+            }
+
+            window.onload=initWebGL;
+        </script>
+
+    </body>
+</html>
