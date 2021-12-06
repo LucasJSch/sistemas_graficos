@@ -34,7 +34,7 @@ var camera = new Camera(capsule_controls);
 camera.initialize();
 
 var global;
-
+var MAIN_SHADER_PROGRAM;
 
 function onResize() {
     gl.canvas.width = $canvas.width();
@@ -85,9 +85,9 @@ function animate(){
     mat4.transpose(normalMatrix, normalMatrix);
 }
 
-function tick(glProgram) {
+function tick() {
     requestAnimationFrame(tick);
-    drawScene(glProgram,
+    drawScene(MAIN_SHADER_PROGRAM,
               modelMatrix,
               viewMatrix,
               projMatrix,
@@ -116,9 +116,9 @@ function webGLStart() {
         setupWebGL();
         initMenu(); 
 
-        var MAIN_SHADER_PROGRAM = new MainProgram();
+        MAIN_SHADER_PROGRAM = new MainProgram();
         MAIN_SHADER_PROGRAM.setearParametros();
-        tick(MAIN_SHADER_PROGRAM.getProgram());
+        tick();
 
     } else{    
         alert("Error: Your browser does not appear to support WebGL.");

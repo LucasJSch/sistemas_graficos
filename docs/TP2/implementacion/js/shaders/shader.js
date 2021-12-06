@@ -26,28 +26,47 @@ class ShaderProgram {
         this.attribs.vertexPos = gl.getAttribLocation(this.program, "aVertexPosition");
         gl.enableVertexAttribArray(this.attribs.vertexPos);
 
-        this.unifs.proyMatrix = gl.getUniformLocation(this.program, "uPMatrix");
+        this.unifs.projMatrix = gl.getUniformLocation(this.program, "uPMatrix");
         this.unifs.modelMatrix = gl.getUniformLocation(this.program, "uMMatrix");
         this.unifs.viewMatrix = gl.getUniformLocation(this.program, "uVMatrix");
 
-        this.attribs.texCoord = gl.getAttribLocation(this.program, "aVertexUV");
-        gl.enableVertexAttribArray(this.attribs.texCoord);
+        // this.attribs.texCoord = gl.getAttribLocation(this.program, "aVertexUV");
+        // gl.enableVertexAttribArray(this.attribs.texCoord);
 
-        this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
-        this.unifs.usarVariosSampleos = gl.getUniformLocation(this.program, "uUsarVariosSampleos");
+        // this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
+        // this.unifs.usarVariosSampleos = gl.getUniformLocation(this.program, "uUsarVariosSampleos");
     }
 
     setearParametros() {
-
         gl.useProgram(this.program);
 
         gl.uniformMatrix4fv(this.unifs.viewMatrix, false, viewMatrix);
-        gl.uniformMatrix4fv(this.unifs.proyMatrix, false, projMatrix);
+        gl.uniformMatrix4fv(this.unifs.projMatrix, false, projMatrix);
     }
 
     getProgram() {
         return this.program;
     }
+
+    getPosBufPtr() {
+        return this.attribs.vertexPos;
+    }
+
+    getUvBufPtr() {
+        return this.attribs.texCoord;
+    }
+
+    // getProjMatrixPtr() {
+    //     return this.unifs.projMatrix;
+    // }
+
+    // getModelMatrixPtr() {
+    //     return this.unifs.modelMatrix;
+    // }
+
+    // getViewMatrixPtr() {
+    //     return this.unifs.viewMatrix;
+    // }
 }
 
 
@@ -58,12 +77,33 @@ class MainProgram extends ShaderProgram {
         // setear attribs y unifs particulares de este shader
         this.attribs.normal = gl.getAttribLocation(this.program, "aVertexNormal");
         gl.enableVertexAttribArray(this.attribs.normal);
-
+        
+        this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
+        gl.enableVertexAttribArray( this.attribs.color);
+        
         this.unifs.normalMatrix = gl.getUniformLocation(this.program, "uNMatrix");
-        this.unifs.color = gl.getUniformLocation(this.program, "uColor");
-        this.unifs.deltaSampler = gl.getUniformLocation(this.program, "uDeltaSampler");
-        this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
-        this.unifs.samplerMapaReflexion = gl.getUniformLocation(this.program, "uSamplerMapaReflexion");        
-        this.unifs.factorReflexion = gl.getUniformLocation(this.program, "uFactorReflexion");
+        // this.unifs.color = gl.getUniformLocation(this.program, "uColor");
+        // this.unifs.deltaSampler = gl.getUniformLocation(this.program, "uDeltaSampler");
+        // this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
+        // this.unifs.samplerMapaReflexion = gl.getUniformLocation(this.program, "uSamplerMapaReflexion");        
+        // this.unifs.factorReflexion = gl.getUniformLocation(this.program, "uFactorReflexion");
     }
+
+    setearParametros() {
+        super.setearParametros();
+        gl.uniformMatrix4fv(this.unifs.normalMatrix, false, projMatrix);
+        gl.uniformMatrix4fv(this.unifs.projMatrix, false, projMatrix);
+    }
+
+    getClrBufPtr() {
+        return this.attribs.color;
+    }
+
+    getNrmBufPtr() {
+        return this.attribs.normal;
+    }
+
+    // getNormalMatrixPtr() {
+    //     return this.unifs.normalMatrix;
+    // }
 }

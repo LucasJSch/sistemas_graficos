@@ -1,7 +1,7 @@
 class Coordinates {
     // Draws XYZ coordinates. (3 thin cylinders)
-    constructor(glProgram) {
-        this.glProgram = glProgram;
+    constructor(shader) {
+        this.shader = shader;
     }
 
     // vScaleFactor: vec3 with a scale for each coordinate axis.
@@ -15,9 +15,9 @@ class Coordinates {
             vec3.set(vScaleFactor, 1.0, 1.0, 1.0);
         }
 
-        var x_coord = new Cylinder(this.glProgram, [1.0, 0.0, 0.0]);
-        var y_coord = new Cylinder(this.glProgram, [0.0, 1.0, 0.0]);
-        var z_coord = new Cylinder(this.glProgram, [0.0, 0.0, 1.0]);
+        var x_coord = new Cylinder(this.shader, [1.0, 0.0, 0.0]);
+        var y_coord = new Cylinder(this.shader, [0.0, 1.0, 0.0]);
+        var z_coord = new Cylinder(this.shader, [0.0, 0.0, 1.0]);
 
         // Create rotation transforms (each cylinder goes in a different axis).
         var transf_x_rotation = mat4.create();
