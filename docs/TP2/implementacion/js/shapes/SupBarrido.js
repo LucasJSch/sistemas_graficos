@@ -1,6 +1,6 @@
 class SupBarrido {
-    constructor(glProgram, levels, shapeGen, curveGen) {
-        this.glProgram = glProgram;
+    constructor(shader, levels, shapeGen, curveGen) {
+        this.shader = shader;
         this.levels = levels;
         this.n_cols = null;
         this.shapeGen = shapeGen;
@@ -28,7 +28,7 @@ class SupBarrido {
             this.color_buffer = this.color_buffer.concat(buffers[2]);
         }
 
-        var grid = new Grid(this.glProgram, this.position_buffer, this.normal_buffer, this.color_buffer, this.levels, this.n_cols);
+        var grid = new Grid(this.shader, this.position_buffer, this.normal_buffer, this.color_buffer, this.levels, this.n_cols);
         grid.draw();
     }
 

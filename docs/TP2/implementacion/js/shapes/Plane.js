@@ -1,7 +1,7 @@
 class Plane {
     // Initializes a plane with a diagonal that goes from (0,0,0) to (1,1,0), normal to the z axis.
-    constructor(glProgram, vColor, n_rows=50, n_cols=50) {
-        this.glProgram = glProgram;
+    constructor(shader, vColor, n_rows=50, n_cols=50) {
+        this.shader = shader;
         this.vColor = vColor;
         this.n_rows = n_rows;
         this.n_cols = n_cols;
@@ -14,7 +14,7 @@ class Plane {
         }
 
         this.createBuffers(transformMatrix);
-        this.grid = new Grid(glProgram, this.position_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
+        this.grid = new Grid(shader, this.position_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
         this.grid.draw();
     }
 

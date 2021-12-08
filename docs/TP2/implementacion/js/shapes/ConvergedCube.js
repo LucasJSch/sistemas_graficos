@@ -2,8 +2,8 @@ class ConvergedCube {
     // Draws a cube with one end bigger than the other.
     // The smaller the scaleFactor, the similar it will be to a pyramid.
     // scaleFactor: Scale difference between each end.
-    constructor(glProgram, vColor, scaleFactor) {
-        this.glProgram = glProgram;
+    constructor(shader, vColor, scaleFactor) {
+        this.shader = shader;
         this.vColor = vColor;
         this.scaleFactor = scaleFactor;
         this.vCentralBottomPos = [0.0, 0.0, 0.0];
@@ -20,7 +20,7 @@ class ConvergedCube {
         }
 
         this.shapeGen = new ConvergedCubeShapeGenerator(this.vColor, this.vCentralTopPos, this.vCentralBottomPos, this.scaleFactor);
-        this.sides = new Extrusion(this.glProgram, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
+        this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
         this.createTopAndBottomFans();
         this.sides.draw(transformMatrix);
         this.top_fan.draw(transformMatrix);
@@ -45,7 +45,7 @@ class ConvergedCube {
         top_color_buffer.push(top_color_buffer[0]);
         top_color_buffer.push(top_color_buffer[1]);
         top_color_buffer.push(top_color_buffer[2]);
-        this.top_fan = new Fan(this.glProgram, top_pos_buffer, top_normal_buffer, top_color_buffer);
+        this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer);
 
         var bottom_pos_buffer = [];
         bottom_pos_buffer.push(this.vCentralBottomPos[0]);
@@ -64,7 +64,7 @@ class ConvergedCube {
         bottom_color_buffer.push(bottom_color_buffer[0]);
         bottom_color_buffer.push(bottom_color_buffer[1]);
         bottom_color_buffer.push(bottom_color_buffer[2]);
-        this.bottom_fan = new Fan(this.glProgram, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer);
+        this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer);
     }
 }
 
