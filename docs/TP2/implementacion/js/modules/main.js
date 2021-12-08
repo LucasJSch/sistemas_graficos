@@ -11,9 +11,9 @@ var n_secciones_nucleo = 2.0;
 var gl = null;
 var canvas = null;
 
-glProgram = null;
-fragmentShader = null,
-vertexShader = null;
+// glProgram = null,
+// fragmentShader = null,
+// vertexShader = null;
 
 var aux_t = mat4.create();
 var capsule_t = mat4.create();
@@ -33,7 +33,7 @@ var rotacion_anillo = 0;
 var camera = new Camera(capsule_controls);
 camera.initialize();
 
-var global;
+// var global;
 var MAIN_SHADER_PROGRAM;
 
 function onResize() {

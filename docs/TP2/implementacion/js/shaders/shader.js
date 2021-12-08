@@ -26,9 +26,9 @@ class ShaderProgram {
         this.attribs.vertexPos = gl.getAttribLocation(this.program, "aVertexPosition");
         gl.enableVertexAttribArray(this.attribs.vertexPos);
 
-        this.unifs.projMatrix = gl.getUniformLocation(this.program, "uPMatrix");
-        this.unifs.modelMatrix = gl.getUniformLocation(this.program, "uMMatrix");
-        this.unifs.viewMatrix = gl.getUniformLocation(this.program, "uVMatrix");
+        this.unifs.projMatrix = gl.getUniformLocation(this.program, "projMatrix");
+        this.unifs.modelMatrix = gl.getUniformLocation(this.program, "modelMatrix");
+        this.unifs.viewMatrix = gl.getUniformLocation(this.program, "viewMatrix");
 
         // this.attribs.texCoord = gl.getAttribLocation(this.program, "aVertexUV");
         // gl.enableVertexAttribArray(this.attribs.texCoord);
@@ -56,17 +56,17 @@ class ShaderProgram {
         return this.attribs.texCoord;
     }
 
-    // getProjMatrixPtr() {
-    //     return this.unifs.projMatrix;
-    // }
+    getProjMatrixPtr() {
+        return this.unifs.projMatrix;
+    }
 
-    // getModelMatrixPtr() {
-    //     return this.unifs.modelMatrix;
-    // }
+    getModelMatrixPtr() {
+        return this.unifs.modelMatrix;
+    }
 
-    // getViewMatrixPtr() {
-    //     return this.unifs.viewMatrix;
-    // }
+    getViewMatrixPtr() {
+        return this.unifs.viewMatrix;
+    }
 }
 
 
@@ -79,9 +79,9 @@ class MainProgram extends ShaderProgram {
         gl.enableVertexAttribArray(this.attribs.normal);
         
         this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
-        gl.enableVertexAttribArray( this.attribs.color);
+        gl.enableVertexAttribArray(this.attribs.color);
         
-        this.unifs.normalMatrix = gl.getUniformLocation(this.program, "uNMatrix");
+        this.unifs.normalMatrix = gl.getUniformLocation(this.program, "normalMatrix");
         // this.unifs.color = gl.getUniformLocation(this.program, "uColor");
         // this.unifs.deltaSampler = gl.getUniformLocation(this.program, "uDeltaSampler");
         // this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
@@ -103,7 +103,7 @@ class MainProgram extends ShaderProgram {
         return this.attribs.normal;
     }
 
-    // getNormalMatrixPtr() {
-    //     return this.unifs.normalMatrix;
-    // }
+    getNormalMatrixPtr() {
+        return this.unifs.normalMatrix;
+    }
 }

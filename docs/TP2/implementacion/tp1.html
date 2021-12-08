@@ -59,7 +59,7 @@
         <script type="text/javascript" src="js/shaders/shader.js"></script>
         <script type="x-shader/x-fragment" src="js/shaders/fragment-shader.glsl"></script>
         <script type="x-shader/x-vertex" src="js/shaders/vertex-shader.glsl"></script>
-        <script type="x-shader/x-vertex" src="js/shaders/utils.glsl"></script>
+        <!-- <script src="js/shaders/utils.glsl"></script> -->
 
     <style>
         html {
@@ -147,7 +147,7 @@
 
 <body>
 
-    <canvas id="my-canvas">
+    <canvas id="my-canvas" width="1000" height="800">
         Your browser does not support the HTML5 canvas element.
     </canvas>
 
@@ -160,6 +160,7 @@
         $(document).ready(function () {
             $("#hud").html("Iniciando escena...");
             main();
+            $("#hud").html("inicie");
         })
     </script>
 

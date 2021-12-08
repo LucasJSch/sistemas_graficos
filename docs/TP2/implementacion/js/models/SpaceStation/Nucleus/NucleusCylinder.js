@@ -1,7 +1,7 @@
 class NucleusCylinder {
     // Draws a cylinder with Bezier-defined surfaces
-    constructor(glProgram, bezier_points, length) {
-        this.glProgram = glProgram;
+    constructor(shader, bezier_points, length) {
+        this.shader = shader;
         this.color = [0.823529412, 0.662745098, 0.53333333];
         this.cylinder_length = length;
         this.bezier_points = bezier_points;
@@ -39,9 +39,9 @@ class NucleusCylinder {
         this.generateTopBottomBuffers();
         this.applyTransformMatrix(transformMatrix);
 
-        var sides_grid = new Grid(this.glProgram, this.sides_pos_buf, this.sides_nrm_buf, this.sides_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
-        var top_grid = new Grid(this.glProgram, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0));
-        var bottom_grid = new Grid(this.glProgram, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0));
+        var sides_grid = new Grid(this.shader, this.sides_pos_buf, this.sides_nrm_buf, this.sides_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
+        var top_grid = new Grid(this.shader, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0));
+        var bottom_grid = new Grid(this.shader, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0));
         sides_grid.draw();
         top_grid.draw();
         bottom_grid.draw();

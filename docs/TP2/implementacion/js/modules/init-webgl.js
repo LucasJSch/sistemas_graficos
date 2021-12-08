@@ -1,10 +1,10 @@
 const vertexShaderFile = "vertex-shader.glsl";
 const fragmentShaderFile = "fragment-shader.glsl";
-const utilsShaderFile = "utils.glsl";
+// const utilsShaderFile = "utils.glsl";
 
 var MAIN_VRTXSHADER_SRC;
 var FRAGMENT_SHADER_SRC;
-var UTILS_SHADER_SRC;
+// var UTILS_SHADER_SRC;
 
 function initGL(canvas) {
 
@@ -30,7 +30,7 @@ function getShaderSource(url) {
 
 function loadShaders(onDone) {
 
-    $.when(loadVS(), loadFS()).done(function (...res) {
+    $.when(loadVS(), loadFS()/*, loadUtils()*/).done(function (...res) {
         //this code is executed when all ajax calls are done     
         onDone();
     });
@@ -53,6 +53,14 @@ function loadShaders(onDone) {
         });
     }
 
+    // function loadUtils() {
+    //     return $.ajax({
+    //         url: "js/shaders/" + utilsShaderFile,
+    //         success: function (result) {
+    //             UTILS_SHADER_SRC = result;
+    //         }
+    //     });
+    // }
 }
 
 

@@ -1,16 +1,16 @@
 class SpaceStation {
-    constructor(glProgram, n_sections, n_solar_panels, panels_angle, ring_rotation) {
-        this.glProgram = glProgram;
+    constructor(shader, n_sections, n_solar_panels, panels_angle, ring_rotation) {
+        this.shader = shader;
         this.n_sections = n_sections;
         this.n_solar_panels = n_solar_panels;
         this.ring_rotation = ring_rotation;
 
-        this.rectangles = new CircularRectangles(glProgram, this.n_sections);
-        this.columns = new CraneColumns(glProgram, this.n_sections);
-        this.cylinder = new CircularCylinder(glProgram);
-        this.nucleus = new Nucleus(glProgram);
-        this.panels = new Panels(glProgram, n_solar_panels, panels_angle);
-        this.center_cylinder = new Cylinder(glProgram, [0.0, 0.82, 0.12])
+        this.rectangles = new CircularRectangles(shader, this.n_sections);
+        this.columns = new CraneColumns(shader, this.n_sections);
+        this.cylinder = new CircularCylinder(shader);
+        this.nucleus = new Nucleus(shader);
+        this.panels = new Panels(shader, n_solar_panels, panels_angle);
+        this.center_cylinder = new Cylinder(shader, [0.0, 0.82, 0.12])
     }
 
     draw(transformMatrix) {
