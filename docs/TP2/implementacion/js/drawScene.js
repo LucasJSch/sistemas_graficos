@@ -15,8 +15,8 @@ function drawScene(shader,
     gl.uniformMatrix4fv(shader.getProjMatrixPtr(), false, projMatrix);
     gl.uniformMatrix4fv(shader.getNormalMatrixPtr(), false, normalMatrix);
 
-    var coord = new Coordinates(shader);
-    coord.draw();
+    // var coord = new Coordinates(shader);
+    // coord.draw();
 
     var aux_t = mat4.create();
     var capsule = new Capsule(shader);

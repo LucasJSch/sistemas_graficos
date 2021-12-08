@@ -26,9 +26,13 @@ class ShaderProgram {
         this.attribs.vertexPos = gl.getAttribLocation(this.program, "aVertexPosition");
         gl.enableVertexAttribArray(this.attribs.vertexPos);
 
+        this.attribs.normal = gl.getAttribLocation(this.program, "aVertexNormal");
+        gl.enableVertexAttribArray(this.attribs.normal);
+
         this.unifs.projMatrix = gl.getUniformLocation(this.program, "projMatrix");
         this.unifs.modelMatrix = gl.getUniformLocation(this.program, "modelMatrix");
         this.unifs.viewMatrix = gl.getUniformLocation(this.program, "viewMatrix");
+        this.unifs.normalMatrix = gl.getUniformLocation(this.program, "normalMatrix");
 
         // this.attribs.texCoord = gl.getAttribLocation(this.program, "aVertexUV");
         // gl.enableVertexAttribArray(this.attribs.texCoord);
@@ -41,6 +45,8 @@ class ShaderProgram {
         gl.useProgram(this.program);
 
         gl.uniformMatrix4fv(this.unifs.viewMatrix, false, viewMatrix);
+        gl.uniformMatrix4fv(this.unifs.projMatrix, false, projMatrix);
+        gl.uniformMatrix4fv(this.unifs.normalMatrix, false, normalMatrix);
         gl.uniformMatrix4fv(this.unifs.projMatrix, false, projMatrix);
     }
 
@@ -67,6 +73,14 @@ class ShaderProgram {
     getViewMatrixPtr() {
         return this.unifs.viewMatrix;
     }
+
+    getNormalMatrixPtr() {
+        return this.unifs.normalMatrix;
+    }
+
+    getNrmBufPtr() {
+        return this.attribs.normal;
+    }
 }
 
 
@@ -75,18 +89,40 @@ class MainProgram extends ShaderProgram {
         super(MAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
 
         // setear attribs y unifs particulares de este shader
-        this.attribs.normal = gl.getAttribLocation(this.program, "aVertexNormal");
-        gl.enableVertexAttribArray(this.attribs.normal);
+
         
         this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
         gl.enableVertexAttribArray(this.attribs.color);
         
-        this.unifs.normalMatrix = gl.getUniformLocation(this.program, "normalMatrix");
         // this.unifs.color = gl.getUniformLocation(this.program, "uColor");
         // this.unifs.deltaSampler = gl.getUniformLocation(this.program, "uDeltaSampler");
         // this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
         // this.unifs.samplerMapaReflexion = gl.getUniformLocation(this.program, "uSamplerMapaReflexion");        
         // this.unifs.factorReflexion = gl.getUniformLocation(this.program, "uFactorReflexion");
+    }
+
+    setearParametros() {
+        super.setearParametros();
+    }
+
+    getClrBufPtr() {
+        return this.attribs.color;
+    }
+
+
+
+
+}
+
+class PanelsProgram extends ShaderProgram {
+    constructor() {
+        super(MAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
+
+        // setear attribs y unifs particulares de este shader
+        
+        this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
+        gl.enableVertexAttribArray(this.attribs.color);
+        
     }
 
     setearParametros() {
@@ -99,11 +135,5 @@ class MainProgram extends ShaderProgram {
         return this.attribs.color;
     }
 
-    getNrmBufPtr() {
-        return this.attribs.normal;
-    }
 
-    getNormalMatrixPtr() {
-        return this.unifs.normalMatrix;
-    }
 }
