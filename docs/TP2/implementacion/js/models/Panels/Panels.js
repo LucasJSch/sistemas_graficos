@@ -1,14 +1,14 @@
 class Panels {
     // Draws the solar panels.
     // Must have at least 4 panels per side.
-    constructor(glProgram, n_solar_panels, angle_panels) {
-        this.glProgram = glProgram;
+    constructor(shader, n_solar_panels, angle_panels) {
+        this.shader = shader;
         this.cylinder_color = [0.794117647, 0.7, 0.809803922];
         this.n_panels_per_side = n_solar_panels;
         this.panel_dist = 1.5;
         // this.cylinder_length = 8.0 + (this.n_panels_per_side - 4.0) * this.panel_dist;
         this.cylinder_length = this.getModelLength(this.n_panels_per_side);
-        this.cylinder = new Cylinder(glProgram, this.cylinder_color);
+        this.cylinder = new Cylinder(shader, this.cylinder_color);
         this.panel_rotation_rad = angle_panels;
     }
 
@@ -52,7 +52,7 @@ class Panels {
         mat4.fromTranslation(aux, [0.0, 0.0, init_dist + this.panel_dist * number]);
         mat4.mul(t_solar_panel, aux, t_solar_panel);
         mat4.mul(t_solar_panel, transformMatrix, t_solar_panel);
-        var solarPanel = new SolarPanel(this.glProgram);
+        var solarPanel = new SolarPanel(this.shader);
         solarPanel.draw(t_solar_panel);
     }
 }

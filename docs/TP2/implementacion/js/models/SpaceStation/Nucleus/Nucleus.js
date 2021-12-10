@@ -1,7 +1,7 @@
 class Nucleus {
     // Draws a the nucleus of the space station
-    constructor(glProgram) {
-        this.glProgram = glProgram;
+    constructor(shader) {
+        this.shader = shader;
         this.cyl_length_1 = 3.0;
         this.bezier_points_1 = [[0.0, 0.0, 1.0], [1.0, 2.0, 1.0], [2.0, 2.0, 1.0], [3.0, 0.0, 1.0]];
         this.cyl_length_2 = 5.0;
@@ -17,9 +17,9 @@ class Nucleus {
         }
 
         
-        var cyl_1 = new NucleusCylinder(this.glProgram, this.bezier_points_1, this.cyl_length_1);
-        var cyl_2 = new NucleusCylinder(this.glProgram, this.bezier_points_2, this.cyl_length_2);
-        var cyl_3 = new NucleusCylinder(this.glProgram, this.bezier_points_2, this.cyl_length_2);
+        var cyl_1 = new NucleusCylinder(this.shader, this.bezier_points_1, this.cyl_length_1);
+        var cyl_2 = new NucleusCylinder(this.shader, this.bezier_points_2, this.cyl_length_2);
+        var cyl_3 = new NucleusCylinder(this.shader, this.bezier_points_2, this.cyl_length_2);
         
         var cyl_2_t = mat4.create();
         var cyl_3_t = mat4.create();
@@ -30,8 +30,8 @@ class Nucleus {
         mat4.mul(cyl_2_t, transformMatrix, cyl_2_t);
         mat4.mul(cyl_3_t, transformMatrix, cyl_3_t);
         
-        var cube_12 = new NucleusCube(this.glProgram);
-        var cube_23 = new NucleusCube(this.glProgram);
+        var cube_12 = new NucleusCube(this.shader);
+        var cube_23 = new NucleusCube(this.shader);
         
         var cube_12_t = mat4.create();
         var cube_23_t = mat4.create();

@@ -1,7 +1,7 @@
 class NucleusCube {
     // Draws a cube with Bezier-defined surfaces
-    constructor(glProgram) {
-        this.glProgram = glProgram;
+    constructor(shader) {
+        this.shader = shader;
         this.color = [0.690196078, 0.298039216, 0.611764706];
         this.bezier_points = [[0.5, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.5, 0.0],
                               [1.0, 0.5, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 0.0], [0.5, 1.0, 0.0],
@@ -43,9 +43,9 @@ class NucleusCube {
         this.generateTopBottomBuffers();
         this.applyTransformMatrix(transformMatrix);
 
-        var sides_grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels + 1, /*n_cols=*/this.ptos_longitudinal+1);
-        var top_grid = new Grid(this.glProgram, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
-        var bottom_grid = new Grid(this.glProgram, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
+        var sides_grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels + 1, /*n_cols=*/this.ptos_longitudinal+1);
+        var top_grid = new Grid(this.shader, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
+        var bottom_grid = new Grid(this.shader, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
 
         sides_grid.draw();
         top_grid.draw();

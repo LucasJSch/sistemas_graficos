@@ -4,8 +4,8 @@ class SupRevolucion {
     // curveGen define la curva a dibujar
     // PRECONDICION:
     //      - curveGen tiene que empezar en [0.0, 0.0, 0.0]
-    constructor(glProgram, levels, shapeGen, curveGen, ptos_longitudinal=100, ptos_rev=100) {
-        this.glProgram = glProgram;
+    constructor(shader, levels, shapeGen, curveGen, ptos_longitudinal=100, ptos_rev=100) {
+        this.shader = shader;
         this.levels = levels;
         this.n_cols = null;
         this.shapeGen = shapeGen;
@@ -27,7 +27,7 @@ class SupRevolucion {
         this.generateBuffers();
 
 
-        var grid = new Grid(this.glProgram, this.position_buffer, this.normal_buffer, this.color_buffer, this.levels, this.n_cols);
+        var grid = new Grid(this.shader, this.position_buffer, this.normal_buffer, this.color_buffer, this.levels, this.n_cols);
         grid.draw();
     }
 

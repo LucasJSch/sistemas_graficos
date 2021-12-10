@@ -1,6 +1,6 @@
 class CraneColumns {
-    constructor(glProgram, n_cyls) {
-        this.glProgram = glProgram;
+    constructor(shader, n_cyls) {
+        this.shader = shader;
         this.utils = new Utils();
 
         // must be an int greater than 3.
@@ -14,7 +14,7 @@ class CraneColumns {
         }
 
         for (var rotation = 0.0; rotation < Math.PI * 2.0 - 0.001; rotation += this.diff_rotation) {
-            var col = new CraneColumn(glProgram);
+            var col = new CraneColumn(this.shader);
             var t = mat4.create();
             mat4.fromRotation(t, rotation, [0.0, 1.0, 0.0]);
             mat4.mul(t, transformMatrix, t);

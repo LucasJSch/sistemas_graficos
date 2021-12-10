@@ -1,6 +1,6 @@
 class CircularCylinder {
-    constructor(glProgram) {
-        this.glProgram = glProgram;
+    constructor(shader) {
+        this.shader = shader;
         this.color = [1.0, 0.0, 0.0];
         // The curve in this case is the shape to draw multiple times.
         // Use odd numbers here.
@@ -34,7 +34,7 @@ class CircularCylinder {
         }
 
 
-        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_curves + 1.0, /*n_cols=*/this.n_points_per_curve + 1.0);
+        var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_curves + 1.0, /*n_cols=*/this.n_points_per_curve + 1.0);
         grid.draw(transformMatrix);
     }
 

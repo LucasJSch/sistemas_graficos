@@ -1,7 +1,7 @@
 class Cylinder {
     // Draws a closed-surface cylinder at the origin with unitary radius and unitary length.
-    constructor(glProgram, vColor, pointsPerCircle=100) {
-        this.glProgram = glProgram;
+    constructor(shader, vColor, pointsPerCircle=100) {
+        this.shader = shader;
         this.vColor = vColor;
         this.pointsPerCircle = pointsPerCircle;
         this.vCentralBottomPos = [0.0, 0.0, 0.0];
@@ -19,7 +19,7 @@ class Cylinder {
         }
 
         this.shapeGen = new CylinderShapeGenerator(this.pointsPerCircle, this.radius, this.vColor);
-        this.sides = new Extrusion(this.glProgram, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
+        this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
         this.createTopAndBottomFans();
         this.sides.draw(transformMatrix);
         this.top_fan.draw(transformMatrix);
@@ -31,12 +31,12 @@ class Cylinder {
         var top_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralTopPos);
         var top_normal_buffer = this.getTopNormalBuffer();
         var top_color_buffer = this.shapeGen.getColorBuffer(this.vCentralTopPos);
-        this.top_fan = new Fan(this.glProgram, top_pos_buffer, top_normal_buffer, top_color_buffer);
+        this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer);
 
         var bottom_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralBottomPos);
         var bottom_normal_buffer = this.getBottomNormalBuffer();
         var bottom_color_buffer = this.shapeGen.getColorBuffer(this.vCentralBottomPos);
-        this.bottom_fan = new Fan(this.glProgram, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer);
+        this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer);
     }
 
     getTopNormalBuffer() {

@@ -10,15 +10,13 @@ class Camera {
 
         this.keyboardListener = new KeyboardListener();
         
-        this.spaceStationCam = new GenericCamera(/*initialPos=*/[0.0, 0.0, 3.0],
-                                                 /*targetPosition=*/[0.0, 0.0, 0.0],
-                                                 /*upVector=*/[0.0, 0.0, 1.0],
-                                                 (radius, angle) => [radius * Math.sin(angle), radius * Math.cos(angle), radius]);
+        this.spaceStationCam = new ControllableCamera2(/*initialPos=*/[0.0, 0.0, 3.0],
+                                                       /*targetPosition=*/[0.0, 0.0, 0.0],
+                                                       /*upVector=*/[0.0, 0.0, 1.0]);
         this.capsuleCam = new CapsuleCamera(capsule_controls);
-        this.panelsCam = new GenericCamera(/*initialPos=*/[0.0, 10.0, 0.0],
-                                            /*targetPosition=*/[0.0, 10.0, 0.0],
-                                            /*upVector=*/[0.0, 0.0, 1.0],
-                                            (radius, angle) => [radius * Math.cos(angle), radius, radius * Math.sin(angle)]);
+        this.panelsCam = new ControllableCamera2(/*initialPos=*/[0.0, 10.0, 0.0],
+                                                  /*targetPosition=*/[0.0, 13.0, 0.0],
+                                                  /*upVector=*/[0.0, 0.0, 1.0]);
         
         this.currentCam = this.kSpaceStation;
         this.capsule_controls = capsule_controls;

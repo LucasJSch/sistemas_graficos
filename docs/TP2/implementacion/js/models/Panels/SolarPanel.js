@@ -1,11 +1,11 @@
 class SolarPanel {
     // Draws a single panel.
-    constructor(glProgram) {
-        this.glProgram = glProgram;
+    constructor(shader) {
+        this.shader = shader;
         this.plane_color = [0.823529412, 0.662745098, 0.53333333];
         this.cylinder_color = [0.873529412, 0.712745098, 0.58333333];
-        this.cylinder = new Cylinder(glProgram, this.cylinder_color, /*pointsPerCircle=*/10);
-        this.plane = new Cube(glProgram, this.plane_color);
+        this.cylinder = new Cylinder(shader, this.cylinder_color, /*pointsPerCircle=*/10);
+        this.plane = new Cube(shader, this.plane_color);
     }
 
     draw(transformMatrix) {

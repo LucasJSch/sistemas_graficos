@@ -1,6 +1,6 @@
 class CircularRectangles {
-    constructor(glProgram, n_rectangles) {
-        this.glProgram = glProgram;
+    constructor(shader, n_rectangles) {
+        this.shader = shader;
         this.color = [0.184313725, 0.31372549, 0.31372549];
         // The curve in this case is the shape to draw multiple times.
         this.n_curves_per_section = 12.0;
@@ -69,9 +69,9 @@ class CircularRectangles {
             mat4.fromRotation(transformation, this.angular_length_per_section - this.angular_length_per_section / this.n_curves_per_section, [0.0, 1.0, 0.0]);
             top_pos_buf = this.utils.TransformPosBuffer(transformation, bottom_pos_buf);
 
-            this.grids.push(new Grid(this.glProgram, pos_buf, nrm_buf, clr_buf, /*n_rows=*/this.n_curves_per_section + 0.0, /*n_cols=*/this.n_points_per_curve + 1.0));
-            this.grids.push(new Fan(this.glProgram, bottom_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0));
-            this.grids.push(new Fan(this.glProgram, top_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0));
+            this.grids.push(new Grid(this.shader, pos_buf, nrm_buf, clr_buf, /*n_rows=*/this.n_curves_per_section + 0.0, /*n_cols=*/this.n_points_per_curve + 1.0));
+            this.grids.push(new Fan(this.shader, bottom_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0));
+            this.grids.push(new Fan(this.shader, top_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0));
         }
 
         for (var grid of this.grids) {

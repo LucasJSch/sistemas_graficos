@@ -1,7 +1,7 @@
 class Sphere {
     // Draws a closed-surface cylinder at the origin with unitary radius and unitary length.
-    constructor(glProgram, vColor, n_rows=50, n_cols=50) {
-        this.glProgram = glProgram;
+    constructor(shader, vColor, n_rows=50, n_cols=50) {
+        this.shader = shader;
         this.vColor = vColor;
         this.n_rows = n_rows;
         this.n_cols = n_cols;
@@ -20,7 +20,7 @@ class Sphere {
         this.generateBuffers();
 
         // TODO: Change normal buffer as welll.
-        var grid = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, this.n_rows, this.n_cols);
+        var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, this.n_rows, this.n_cols);
         grid.draw(transformMatrix);
     }
 

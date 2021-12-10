@@ -1,7 +1,7 @@
 class Capsule {
     // Draws the capsule.
-    constructor(glProgram) {
-        this.glProgram = glProgram;
+    constructor(shader) {
+        this.shader = shader;
         this.color = [0.823529412, 0.662745098, 0.53333333];
         this.color_aleron = [0.1, 0.1, 0.1];
         this.bezier_points = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.5], [0.0, 0.0, 0.5],
@@ -35,8 +35,8 @@ class Capsule {
         this.generateBezierConcatenator();
         this.generateBuffers();
 
-        var capsula = new Grid(this.glProgram, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
-        var aleron = new Grid(this.glProgram, this.aleron_pos_buf, this.aleron_nrm_buf, this.aleron_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
+        var capsula = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
+        var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.aleron_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         capsula.draw(transformMatrix);
         aleron.draw(transformMatrix);
     }

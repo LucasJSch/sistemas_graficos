@@ -1,8 +1,8 @@
 class LinearExtrusionWithFillings {
-    constructor(glProgram, levels, vStartPos, vEndPos, shapeGenerator) {
-        this.glProgram = glProgram;
+    constructor(shader, levels, vStartPos, vEndPos, shapeGenerator) {
+        this.shader = shader;
         this.shapeGenerator = shapeGenerator;
-        this.extrusion = new LinearExtrusion(glProgram, levels, vStartPos, vEndPos, shapeGenerator);
+        this.extrusion = new LinearExtrusion(shader, levels, vStartPos, vEndPos, shapeGenerator);
         this.levels = levels;
 
         this.fillings_fans = [];
@@ -48,7 +48,7 @@ class LinearExtrusionWithFillings {
             clrBuf.unshift(buffers[2][1]);
             clrBuf.unshift(buffers[2][2]);
 
-            var fan = new Fan(this.glProgram, posBuf, nrmBuf, clrBuf);
+            var fan = new Fan(this.shader, posBuf, nrmBuf, clrBuf);
             fan.draw(transformMatrix);
         }
         this.extrusion.draw(transformMatrix);

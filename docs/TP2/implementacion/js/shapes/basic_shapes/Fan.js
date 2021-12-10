@@ -1,11 +1,13 @@
 class Fan {
     // Initializes a Fan. 
-    constructor(glProgram, position_buffer, normal_buffer, color_buffer) {
-        this.glProgram = glProgram;
+    constructor(shader, position_buffer, normal_buffer, color_buffer, uv_buffer=null, texture=null) {
+        this.shader = shader;
         this.position_buffer = position_buffer;
         this.normal_buffer = normal_buffer;
         this.color_buffer = color_buffer;
         this.index_buffer = null;
+        this.uv_buffer = uv_buffer;
+        this.texture = texture;
     }
 
     draw(transformMatrix) {
@@ -33,7 +35,6 @@ class Fan {
     }
 
     setupBuffers() {
-        gl.useProgram(this.glProgram);
         // 1. Creamos un buffer para las posiciones dentro del pipeline.
         this.webgl_position_buffer = gl.createBuffer();
         // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que
@@ -48,7 +49,7 @@ class Fan {
 
         // Repetimos los pasos 1. 2. y 3. para la información de los índices
         // Notar que esta vez se usa ELEMENT_ARRAY_BUFFER en lugar de ARRAY_BUFFER.
-        // Notar tambi�n que se usa un array de enteros en lugar de floats.
+        // Notar tambien que se usa un array de enteros en lugar de floats.
         this.webgl_index_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
@@ -60,20 +61,17 @@ class Fan {
 
 
         // Cargamos los vértices en el shader.
-        var vertexPositionAttribute = gl.getAttribLocation(this.glProgram, "aVertexPosition");
-        gl.enableVertexAttribArray(vertexPositionAttribute);
+        // var vertexPositionAttribute = gl.getAttribLocation(this.glProgram, "aVertexPosition");
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
-        gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this.shader.getPosBufPtr(), 3, gl.FLOAT, false, 0, 0);
         
-        var vertexNormalAttribute = gl.getAttribLocation(glProgram, "aVertexNormal");
-        gl.enableVertexAttribArray(vertexNormalAttribute);
+        // var vertexNormalAttribute = gl.getAttribLocation(this.glProgram, "aVertexNormal");
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
-        gl.vertexAttribPointer(vertexNormalAttribute, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this.shader.getNrmBufPtr(), 3, gl.FLOAT, false, 0, 0);
                 
-        var colorAttribute = gl.getAttribLocation(glProgram, "aVertexColor");
-        gl.enableVertexAttribArray(colorAttribute);
+        // var colorAttribute = gl.getAttribLocation(this.glProgram, "aVertexColor");
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-        gl.vertexAttribPointer(colorAttribute, 3, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(this.shader.getClrBufPtr(), 3, gl.FLOAT, false, 0, 0);
         
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     }
