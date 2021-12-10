@@ -39,17 +39,17 @@ class SceneControls {
 
             case "a":
             case "A":
-                this.camState.zVelTarget=this.DELTA_TRASLACION; break;
+                this.camState.xVelTarget=-this.DELTA_TRASLACION; break;
             case "d":
             case "D":
-                this.camState.zVelTarget=-this.DELTA_TRASLACION; break; 
+                this.camState.xVelTarget=this.DELTA_TRASLACION; break; 
 
             case "s":
             case "S":
-                this.camState.xVelTarget=this.DELTA_TRASLACION;break;
+                this.camState.zVelTarget=this.DELTA_TRASLACION;break;
             case "w": 
             case "W": 
-                this.camState.xVelTarget=-this.DELTA_TRASLACION; break;   
+                this.camState.zVelTarget=-this.DELTA_TRASLACION; break;   
 
             case "q":
             case "Q":
@@ -61,28 +61,20 @@ class SceneControls {
 
             case "j": 
             case "J": 
-                this.camState.xRotVelTarget=this.DELTA_ROTACION;break;                                 
+                this.camState.zRotVelTarget=this.DELTA_ROTACION;break;                                 
             case "l": 
             case "L": 
-                this.camState.xRotVelTarget=-this.DELTA_ROTACION;break;
+                this.camState.zRotVelTarget=-this.DELTA_ROTACION;break;
 
 
             case "i": 
             case "I": 
-                this.camState.yRotVelTarget=this.DELTA_ROTACION; break;                
+                this.camState.xRotVelTarget=this.DELTA_ROTACION; break;                
             case "k": 
             case "K": 
-                this.camState.yRotVelTarget=-this.DELTA_ROTACION; break;         
+                this.camState.xRotVelTarget=-this.DELTA_ROTACION; break;         
 
         
-            case "u":
-            case "U":
-                this.camState.zRotVelTarget=this.DELTA_ROTACION;break;                                 
-            case "o": 
-            case "O": 
-                this.camState.zRotVelTarget=-this.DELTA_ROTACION;break;            
-
-
                     
             case "r": 
                 this.position=vec3.fromValues(initialPos[0],initialPos[1],initialPos[2]);
@@ -107,13 +99,13 @@ class SceneControls {
             case "A":
             case "d":
             case "D":
-                this.camState.zVelTarget=0; break;
+                this.camState.xVelTarget=0; break;
             
             case "s":
             case "S":
             case "w":
             case "W":
-                this.camState.xVelTarget=0; break;  
+                this.camState.zVelTarget=0; break;  
 
             case "q":
             case "Q":
@@ -126,20 +118,14 @@ class SceneControls {
             case "I": 
             case "k": 
             case "K": 
-                this.camState.yRotVelTarget=0; break;
+                this.camState.xRotVelTarget=0; break;
                 
             case "j": 
             case "J": 
             case "l": 
             case "L": 
-                this.camState.xRotVelTarget=0;break; 
-        
-            case "u":
-            case "U":
-            case "o":
-            case "O":
                 this.camState.zRotVelTarget=0;break; 
-                
+        
       
         }                 
         
