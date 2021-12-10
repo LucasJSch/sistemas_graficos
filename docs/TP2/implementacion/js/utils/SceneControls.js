@@ -11,7 +11,11 @@ class SceneControls {
 
         this.position = vec3.fromValues(this.initialPos[0], this.initialPos[1], this.initialPos[2]);
 
-        this.rotationMatrix=mat4.create();	
+        this.rotationMatrix = mat4.create();
+        mat4.fromRotation(this.rotationMatrix, Math.PI, [0.0, 0.0, 1.0]);	
+        var aux = mat4.create();
+        mat4.fromRotation(aux, Math.PI, [0.0, 1.0, 0.0])
+        mat4.mul(this.rotationMatrix, aux, this.rotationMatrix);
 
         let camInitialState={
             xVel:0,
@@ -39,17 +43,17 @@ class SceneControls {
 
             case "a":
             case "A":
-                this.camState.xVelTarget=-this.DELTA_TRASLACION; break;
+                this.camState.xVelTarget=this.DELTA_TRASLACION; break;
             case "d":
             case "D":
-                this.camState.xVelTarget=this.DELTA_TRASLACION; break; 
+                this.camState.xVelTarget=-this.DELTA_TRASLACION; break; 
 
             case "s":
             case "S":
-                this.camState.zVelTarget=this.DELTA_TRASLACION;break;
+                this.camState.zVelTarget=-this.DELTA_TRASLACION;break;
             case "w": 
             case "W": 
-                this.camState.zVelTarget=-this.DELTA_TRASLACION; break;   
+                this.camState.zVelTarget=this.DELTA_TRASLACION; break;   
 
             case "q":
             case "Q":
@@ -61,10 +65,10 @@ class SceneControls {
 
             case "j": 
             case "J": 
-                this.camState.zRotVelTarget=this.DELTA_ROTACION;break;                                 
+                this.camState.zRotVelTarget=-this.DELTA_ROTACION;break;                                 
             case "l": 
             case "L": 
-                this.camState.zRotVelTarget=-this.DELTA_ROTACION;break;
+                this.camState.zRotVelTarget=+this.DELTA_ROTACION;break;
 
 
             case "i": 
