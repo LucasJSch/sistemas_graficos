@@ -3,7 +3,7 @@ class ShaderProgram {
         var vertexShader = buildShader(gl, vertexSrc, "vertex");
 
         // agregar utils a frag shader
-        // fragmentSrc = UTILS_SHADER_SRC + fragmentSrc;
+        fragmentSrc = fragmentSrc +  UTILS_SHADER_SRC;
         var fragmentShader = buildShader(gl, fragmentSrc, "fragment");
 
         this.program = gl.createProgram();
@@ -11,7 +11,6 @@ class ShaderProgram {
         gl.attachShader(this.program, fragmentShader);
         gl.linkProgram(this.program);
 
-        // console.log(vertexSrc, this.program, vertexShader, fragmentShader);
         if (!gl.getProgramParameter(this.program, gl.LINK_STATUS)) {
             alert("Could not initialise shaders");
         }
@@ -20,8 +19,6 @@ class ShaderProgram {
         this.unifs = {};
 
         gl.useProgram(this.program);
-
-        // definir attribs y unifs comunes a todos los shaders
 
         this.attribs.vertexPos = gl.getAttribLocation(this.program, "aVertexPosition");
         gl.enableVertexAttribArray(this.attribs.vertexPos);
@@ -33,12 +30,6 @@ class ShaderProgram {
         this.unifs.modelMatrix = gl.getUniformLocation(this.program, "modelMatrix");
         this.unifs.viewMatrix = gl.getUniformLocation(this.program, "viewMatrix");
         this.unifs.normalMatrix = gl.getUniformLocation(this.program, "normalMatrix");
-
-        // this.attribs.texCoord = gl.getAttribLocation(this.program, "aVertexUV");
-        // gl.enableVertexAttribArray(this.attribs.texCoord);
-
-        // this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
-        // this.unifs.usarVariosSampleos = gl.getUniformLocation(this.program, "uUsarVariosSampleos");
     }
 
     setearParametros() {
@@ -88,17 +79,8 @@ class MainProgram extends ShaderProgram {
     constructor() {
         super(MAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
 
-        // setear attribs y unifs particulares de este shader
-
-        
         this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
         gl.enableVertexAttribArray(this.attribs.color);
-        
-        // this.unifs.color = gl.getUniformLocation(this.program, "uColor");
-        // this.unifs.deltaSampler = gl.getUniformLocation(this.program, "uDeltaSampler");
-        // this.unifs.sampler = gl.getUniformLocation(this.program, "uSampler");
-        // this.unifs.samplerMapaReflexion = gl.getUniformLocation(this.program, "uSamplerMapaReflexion");        
-        // this.unifs.factorReflexion = gl.getUniformLocation(this.program, "uFactorReflexion");
     }
 
     setearParametros() {
@@ -118,22 +100,24 @@ class PanelsProgram extends ShaderProgram {
     constructor() {
         super(MAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
 
-        // setear attribs y unifs particulares de este shader
-        
         this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
         gl.enableVertexAttribArray(this.attribs.color);
-        
+
+        this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
+        this.panelTexture = new Textura("../assets/textures/paneles_solares.jpg");
     }
 
     setearParametros() {
         super.setearParametros();
         gl.uniformMatrix4fv(this.unifs.normalMatrix, false, projMatrix);
         gl.uniformMatrix4fv(this.unifs.projMatrix, false, projMatrix);
+
+        gl.activeTexture(gl.TEXTURE2);
+        gl.bindTexture(gl.TEXTURE_2D, this.panelTexture.gl_tex);
+        gl.uniform1i(this.unifs.panelSampler, 2);
     }
 
     getClrBufPtr() {
         return this.attribs.color;
     }
-
-
 }

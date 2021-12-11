@@ -2,7 +2,7 @@ class ConvergedCube {
     // Draws a cube with one end bigger than the other.
     // The smaller the scaleFactor, the similar it will be to a pyramid.
     // scaleFactor: Scale difference between each end.
-    constructor(shader, vColor, scaleFactor) {
+    constructor(shader, vColor, scaleFactor, top_fan_uv_buf = null) {
         this.shader = shader;
         this.vColor = vColor;
         this.scaleFactor = scaleFactor;
@@ -12,6 +12,8 @@ class ConvergedCube {
         this.top_fan = null;
         this.bottom_fan = null;
         this.shapeGen = null
+
+        this.top_fan_uv_buf = top_fan_uv_buf;
     }
 
     draw(transformMatrix) {
@@ -45,7 +47,7 @@ class ConvergedCube {
         top_color_buffer.push(top_color_buffer[0]);
         top_color_buffer.push(top_color_buffer[1]);
         top_color_buffer.push(top_color_buffer[2]);
-        this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer);
+        this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer, this.top_fan_uv_buf);
 
         var bottom_pos_buffer = [];
         bottom_pos_buffer.push(this.vCentralBottomPos[0]);

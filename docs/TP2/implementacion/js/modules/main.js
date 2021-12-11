@@ -11,10 +11,6 @@ var n_secciones_nucleo = 2.0;
 var gl = null;
 var canvas = null;
 
-// glProgram = null,
-// fragmentShader = null,
-// vertexShader = null;
-
 var aux_t = mat4.create();
 var capsule_t = mat4.create();
 mat4.fromRotation(aux_t, Math.PI, [1.0, 0.0, 0.0]);
@@ -50,8 +46,8 @@ function setupWebGL() {
 
     gl.enable(gl.DEPTH_TEST);
     //set the clear color
-    gl.clearColor(0.1, 0.1, 0.2, 1.0);     
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     
+    // gl.clearColor(0.1, 0.1, 0.2, 1.0);     
+    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     
 
     gl.viewport(0, 0, canvas.width, canvas.height);
 
