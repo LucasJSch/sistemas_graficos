@@ -13,7 +13,8 @@ class ConvergedCube {
         this.bottom_fan = null;
         this.shapeGen = null
 
-        this.top_fan_uv_buf = top_fan_uv_buf;
+        // this.top_fan_uv_buf = top_fan_uv_buf;
+        this.top_fan_uv_buf = [];
     }
 
     draw(transformMatrix) {
@@ -24,7 +25,7 @@ class ConvergedCube {
         this.shapeGen = new ConvergedCubeShapeGenerator(this.vColor, this.vCentralTopPos, this.vCentralBottomPos, this.scaleFactor);
         this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
         this.createTopAndBottomFans();
-        this.sides.draw(transformMatrix);
+        // this.sides.draw(transformMatrix);
         this.top_fan.draw(transformMatrix);
         this.bottom_fan.draw(transformMatrix);
     }
@@ -47,6 +48,9 @@ class ConvergedCube {
         top_color_buffer.push(top_color_buffer[0]);
         top_color_buffer.push(top_color_buffer[1]);
         top_color_buffer.push(top_color_buffer[2]);
+
+        this.top_fan_uv_buf = this.top_fan_uv_buf.concat(this.shapeGen.getUVBuffer(this.vCentralTopPos));
+
         this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer, this.top_fan_uv_buf);
 
         var bottom_pos_buffer = [];
@@ -66,7 +70,7 @@ class ConvergedCube {
         bottom_color_buffer.push(bottom_color_buffer[0]);
         bottom_color_buffer.push(bottom_color_buffer[1]);
         bottom_color_buffer.push(bottom_color_buffer[2]);
-        this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer);
+        this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer, this.top_fan_uv_buf);
     }
 }
 
@@ -130,6 +134,23 @@ class ConvergedCubeShapeGenerator {
     }
 
     getUVBuffer() {
-        return [];
+        var buffer = [];
+
+        buffer.push(0.0);
+        buffer.push(0.0);
+
+        buffer.push(1.0);
+        buffer.push(0.0);
+
+        buffer.push(1.0);
+        buffer.push(1.0);
+
+        buffer.push(0.0);
+        buffer.push(1.0);
+
+        buffer.push(0.0);
+        buffer.push(0.0);
+
+        return buffer;
     }
 }

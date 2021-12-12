@@ -49,10 +49,6 @@ class ShaderProgram {
         return this.attribs.vertexPos;
     }
 
-    getUvBufPtr() {
-        return this.attribs.texCoord;
-    }
-
     getProjMatrixPtr() {
         return this.unifs.projMatrix;
     }
@@ -103,21 +99,27 @@ class PanelsProgram extends ShaderProgram {
         this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
         gl.enableVertexAttribArray(this.attribs.color);
 
+        this.attribs.uv = gl.getAttribLocation(this.program, "aVertexUV");
+        gl.enableVertexAttribArray(this.attribs.uv);
+
         this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
-        this.panelTexture = new Textura("../assets/textures/paneles_solares.jpg");
+        this.panelTexture = new Texture("js/assets/textures/agua.jpg");
+        
     }
 
     setearParametros() {
         super.setearParametros();
-        gl.uniformMatrix4fv(this.unifs.normalMatrix, false, projMatrix);
-        gl.uniformMatrix4fv(this.unifs.projMatrix, false, projMatrix);
 
-        gl.activeTexture(gl.TEXTURE2);
+        gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.panelTexture.gl_tex);
-        gl.uniform1i(this.unifs.panelSampler, 2);
+        gl.uniform1i(this.unifs.panelSampler, 0);
     }
 
     getClrBufPtr() {
         return this.attribs.color;
+    }
+
+    getUvBufPtr() {
+        return this.attribs.uv;
     }
 }

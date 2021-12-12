@@ -29,7 +29,6 @@ var rotacion_anillo = 0;
 var camera = new Camera(capsule_controls);
 camera.initialize();
 
-// var global;
 var MAIN_SHADER_PROGRAM;
 
 function onResize() {
@@ -46,8 +45,8 @@ function setupWebGL() {
 
     gl.enable(gl.DEPTH_TEST);
     //set the clear color
-    // gl.clearColor(0.1, 0.1, 0.2, 1.0);     
-    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     
+    gl.clearColor(0.1, 0.1, 0.2, 1.0);     
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     
 
     gl.viewport(0, 0, canvas.width, canvas.height);
 
@@ -83,6 +82,10 @@ function animate(){
 
 function tick() {
     requestAnimationFrame(tick);
+    if (!MAIN_SHADER_PROGRAM.panelTexture.finished) {
+        return;
+    }
+    MAIN_SHADER_PROGRAM.setearParametros();
     drawScene(MAIN_SHADER_PROGRAM,
               modelMatrix,
               viewMatrix,
@@ -112,8 +115,8 @@ function webGLStart() {
         setupWebGL();
         initMenu(); 
 
-        MAIN_SHADER_PROGRAM = new MainProgram();
-        MAIN_SHADER_PROGRAM.setearParametros();
+        MAIN_SHADER_PROGRAM = new PanelsProgram();
+        // MAIN_SHADER_PROGRAM.setearParametros();
         tick();
 
     } else{    

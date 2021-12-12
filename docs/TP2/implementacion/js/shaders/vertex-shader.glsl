@@ -17,7 +17,7 @@ varying vec3 vColor;
 varying highp vec3 vLighting;
 
 /*********** Textures ***********/
-uniform sampler2D uSampler;
+uniform sampler2D uPanelsSampler;
 varying vec2 vUV;
 /********************************/
 
@@ -30,7 +30,7 @@ void main(void) {
 
     /*********** Textures ***********/
     vUV = aVertexUV;
-    vec4 textureColor = texture2D(uSampler, vec2(vUV.s, vUV.t));         
+    // vec4 textureColor = texture2D(uPanelsSampler, vec2(aVertexUV.s, aVertexUV.t));         
     /********************************/
     
     /*********** Lighting ************/
