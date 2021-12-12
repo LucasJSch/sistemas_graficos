@@ -1,5 +1,5 @@
 // This function serves as an interface between the main js script that initializes the environment and the JS classes.
-function drawScene(shader,
+function drawScene(panelsShader,
                    modelMatrix,
                    viewMatrix,
                    projMatrix,
@@ -10,20 +10,20 @@ function drawScene(shader,
                    n_secciones_nucleo,
                    capsule_controls) {
 
-    gl.uniformMatrix4fv(shader.getModelMatrixPtr(), false, modelMatrix);
-    gl.uniformMatrix4fv(shader.getViewMatrixPtr(), false, viewMatrix);
-    gl.uniformMatrix4fv(shader.getProjMatrixPtr(), false, projMatrix);
-    gl.uniformMatrix4fv(shader.getNormalMatrixPtr(), false, normalMatrix);
+    gl.uniformMatrix4fv(panelsShader.getModelMatrixPtr(), false, modelMatrix);
+    gl.uniformMatrix4fv(panelsShader.getViewMatrixPtr(), false, viewMatrix);
+    gl.uniformMatrix4fv(panelsShader.getProjMatrixPtr(), false, projMatrix);
+    gl.uniformMatrix4fv(panelsShader.getNormalMatrixPtr(), false, normalMatrix);
 
     // var coord = new Coordinates(shader);
     // coord.draw();
-    var cube = new ConvergedCube(shader, [1.0, 0.0, 0.0], 1.0);
+    var cube = new ConvergedCube(panelsShader, [1.0, 0.0, 0.0], 1.0);
     cube.draw();
 
     // var aux_t = mat4.create();
     // var capsule = new Capsule(shader);
     
-    // var space_station = new SpaceStation(shader, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
+    // var space_station = new SpaceStation(panelsShader, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
     
     // var planet = new Planet(shader);
     // var planet_t = mat4.create();

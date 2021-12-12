@@ -2,7 +2,7 @@ class ConvergedCube {
     // Draws a cube with one end bigger than the other.
     // The smaller the scaleFactor, the similar it will be to a pyramid.
     // scaleFactor: Scale difference between each end.
-    constructor(shader, vColor, scaleFactor, top_fan_uv_buf = null) {
+    constructor(shader, vColor, scaleFactor) {
         this.shader = shader;
         this.vColor = vColor;
         this.scaleFactor = scaleFactor;
@@ -13,7 +13,6 @@ class ConvergedCube {
         this.bottom_fan = null;
         this.shapeGen = null
 
-        // this.top_fan_uv_buf = top_fan_uv_buf;
         this.top_fan_uv_buf = [];
     }
 
@@ -25,7 +24,7 @@ class ConvergedCube {
         this.shapeGen = new ConvergedCubeShapeGenerator(this.vColor, this.vCentralTopPos, this.vCentralBottomPos, this.scaleFactor);
         this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
         this.createTopAndBottomFans();
-        // this.sides.draw(transformMatrix);
+        this.sides.draw(transformMatrix);
         this.top_fan.draw(transformMatrix);
         this.bottom_fan.draw(transformMatrix);
     }
@@ -38,7 +37,7 @@ class ConvergedCube {
         top_pos_buffer = top_pos_buffer.concat(this.shapeGen.getPosBuffer(this.vCentralTopPos));
 
         var top_normal_buffer = [];
-        for (var i = 0; i < top_pos_buffer.length+1; i++) {
+        for (var i = 0; i < top_pos_buffer.length; i+=3) {
             top_normal_buffer.push(0.0);
             top_normal_buffer.push(0.0);
             top_normal_buffer.push(1.0);
@@ -49,7 +48,7 @@ class ConvergedCube {
         top_color_buffer.push(top_color_buffer[1]);
         top_color_buffer.push(top_color_buffer[2]);
 
-        this.top_fan_uv_buf = this.top_fan_uv_buf.concat(this.shapeGen.getUVBuffer(this.vCentralTopPos));
+        this.top_fan_uv_buf = this.top_fan_uv_buf.concat(this.shapeGen.getUVBuffer_internal(this.vCentralTopPos));
 
         this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer, this.top_fan_uv_buf);
 
@@ -60,7 +59,7 @@ class ConvergedCube {
         bottom_pos_buffer = bottom_pos_buffer.concat(this.shapeGen.getPosBuffer(this.vCentralBottomPos));
 
         var bottom_normal_buffer = [];
-        for (var i = 0; i < bottom_pos_buffer.length+1; i++) {
+        for (var i = 0; i < bottom_pos_buffer.length; i+=3) {
             bottom_normal_buffer.push(0.0);
             bottom_normal_buffer.push(0.0);
             bottom_normal_buffer.push(-1.0);
@@ -133,8 +132,33 @@ class ConvergedCubeShapeGenerator {
         return buffer;
     }
 
-    getUVBuffer() {
+    getUVBuffer(pos) {
         var buffer = [];
+
+        buffer.push(0.0);
+        buffer.push(0.0);
+
+        buffer.push(1.0);
+        buffer.push(0.0);
+
+        buffer.push(1.0);
+        buffer.push(1.0);
+
+        buffer.push(0.0);
+        buffer.push(1.0);
+
+        buffer.push(0.0);
+        buffer.push(0.0);
+
+        return buffer;
+    }
+
+    getUVBuffer_internal(pos) {
+        var buffer = [];
+
+        // // First goes the central location because we're using fans.
+        buffer.push(0.5);
+        buffer.push(0.5);
 
         buffer.push(0.0);
         buffer.push(0.0);

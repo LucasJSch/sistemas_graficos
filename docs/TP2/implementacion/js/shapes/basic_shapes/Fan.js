@@ -7,6 +7,11 @@ class Fan {
         this.color_buffer = color_buffer;
         this.index_buffer = null;
         this.uv_buffer = uv_buffer;
+
+        // console.log("pos buffer len: " + position_buffer.length);
+        // console.log("normal_buffer len: " + normal_buffer.length);
+        // console.log("color_buffer len: " + color_buffer.length);
+        // console.log("uv_buffer len: " + uv_buffer.length);
     }
 
     draw(transformMatrix) {

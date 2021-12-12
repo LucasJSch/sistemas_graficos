@@ -103,7 +103,7 @@ class PanelsProgram extends ShaderProgram {
         gl.enableVertexAttribArray(this.attribs.uv);
 
         this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
-        this.panelTexture = new Texture("js/assets/textures/agua.jpg");
+        this.panelTexture = new Texture("js/assets/textures/paneles_solares.jpg");
         
     }
 

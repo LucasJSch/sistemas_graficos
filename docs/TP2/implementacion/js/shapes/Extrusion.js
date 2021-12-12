@@ -2,8 +2,7 @@ class Extrusion {
     // shapeGenerator is an instance of a class that has 3 methods:
     // getPosBuffer(central_point), getNormalBuffer(central_point), getColorBuffer(central_point)
     // For a working example, see either the Cylinder class or the /tests/drawLinearExtrusion.js file.
-    // TDOO: Add support for textures.
-    constructor(shader, levels, vStartPos, vEndPos, shapeGenerator, useFan=false, texture=null) {
+    constructor(shader, levels, vStartPos, vEndPos, shapeGenerator, useFan=false) {
         this.shader = shader;
         this.levels = levels;
         this.vStartPos = vStartPos;
@@ -15,7 +14,6 @@ class Extrusion {
         this.normal_buffer = null;
         this.color_buffer = null;
         this.uv_buffer = null;
-        this.texture = texture;
 
         this.useFan = useFan;
     }
@@ -28,12 +26,12 @@ class Extrusion {
         this.createBuffers();
         this.applyTransformation(transformMatrix);
 
-        if (!this.useFan) {
-            var grid = new Grid(this.shader, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer, this.texture);
-            grid.draw();
-        } else {
+        if (this.useFan) {
             var fan = new Fan(this.shader, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.top_uv_buffer);
             fan.draw();          
+        } else {
+            var grid = new Grid(this.shader, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer);
+            grid.draw();
         }
     }
 
