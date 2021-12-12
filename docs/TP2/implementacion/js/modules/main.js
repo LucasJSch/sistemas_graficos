@@ -30,6 +30,7 @@ var camera = new Camera(capsule_controls);
 camera.initialize();
 
 var MAIN_SHADER_PROGRAM;
+var EARTH_SHADER_PROGRAM;
 
 function onResize() {
     gl.canvas.width = $canvas.width();
@@ -82,11 +83,13 @@ function animate(){
 
 function tick() {
     requestAnimationFrame(tick);
-    if (!MAIN_SHADER_PROGRAM.panelTexture.finished) {
+    if (!MAIN_SHADER_PROGRAM.panelTexture.finished || !EARTH_SHADER_PROGRAM.earthTexture.finished) {
         return;
     }
     MAIN_SHADER_PROGRAM.setearParametros();
+    EARTH_SHADER_PROGRAM.setearParametros();
     drawScene(MAIN_SHADER_PROGRAM,
+              EARTH_SHADER_PROGRAM,
               modelMatrix,
               viewMatrix,
               projMatrix,
@@ -116,7 +119,7 @@ function webGLStart() {
         initMenu(); 
 
         MAIN_SHADER_PROGRAM = new PanelsProgram();
-        // MAIN_SHADER_PROGRAM.setearParametros();
+        EARTH_SHADER_PROGRAM = new EarthProgram();
         tick();
 
     } else{    
