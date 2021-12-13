@@ -4,6 +4,10 @@ class Coordinates {
         this.shader = shader;
     }
 
+    setTexture(texture) {
+        this.texture = texture;
+    }
+
     // vScaleFactor: vec3 with a scale for each coordinate axis.
     draw(transformMatrix, vScaleFactor) {
         if (transformMatrix == null) {
@@ -16,8 +20,11 @@ class Coordinates {
         }
 
         var x_coord = new Cylinder(this.shader, [1.0, 0.0, 0.0]);
+        x_coord.setTexture(this.texture);
         var y_coord = new Cylinder(this.shader, [0.0, 1.0, 0.0]);
+        y_coord.setTexture(this.texture);
         var z_coord = new Cylinder(this.shader, [0.0, 0.0, 1.0]);
+        z_coord.setTexture(this.texture);
 
         // Create rotation transforms (each cylinder goes in a different axis).
         var transf_x_rotation = mat4.create();

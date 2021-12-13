@@ -8,6 +8,10 @@ class Planet {
         this.sphere = new Sphere(shader, this.planet_color, this.n_rows, this.n_cols);
     }
 
+    setTexture(texture) {
+        this.sphere.setTexture(texture);
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();

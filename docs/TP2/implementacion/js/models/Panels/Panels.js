@@ -12,6 +12,11 @@ class Panels {
         this.panel_rotation_rad = angle_panels;
     }
 
+    setTexture(texture) {
+        this.texture = texture;
+        this.cylinder.setTexture(texture);
+    }
+
     getModelLength(n_panels_per_side) {
         return 8.0 + (n_panels_per_side - 4.0) * this.panel_dist;
     }
@@ -26,10 +31,10 @@ class Panels {
         mat4.mul(t_cylinder, transformMatrix, t_cylinder);
         this.cylinder.draw(t_cylinder);
 
-        for (var i = 0; i < this.n_panels_per_side; i++) {
-            this.drawSolarPanel(transformMatrix, i, false);
-            this.drawSolarPanel(transformMatrix, i, true);
-        }
+        // for (var i = 0; i < this.n_panels_per_side; i++) {
+        //     this.drawSolarPanel(transformMatrix, i, false);
+        //     this.drawSolarPanel(transformMatrix, i, true);
+        // }
     }
 
     // number: int that says which number of panel it is
@@ -53,6 +58,7 @@ class Panels {
         mat4.mul(t_solar_panel, aux, t_solar_panel);
         mat4.mul(t_solar_panel, transformMatrix, t_solar_panel);
         var solarPanel = new SolarPanel(this.shader);
-        solarPanel.draw(t_solar_panel);
+        solarPanel.setTexture(this.texture);
+        // solarPanel.draw(t_solar_panel);
     }
 }

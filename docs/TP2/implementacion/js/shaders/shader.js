@@ -104,7 +104,9 @@ class PanelsProgram extends ShaderProgram {
 
         this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
         this.panelTexture = new Texture("js/assets/textures/paneles_solares.jpg");
-        
+
+        this.unifs.earthSampler = gl.getUniformLocation(this.program, "uEarthSampler");
+        this.earthTexture = new Texture("js/assets/textures/tierra.jpg");
     }
 
     setearParametros() {
@@ -121,6 +123,14 @@ class PanelsProgram extends ShaderProgram {
 
     getUvBufPtr() {
         return this.attribs.uv;
+    }
+
+    getPanelTexture() {
+        return this.panelTexture.gl_tex;
+    }
+
+    getEarthTexture() {
+        return this.earthTexture.gl_tex;
     }
 }
 

@@ -8,6 +8,12 @@ class SolarPanel {
         this.plane = new Cube(shader, this.plane_color);
     }
 
+    setTexture(texture) {
+        console.log(texture);
+        this.cylinder.setTexture(texture);
+        this.plane.setTexture(texture);
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
@@ -33,6 +39,6 @@ class SolarPanel {
 
         mat4.mul(t_plane, transformMatrix, t_plane);
 
-        this.plane.draw(t_plane);
+        // this.plane.draw(t_plane);
     }
 }

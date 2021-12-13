@@ -30,16 +30,11 @@ var camera = new Camera(capsule_controls);
 camera.initialize();
 
 var MAIN_SHADER_PROGRAM;
-var EARTH_SHADER_PROGRAM;
 
 function onResize() {
     gl.canvas.width = $canvas.width();
     gl.canvas.height = $canvas.height();
     aspect = $canvas.width() / $canvas.height();
-}
-
-function _rgbToFloat(r,g,b) {
-    return [r/256, g/256, b/256];
 }
 
 function setupWebGL() {
@@ -83,13 +78,11 @@ function animate(){
 
 function tick() {
     requestAnimationFrame(tick);
-    if (!MAIN_SHADER_PROGRAM.panelTexture.finished || !EARTH_SHADER_PROGRAM.earthTexture.finished) {
+    if (!MAIN_SHADER_PROGRAM.panelTexture.finished) {
         return;
     }
     MAIN_SHADER_PROGRAM.setearParametros();
-    EARTH_SHADER_PROGRAM.setearParametros();
     drawScene(MAIN_SHADER_PROGRAM,
-              EARTH_SHADER_PROGRAM,
               modelMatrix,
               viewMatrix,
               projMatrix,
@@ -119,7 +112,6 @@ function webGLStart() {
         initMenu(); 
 
         MAIN_SHADER_PROGRAM = new PanelsProgram();
-        EARTH_SHADER_PROGRAM = new EarthProgram();
         tick();
 
     } else{    

@@ -13,6 +13,10 @@ class Sphere {
         this.utils = new Utils();
     }
 
+    setTexture(texture) {
+        this.texture = texture;
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
@@ -22,6 +26,7 @@ class Sphere {
 
         // TODO: Change normal buffer as welll.
         var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, this.n_rows, this.n_cols, this.uv_buf);
+        grid.setTexture(this.texture);
         grid.draw(transformMatrix);
     }
 

@@ -7,11 +7,16 @@ class Fan {
         this.color_buffer = color_buffer;
         this.index_buffer = null;
         this.uv_buffer = uv_buffer;
+        this.texture = null;
 
-        // console.log("pos buffer len: " + position_buffer.length);
-        // console.log("normal_buffer len: " + normal_buffer.length);
-        // console.log("color_buffer len: " + color_buffer.length);
-        // console.log("uv_buffer len: " + uv_buffer.length);
+        console.log("pos buffer len: " + position_buffer.length);
+        console.log("normal_buffer len: " + normal_buffer.length);
+        console.log("color_buffer len: " + color_buffer.length);
+        console.log("uv_buffer len: " + uv_buffer.length);
+    }
+
+    setTexture(texture) {
+        this.texture = texture;
     }
 
     draw(transformMatrix) {
@@ -58,18 +63,14 @@ class Fan {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
 
-        // if (this.uv_buffer != null && this.uv_buffer.length != 0) {
-            this.webgl_uv_buffer = gl.createBuffer();
-            this.webgl_uv_buffer.itemSize = 2;
-            this.webgl_uv_buffer.numItems = this.uv_buffer.length / 2;
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uv_buffer), gl.STATIC_DRAW);
-        // } else {
-            // If not using texture, use color.
-            this.webgl_color_buffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
-        // }
+        this.webgl_uv_buffer = gl.createBuffer();
+        this.webgl_uv_buffer.itemSize = 2;
+        this.webgl_uv_buffer.numItems = this.uv_buffer.length / 2;
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uv_buffer), gl.STATIC_DRAW);
+        this.webgl_color_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
 
 
 
@@ -82,17 +83,14 @@ class Fan {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.vertexAttribPointer(this.shader.getNrmBufPtr(), 3, gl.FLOAT, false, 0, 0);
                 
-        // if (this.uv_buffer != null && this.uv_buffer.length != 0) {
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
-            gl.vertexAttribPointer(this.shader.getUvBufPtr(), 2, gl.FLOAT, false, 0, 0);
-            // gl.activeTexture(gl.TEXTURE0);
-            // gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            // gl.uniform1i(this.shader.getProgram().samplerUniform, 0);
-        // } else {
-            // If not using texture, use color.
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-            gl.vertexAttribPointer(this.shader.getClrBufPtr(), 3, gl.FLOAT, false, 0, 0);
-        // }
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
+        gl.vertexAttribPointer(this.shader.getUvBufPtr(), 2, gl.FLOAT, false, 0, 0);
+        gl.activeTexture(gl.TEXTURE0);
+        console.log(this.texture);
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
+        gl.vertexAttribPointer(this.shader.getClrBufPtr(), 3, gl.FLOAT, false, 0, 0);
         
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
     }
