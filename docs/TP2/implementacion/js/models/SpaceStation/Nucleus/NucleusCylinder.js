@@ -29,6 +29,14 @@ class NucleusCylinder {
 
         this.ptos_base = [];
         this.utils = new Utils();
+
+        this.scale_factor_u = 1.0;
+        this.scale_factor_v = 1.0;
+    }
+
+    setScalingFactorUV(factor_u, factor_v) {
+        this.scale_factor_u = factor_u;
+        this.scale_factor_v = factor_v;
     }
 
     setTexture(texture) {
@@ -90,8 +98,8 @@ class NucleusCylinder {
                 this.sides_pos_buf.push(elem);
             }
             for (var i = 0; i < ptos_rotados.length; i+=3) {
-                this.sides_uv_buf.push(4.0 * i / ptos_rotados.length);
-                this.sides_uv_buf.push(1.0 * rotacion / Math.PI);
+                this.sides_uv_buf.push(this.scale_factor_u * 4.0 * i / ptos_rotados.length);
+                this.sides_uv_buf.push(this.scale_factor_v * 1.0 * rotacion / Math.PI);
             }
         }
 

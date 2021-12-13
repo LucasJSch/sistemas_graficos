@@ -111,7 +111,7 @@ class PanelsProgram extends ShaderProgram {
         // this.unifs.cilindricoSampler = gl.getUniformLocation(this.program, "uCilindricoSampler");
         this.cilindricoTexture = new Texture("js/assets/textures/cilindrico.jpg");
 
-        this.esfericoTexture = new Texture("js/assets/textures/modulo-esferico.jpg");
+        this.esfericoTexture = new Texture("js/assets/textures/esferico.jpg");
     }
 
     setearParametros() {
@@ -119,15 +119,18 @@ class PanelsProgram extends ShaderProgram {
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.panelTexture.gl_tex);
-        gl.uniform1i(this.unifs.panelSampler, 0);
+        // gl.uniform1i(this.unifs.panelSampler, 0);
 
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this.earthTexture.gl_tex);
-        gl.uniform1i(this.unifs.earthSampler, 1);
+        // gl.uniform1i(this.unifs.earthSampler, 1);
 
         gl.activeTexture(gl.TEXTURE2);
         gl.bindTexture(gl.TEXTURE_2D, this.cilindricoTexture.gl_tex);
-        gl.uniform1i(this.unifs.cilindricoSampler, 2);
+        // gl.uniform1i(this.unifs.cilindricoSampler, 2);
+
+        gl.activeTexture(gl.TEXTURE3);
+        gl.bindTexture(gl.TEXTURE_2D, this.esfericoTexture.gl_tex);
     }
 
     getClrBufPtr() {

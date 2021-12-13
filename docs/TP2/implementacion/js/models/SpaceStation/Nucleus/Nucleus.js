@@ -27,6 +27,7 @@ class Nucleus {
         
         var cyl_1 = new NucleusCylinder(this.shader, this.bezier_points_1, this.cyl_length_1);
         cyl_1.setTexture(this.texture1);
+        cyl_1.setScalingFactorUV(0.12, 0.5);
         var cyl_2 = new NucleusCylinder(this.shader, this.bezier_points_2, this.cyl_length_2);
         cyl_2.setTexture(this.texture2);
         var cyl_3 = new NucleusCylinder(this.shader, this.bezier_points_2, this.cyl_length_2);
