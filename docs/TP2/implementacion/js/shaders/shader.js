@@ -109,25 +109,29 @@ class PanelsProgram extends ShaderProgram {
         this.cilindricoTexture = new Texture("js/assets/textures/cilindrico.jpg");
         this.esfericoTexture = new Texture("js/assets/textures/esferico.jpg");
         this.moduloTexture = new Texture("js/assets/textures/modulo.jpg");
+        this.capsuleTexture = new Texture("js/assets/textures/shiphull.jpg");
     }
 
     setearParametros() {
         super.setearParametros();
 
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, this.panelTexture.gl_tex);
+        // gl.activeTexture(gl.TEXTURE0);
+        // gl.bindTexture(gl.TEXTURE_2D, this.panelTexture.gl_tex);
 
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, this.earthTexture.gl_tex);
+        // gl.activeTexture(gl.TEXTURE1);
+        // gl.bindTexture(gl.TEXTURE_2D, this.earthTexture.gl_tex);
 
-        gl.activeTexture(gl.TEXTURE2);
-        gl.bindTexture(gl.TEXTURE_2D, this.cilindricoTexture.gl_tex);
+        // gl.activeTexture(gl.TEXTURE2);
+        // gl.bindTexture(gl.TEXTURE_2D, this.cilindricoTexture.gl_tex);
 
-        gl.activeTexture(gl.TEXTURE3);
-        gl.bindTexture(gl.TEXTURE_2D, this.esfericoTexture.gl_tex);
+        // gl.activeTexture(gl.TEXTURE3);
+        // gl.bindTexture(gl.TEXTURE_2D, this.esfericoTexture.gl_tex);
 
-        gl.activeTexture(gl.TEXTURE4);
-        gl.bindTexture(gl.TEXTURE_2D, this.moduloTexture.gl_tex);
+        // gl.activeTexture(gl.TEXTURE4);
+        // gl.bindTexture(gl.TEXTURE_2D, this.moduloTexture.gl_tex);
+
+        // gl.activeTexture(gl.TEXTURE5);
+        // gl.bindTexture(gl.TEXTURE_2D, this.capsuleTexture.gl_tex);
     }
 
     getClrBufPtr() {
@@ -156,5 +160,9 @@ class PanelsProgram extends ShaderProgram {
 
     getModuloTexture() {
         return this.moduloTexture.gl_tex;
+    }
+
+    getCapsuleTexture() {
+        return this.capsuleTexture.gl_tex;
     }
 }

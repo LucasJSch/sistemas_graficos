@@ -3,8 +3,8 @@ class Planet {
     constructor(shader) {
         this.shader = shader;
         this.planet_color = [0.282352941, 0.45490196078, 0.61176470588];
-        this.n_rows = 100;
-        this.n_cols = 100;
+        this.n_rows = 20;
+        this.n_cols = 20;
         this.sphere = new Sphere(shader, this.planet_color, this.n_rows, this.n_cols);
     }
 

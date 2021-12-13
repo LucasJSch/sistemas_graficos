@@ -15,14 +15,13 @@ function drawScene(shader,
     gl.uniformMatrix4fv(shader.getProjMatrixPtr(), false, projMatrix);
     gl.uniformMatrix4fv(shader.getNormalMatrixPtr(), false, normalMatrix);
 
-    // var coord = new Coordinates(panelsShader);
-    // coord.setTexture(panelsShader.getPanelTexture());
+    // var coord = new Coordinates(shader);
+    // coord.setTexture(shader.getPanelTexture());
     // coord.draw();
-    // var cube = new ConvergedCube(panelsShader, [1.0, 0.0, 0.0], 1.0);
-    // cube.draw();
 
-    // var aux_t = mat4.create();
-    // var capsule = new Capsule(panelsShader);
+    var aux_t = mat4.create();
+    var capsule = new Capsule(shader);
+    capsule.setTexture(shader.getCapsuleTexture());
     
     var space_station = new SpaceStation(shader, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
     space_station.setPanelsTexture(shader.getPanelTexture());
@@ -39,5 +38,5 @@ function drawScene(shader,
     
     space_station.draw();
     planet.draw(planet_t);
-    // capsule.draw(capsule_controls.getMatrix());
+    capsule.draw(capsule_controls.getMatrix());
 }

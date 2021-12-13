@@ -58,7 +58,7 @@ function initMenu() {
     var gui = new dat.GUI();
     gui.add(window, "n_paneles_solares", 1, 10).step(1);
     gui.add(window, "angulo_paneles", 0, Math.PI * 2.0).step(0.1);
-    gui.add(window, "vel_rotacion_anillo", 0, 5.0).step(0.1);
+    gui.add(window, "vel_rotacion_anillo", 0, 2.0).step(0.1);
     gui.add(window, "n_secciones_nucleo", 2, 8).step(1);
 }
 

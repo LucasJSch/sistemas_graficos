@@ -61,9 +61,9 @@ class SpaceStation {
         mat4.mul(aux, transformMatrix, aux);
 
         this.rectangles.draw(aux);
-        // this.columns.draw(aux);
-        // this.cylinder.draw(transformMatrix);
+        this.columns.draw(aux);
+        this.cylinder.draw(transformMatrix);
         this.panels.draw(t_panels);
-        // this.center_cylinder.draw(center_cyl_t);
+        this.center_cylinder.draw(center_cyl_t);
     }
 }

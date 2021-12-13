@@ -3,7 +3,7 @@ class CircularRectangles {
         this.shader = shader;
         this.color = [0.184313725, 0.31372549, 0.31372549];
         // The curve in this case is the shape to draw multiple times.
-        this.n_curves_per_section = 12.0;
+        this.n_curves_per_section = 8.0;
         this.n_points_per_curve = 8.0;
 
         // Integer bigger than 3.

@@ -19,12 +19,17 @@ class Capsule {
         this.pos_buf = [];
         this.nrm_buf = [];
         this.clr_buf = [];
+        this.uv_buf = [];
 
         this.aleron_pos_buf = [];
         this.aleron_nrm_buf = [];
         this.aleron_clr_buf = [];
 
         this.utils = new Utils();
+    }
+
+    setTexture(texture) {
+        this.texture = texture;
     }
 
     draw(transformMatrix) {
@@ -35,7 +40,10 @@ class Capsule {
         this.generateBezierConcatenator();
         this.generateBuffers();
 
-        var capsula = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
+        var capsula = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal, this.uv_buf);
+        capsula.setTexture(this.texture);
+        console.log(this.texture);
+        console.log(this.uv_buf.length);
         var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.aleron_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         capsula.draw(transformMatrix);
         aleron.draw(transformMatrix);
@@ -64,6 +72,10 @@ class Capsule {
             const ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, ptos_base);
             for (var elem of ptos_rotados) {
                 this.pos_buf.push(elem);
+            }
+            for (var i = 0; i < ptos_rotados.length; i+=3) {
+                this.uv_buf.push(2.0 * i / ptos_rotados.length);
+                this.uv_buf.push(1.0 * rotacion / Math.PI);
             }
         }
 
