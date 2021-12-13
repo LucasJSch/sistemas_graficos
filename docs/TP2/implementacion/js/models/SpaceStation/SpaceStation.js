@@ -25,6 +25,10 @@ class SpaceStation {
         this.nucleus.setTexture1(texture);
     }
 
+    setModuloTexture(texture) {
+        this.rectangles.setTexture(texture);
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
@@ -56,7 +60,7 @@ class SpaceStation {
         mat4.fromRotation(aux, this.ring_rotation, [0.0, 1.0, 0.0]);
         mat4.mul(aux, transformMatrix, aux);
 
-        // this.rectangles.draw(aux);
+        this.rectangles.draw(aux);
         // this.columns.draw(aux);
         // this.cylinder.draw(transformMatrix);
         this.panels.draw(t_panels);

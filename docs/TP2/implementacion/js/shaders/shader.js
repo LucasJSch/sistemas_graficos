@@ -102,16 +102,13 @@ class PanelsProgram extends ShaderProgram {
         this.attribs.uv = gl.getAttribLocation(this.program, "aVertexUV");
         gl.enableVertexAttribArray(this.attribs.uv);
 
-        // this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
+        this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
         this.panelTexture = new Texture("js/assets/textures/paneles_solares.jpg");
-
-        // this.unifs.earthSampler = gl.getUniformLocation(this.program, "uEarthSampler");
+        
         this.earthTexture = new Texture("js/assets/textures/tierra.jpg");
-
-        // this.unifs.cilindricoSampler = gl.getUniformLocation(this.program, "uCilindricoSampler");
         this.cilindricoTexture = new Texture("js/assets/textures/cilindrico.jpg");
-
         this.esfericoTexture = new Texture("js/assets/textures/esferico.jpg");
+        this.moduloTexture = new Texture("js/assets/textures/modulo.jpg");
     }
 
     setearParametros() {
@@ -119,18 +116,18 @@ class PanelsProgram extends ShaderProgram {
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.panelTexture.gl_tex);
-        // gl.uniform1i(this.unifs.panelSampler, 0);
 
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this.earthTexture.gl_tex);
-        // gl.uniform1i(this.unifs.earthSampler, 1);
 
         gl.activeTexture(gl.TEXTURE2);
         gl.bindTexture(gl.TEXTURE_2D, this.cilindricoTexture.gl_tex);
-        // gl.uniform1i(this.unifs.cilindricoSampler, 2);
 
         gl.activeTexture(gl.TEXTURE3);
         gl.bindTexture(gl.TEXTURE_2D, this.esfericoTexture.gl_tex);
+
+        gl.activeTexture(gl.TEXTURE4);
+        gl.bindTexture(gl.TEXTURE_2D, this.moduloTexture.gl_tex);
     }
 
     getClrBufPtr() {
@@ -155,5 +152,9 @@ class PanelsProgram extends ShaderProgram {
 
     getModuloEsfericoTexture() {
         return this.esfericoTexture.gl_tex;
+    }
+
+    getModuloTexture() {
+        return this.moduloTexture.gl_tex;
     }
 }

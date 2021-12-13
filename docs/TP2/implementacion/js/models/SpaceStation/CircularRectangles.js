@@ -13,8 +13,13 @@ class CircularRectangles {
         this.grids = [];
 
         this.base_shape_pos = null;
+        this.uv_buf = [];
 
         this.utils = new Utils();
+    }
+
+    setTexture(texture) {
+        this.texture = texture;
     }
 
     draw(transformMatrix) {
@@ -30,11 +35,16 @@ class CircularRectangles {
             var pos_buf = [];
             var clr_buf = [];
             var nrm_buf = [];
+            var uv_buf = [];
             for (var angle = init_angle; angle <= end_angle; angle += this.angular_length_per_section / this.n_curves_per_section) {
                 var aux  = this.getShapePosBuf(angle);
                 // TODO: Use correct clr and nrm.
                 for (var elem of aux) {
                     pos_buf.push(elem);
+                }
+                for (var idx = 0; idx < aux.length; idx+=3) {
+                    uv_buf.push(1.0 * idx / aux.length + 0.0);
+                    uv_buf.push(0.5 * angle / (Math.PI/4.0) + 0.2);
                 }
             }
             for (var elem of pos_buf) {
@@ -69,9 +79,17 @@ class CircularRectangles {
             mat4.fromRotation(transformation, this.angular_length_per_section - this.angular_length_per_section / this.n_curves_per_section, [0.0, 1.0, 0.0]);
             top_pos_buf = this.utils.TransformPosBuffer(transformation, bottom_pos_buf);
 
-            this.grids.push(new Grid(this.shader, pos_buf, nrm_buf, clr_buf, /*n_rows=*/this.n_curves_per_section + 0.0, /*n_cols=*/this.n_points_per_curve + 1.0));
-            this.grids.push(new Fan(this.shader, bottom_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0));
-            this.grids.push(new Fan(this.shader, top_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0));
+            var grid = new Grid(this.shader, pos_buf, nrm_buf, clr_buf, /*n_rows=*/this.n_curves_per_section + 0.0, /*n_cols=*/this.n_points_per_curve + 1.0, uv_buf);
+            grid.setTexture(this.texture);
+            this.grids.push(grid);
+
+            var bottom_fan = new Fan(this.shader, bottom_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0);
+            bottom_fan.setTexture(this.texture);
+            this.grids.push(bottom_fan);
+
+            var bottom_fan = new Fan(this.shader, top_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0);
+            bottom_fan.setTexture(this.texture);
+            this.grids.push(bottom_fan);
         }
 
         for (var grid of this.grids) {
