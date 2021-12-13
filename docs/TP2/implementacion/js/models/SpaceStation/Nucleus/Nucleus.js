@@ -11,6 +11,14 @@ class Nucleus {
         this.utils = new Utils();
     }
 
+    setTexture1(texture) {
+        this.texture1 = texture;
+    }
+
+    setTexture2(texture) {
+        this.texture2 = texture;
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
@@ -18,8 +26,11 @@ class Nucleus {
 
         
         var cyl_1 = new NucleusCylinder(this.shader, this.bezier_points_1, this.cyl_length_1);
+        cyl_1.setTexture(this.texture1);
         var cyl_2 = new NucleusCylinder(this.shader, this.bezier_points_2, this.cyl_length_2);
+        cyl_2.setTexture(this.texture2);
         var cyl_3 = new NucleusCylinder(this.shader, this.bezier_points_2, this.cyl_length_2);
+        cyl_3.setTexture(this.texture2);
         
         var cyl_2_t = mat4.create();
         var cyl_3_t = mat4.create();

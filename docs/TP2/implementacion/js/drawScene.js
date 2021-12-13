@@ -26,6 +26,8 @@ function drawScene(shader,
     
     var space_station = new SpaceStation(shader, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
     space_station.setPanelsTexture(shader.getPanelTexture());
+    space_station.setModuloCilindricoTexture(shader.getModuloCilindricoTexture());
+    space_station.setModuloEsfericoTexture(shader.getModuloEsfericoTexture());
     
     var planet = new Planet(shader);
     planet.setTexture(shader.getEarthTexture());

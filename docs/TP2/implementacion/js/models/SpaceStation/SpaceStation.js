@@ -17,6 +17,14 @@ class SpaceStation {
         this.panels.setTexture(texture);
     }
 
+    setModuloCilindricoTexture(texture) {
+        this.nucleus.setTexture2(texture);
+    }
+
+    setModuloEsfericoTexture(texture) {
+        this.nucleus.setTexture1(texture);
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
@@ -35,7 +43,7 @@ class SpaceStation {
         mat4.fromTranslation(aux, [0.0, -7.0, 0.0]);
         mat4.mul(t, aux, t);
         mat4.mul(t, transformMatrix, t);
-        // this.nucleus.draw(t);
+        this.nucleus.draw(t);
 
         var center_cyl_t = mat4.create();
         mat4.fromRotation(aux, Math.PI / 2.0, [1.0, 0.0, 0.0]);

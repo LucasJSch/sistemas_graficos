@@ -15,17 +15,24 @@ class NucleusCylinder {
         this.sides_pos_buf = [];
         this.sides_nrm_buf = [];
         this.sides_clr_buf = [];
+        this.sides_uv_buf = [];
 
         this.bottom_pos_buf = [];
         this.bottom_nrm_buf = [];
         this.bottom_clr_buf = [];
+        this.bottom_uv_buf = [];
 
         this.top_pos_buf = [];
         this.top_nrm_buf = [];
         this.top_clr_buf = [];
+        this.top_uv_buf = [];
 
         this.ptos_base = [];
         this.utils = new Utils();
+    }
+
+    setTexture(texture) {
+        this.texture = texture;
     }
 
     draw(transformMatrix) {
@@ -39,9 +46,12 @@ class NucleusCylinder {
         this.generateTopBottomBuffers();
         this.applyTransformMatrix(transformMatrix);
 
-        var sides_grid = new Grid(this.shader, this.sides_pos_buf, this.sides_nrm_buf, this.sides_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
-        var top_grid = new Grid(this.shader, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0));
-        var bottom_grid = new Grid(this.shader, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0));
+        var sides_grid = new Grid(this.shader, this.sides_pos_buf, this.sides_nrm_buf, this.sides_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal, this.sides_uv_buf);
+        sides_grid.setTexture(this.texture);
+        var top_grid = new Grid(this.shader, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0), this.top_uv_buf);
+        top_grid.setTexture(this.texture);
+        var bottom_grid = new Grid(this.shader, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0), this.bottom_uv_buf);
+        bottom_grid.setTexture(this.texture);
         sides_grid.draw();
         top_grid.draw();
         bottom_grid.draw();
@@ -79,6 +89,10 @@ class NucleusCylinder {
             for (var elem of ptos_rotados) {
                 this.sides_pos_buf.push(elem);
             }
+            for (var i = 0; i < ptos_rotados.length; i+=3) {
+                this.sides_uv_buf.push(4.0 * i / ptos_rotados.length);
+                this.sides_uv_buf.push(1.0 * rotacion / Math.PI);
+            }
         }
 
         for (var i = 0; i < this.sides_pos_buf.length; i += 3) {
@@ -109,6 +123,10 @@ class NucleusCylinder {
             for (var elem of rotated_point) {
                 this.bottom_pos_buf.push(elem);
             }
+            this.bottom_uv_buf.push(0.1);
+            this.bottom_uv_buf.push(0.1);
+            this.top_uv_buf.push(0.1);
+            this.top_uv_buf.push(0.1);
         }
         this.bottom_pos_buf.push(this.bottom_pos_buf[0]);
         this.bottom_pos_buf.push(this.bottom_pos_buf[1]);

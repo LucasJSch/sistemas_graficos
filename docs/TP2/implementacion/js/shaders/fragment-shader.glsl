@@ -5,7 +5,7 @@ varying vec3 vColor;
 varying highp vec3 vLighting;
 
 /*********** Textures ***********/
-uniform sampler2D uPanelsSampler;
+// uniform sampler2D uPanelsSampler;
 varying vec2 vUV;
 /********************************/
 

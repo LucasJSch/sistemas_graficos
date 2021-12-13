@@ -102,11 +102,16 @@ class PanelsProgram extends ShaderProgram {
         this.attribs.uv = gl.getAttribLocation(this.program, "aVertexUV");
         gl.enableVertexAttribArray(this.attribs.uv);
 
-        this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
+        // this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
         this.panelTexture = new Texture("js/assets/textures/paneles_solares.jpg");
 
-        this.unifs.earthSampler = gl.getUniformLocation(this.program, "uEarthSampler");
+        // this.unifs.earthSampler = gl.getUniformLocation(this.program, "uEarthSampler");
         this.earthTexture = new Texture("js/assets/textures/tierra.jpg");
+
+        // this.unifs.cilindricoSampler = gl.getUniformLocation(this.program, "uCilindricoSampler");
+        this.cilindricoTexture = new Texture("js/assets/textures/cilindrico.jpg");
+
+        this.esfericoTexture = new Texture("js/assets/textures/modulo-esferico.jpg");
     }
 
     setearParametros() {
@@ -119,6 +124,10 @@ class PanelsProgram extends ShaderProgram {
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, this.earthTexture.gl_tex);
         gl.uniform1i(this.unifs.earthSampler, 1);
+
+        gl.activeTexture(gl.TEXTURE2);
+        gl.bindTexture(gl.TEXTURE_2D, this.cilindricoTexture.gl_tex);
+        gl.uniform1i(this.unifs.cilindricoSampler, 2);
     }
 
     getClrBufPtr() {
@@ -135,5 +144,13 @@ class PanelsProgram extends ShaderProgram {
 
     getEarthTexture() {
         return this.earthTexture.gl_tex;
+    }
+
+    getModuloCilindricoTexture() {
+        return this.cilindricoTexture.gl_tex;
+    }
+
+    getModuloEsfericoTexture() {
+        return this.esfericoTexture.gl_tex;
     }
 }
