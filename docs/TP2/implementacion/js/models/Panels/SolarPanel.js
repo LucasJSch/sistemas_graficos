@@ -9,8 +9,6 @@ class SolarPanel {
     }
 
     setTexture(texture) {
-        console.log(texture);
-        this.cylinder.setTexture(texture);
         this.plane.setTexture(texture);
     }
 
@@ -39,6 +37,6 @@ class SolarPanel {
 
         mat4.mul(t_plane, transformMatrix, t_plane);
 
-        // this.plane.draw(t_plane);
+        this.plane.draw(t_plane);
     }
 }

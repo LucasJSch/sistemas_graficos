@@ -15,7 +15,6 @@ class Cylinder {
 
     setTexture(texture) {
         this.texture = texture;
-        console.log(texture);
     }
 
     draw(transformMatrix) {
@@ -40,7 +39,6 @@ class Cylinder {
         var top_color_buffer = this.shapeGen.getColorBuffer(this.vCentralTopPos);
         this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer, top_pos_uv_buffer);
         this.top_fan.setTexture(this.texture);
-        console.log(this.top_fan.texture);
 
         var bottom_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralBottomPos);
         var bottom_pos_uv_buffer = this.shapeGen.getUVBuffer(this.vCentralBottomPos);

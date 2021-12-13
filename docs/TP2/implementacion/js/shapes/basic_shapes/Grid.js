@@ -42,10 +42,6 @@ class Grid {
     }
 
     setupBuffers() {
-        // if (this.uv_buffer.length) {
-        //     console.log(this.uv_buffer.length);
-        //     console.log(this.position_buffer.length);
-        // }
         // 1. Creamos un buffer para las posiciones dentro del pipeline.
         this.webgl_position_buffer = gl.createBuffer();
         // 2. Le decimos a WebGL que las siguientes operaciones que vamos a ser se aplican sobre el buffer que

@@ -13,9 +13,8 @@ class SpaceStation {
         this.center_cylinder = new Cylinder(shader, [0.0, 0.82, 0.12])
     }
 
-    setTexture(texture) {
+    setPanelsTexture(texture) {
         this.panels.setTexture(texture);
-        this.center_cylinder.setTexture(texture);
     }
 
     draw(transformMatrix) {

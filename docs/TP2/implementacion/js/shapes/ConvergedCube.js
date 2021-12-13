@@ -16,6 +16,10 @@ class ConvergedCube {
         this.top_fan_uv_buf = [];
     }
 
+    setTexture(texture) {
+        this.texture = texture;
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
@@ -23,6 +27,7 @@ class ConvergedCube {
 
         this.shapeGen = new ConvergedCubeShapeGenerator(this.vColor, this.vCentralTopPos, this.vCentralBottomPos, this.scaleFactor);
         this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
+        this.sides.setTexture(this.texture);
         this.createTopAndBottomFans();
         this.sides.draw(transformMatrix);
         this.top_fan.draw(transformMatrix);
@@ -51,6 +56,7 @@ class ConvergedCube {
         this.top_fan_uv_buf = this.top_fan_uv_buf.concat(this.shapeGen.getUVBuffer_internal(this.vCentralTopPos));
 
         this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer, this.top_fan_uv_buf);
+        this.top_fan.setTexture(this.texture);
 
         var bottom_pos_buffer = [];
         bottom_pos_buffer.push(this.vCentralBottomPos[0]);
@@ -70,6 +76,7 @@ class ConvergedCube {
         bottom_color_buffer.push(bottom_color_buffer[1]);
         bottom_color_buffer.push(bottom_color_buffer[2]);
         this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer, this.top_fan_uv_buf);
+        this.bottom_fan.setTexture(this.texture);
     }
 }
 

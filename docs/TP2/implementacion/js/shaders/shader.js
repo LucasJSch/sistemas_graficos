@@ -115,6 +115,10 @@ class PanelsProgram extends ShaderProgram {
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.panelTexture.gl_tex);
         gl.uniform1i(this.unifs.panelSampler, 0);
+
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, this.earthTexture.gl_tex);
+        gl.uniform1i(this.unifs.earthSampler, 1);
     }
 
     getClrBufPtr() {
@@ -131,37 +135,5 @@ class PanelsProgram extends ShaderProgram {
 
     getEarthTexture() {
         return this.earthTexture.gl_tex;
-    }
-}
-
-class EarthProgram extends ShaderProgram {
-    constructor() {
-        super(MAIN_VRTXSHADER_SRC, EARTH_FRAGMENT_SHADER_SRC);
-
-        this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
-        gl.enableVertexAttribArray(this.attribs.color);
-
-        this.attribs.uv = gl.getAttribLocation(this.program, "aVertexUV");
-        gl.enableVertexAttribArray(this.attribs.uv);
-
-        this.unifs.earthSampler = gl.getUniformLocation(this.program, "uEarthSampler");
-        this.earthTexture = new Texture("js/assets/textures/tierra.jpg");
-        
-    }
-
-    setearParametros() {
-        super.setearParametros();
-
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, this.earthTexture.gl_tex);
-        gl.uniform1i(this.unifs.earthSampler, 1);
-    }
-
-    getClrBufPtr() {
-        return this.attribs.color;
-    }
-
-    getUvBufPtr() {
-        return this.attribs.uv;
     }
 }

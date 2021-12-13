@@ -9,10 +9,10 @@ class Fan {
         this.uv_buffer = uv_buffer;
         this.texture = null;
 
-        console.log("pos buffer len: " + position_buffer.length);
-        console.log("normal_buffer len: " + normal_buffer.length);
-        console.log("color_buffer len: " + color_buffer.length);
-        console.log("uv_buffer len: " + uv_buffer.length);
+        // console.log("pos buffer len: " + position_buffer.length);
+        // console.log("normal_buffer len: " + normal_buffer.length);
+        // console.log("color_buffer len: " + color_buffer.length);
+        // console.log("uv_buffer len: " + uv_buffer.length);
     }
 
     setTexture(texture) {
@@ -86,7 +86,6 @@ class Fan {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
         gl.vertexAttribPointer(this.shader.getUvBufPtr(), 2, gl.FLOAT, false, 0, 0);
         gl.activeTexture(gl.TEXTURE0);
-        console.log(this.texture);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
