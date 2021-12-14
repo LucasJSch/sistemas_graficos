@@ -3,7 +3,8 @@ class ShaderProgram {
         var vertexShader = buildShader(gl, vertexSrc, "vertex");
 
         // agregar utils a frag shader
-        fragmentSrc = fragmentSrc +  UTILS_SHADER_SRC;
+        fragmentSrc = UTILS_SHADER_SRC + fragmentSrc;
+        console.log(fragmentSrc);
         var fragmentShader = buildShader(gl, fragmentSrc, "fragment");
 
         this.program = gl.createProgram();
