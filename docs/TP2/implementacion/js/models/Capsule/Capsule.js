@@ -57,19 +57,31 @@ class Capsule {
 
     generateBuffers() {
         var ptos_base = [];
+        var nrm_base = [];
         for (var i = 0; i < this.ptos_longitudinal; i++) {
             var aux = this.bezier_concatenator.getPoint(this.n_points_bezier * i / this.ptos_longitudinal);
             ptos_base.push(aux[0]);
             ptos_base.push(aux[1]);
             ptos_base.push(aux[2]);
+
+            aux = this.bezier_concatenator.getSecondDerivative(this.n_points_bezier * i / this.ptos_longitudinal);
+            nrm_base.push(aux[0]);
+            nrm_base.push(aux[1]);
+            nrm_base.push(aux[2]);
         }
 
         var t_rotacion = mat4.create();
+        var t_rotacion_nrm = mat4.create();
         for (var rotacion = 0.0; rotacion <= 2.0 * Math.PI; rotacion += this.diferencial_rotacion) {
             mat4.fromRotation(t_rotacion, rotacion, [0.0, -1.0, 0.0]);
+            mat4.fromRotation(t_rotacion_nrm, rotacion, [0.0, 1.0, 0.0]);
             const ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, ptos_base);
+            const nrm_rotados = this.utils.TransformPosBuffer(t_rotacion_nrm, nrm_base);
             for (var elem of ptos_rotados) {
                 this.pos_buf.push(elem);
+            }
+            for (var elem of nrm_rotados) {
+                this.nrm_buf.push(elem);
             }
             for (var i = 0; i < ptos_rotados.length; i+=3) {
                 this.uv_buf.push(2.0 * i / ptos_rotados.length);
@@ -77,22 +89,15 @@ class Capsule {
             }
         }
 
-        for (var i = 0; i < this.pos_buf.length; i += 3) {
-            this.clr_buf.push(this.color[0]);
-            this.clr_buf.push(this.color[1]);
-            this.clr_buf.push(this.color[2]);
+        for (var i = 0; i < this.pos_buf.length; i += 1) {
+            // this.clr_buf.push(this.color[0]);
+            // this.clr_buf.push(this.color[1]);
+            // this.clr_buf.push(this.color[2]);
 
-            // Genero normal cada 3 puntos (i.e. 1 por triangulo)
-            if (i < 6) {
-                continue;
-            }
-            var nrm = this.utils.GetTriangNormal(
-                [this.pos_buf[i-6], this.pos_buf[i-5], this.pos_buf[i-4]],
-                [this.pos_buf[i-3], this.pos_buf[i-2], this.pos_buf[i-1]],
-                [this.pos_buf[i], this.pos_buf[i+1], this.pos_buf[i+2]]);
-            this.nrm_buf.push(nrm[0]);
-            this.nrm_buf.push(nrm[1]);
-            this.nrm_buf.push(nrm[2]);
+            // aux = this.bezier_concatenator.getSecondDerivative(this.n_points_bezier * i / this.pos_buf.length);
+            // this.nrm_buf.push(aux[0]);
+            // this.nrm_buf.push(aux[1]);
+            // this.nrm_buf.push(aux[2]);
         }
 
         var t = mat4.create();

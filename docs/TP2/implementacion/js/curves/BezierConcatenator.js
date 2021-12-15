@@ -34,6 +34,17 @@ class CubicBezierConcatenator {
         return this.beziers[curveNumber].getFirstDerivative(u);
     }
 
+    getSecondDerivative(t) {
+        var curveNumber = Math.floor(t);
+        var u = t % 1;
+
+        if (curveNumber > this.beziers.length-1) {
+            console.log("ERROR: Invalid t in CuadraticBsplineConcatenator. t = " + t);
+        }
+
+        return this.beziers[curveNumber].getSecondDerivative(u); 
+    }
+
     getNumberOfCurves() {
         return this.beziers.length;
     }

@@ -15,15 +15,15 @@ function drawScene(shader,
     gl.uniformMatrix4fv(shader.getProjMatrixPtr(), false, projMatrix);
     gl.uniformMatrix4fv(shader.getNormalMatrixPtr(), false, normalMatrix);
 
-    var aux_t = mat4.create();
+    // var aux_t = mat4.create();
     // mat4.fromTranslation(aux_t, [180.0, 0.0, 30.0]);
 
     var coord = new Coordinates(shader);
     coord.setTexture(shader.getPanelTexture());
-    coord.draw(aux_t);
+    coord.draw();
 
-    // var capsule = new Capsule(shader);
-    // capsule.setTexture(shader.getCapsuleTexture());
+    var capsule = new Capsule(shader);
+    capsule.setTexture(shader.getCapsuleTexture());
     
     // var space_station = new SpaceStation(shader, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
     // space_station.setPanelsTexture(shader.getPanelTexture());
@@ -47,14 +47,14 @@ function drawScene(shader,
     // mat4.fromTranslation(aux_t, [200.0, 0.0, 30.0]);
     // mat4.mul(sun_t, aux_t, sun_t);
 
-    // space_station.draw();
-    // earth.draw(earth_t);
+    // // space_station.draw();
+    // // earth.draw(earth_t);
     // sun.draw(sun_t);
-    // capsule.draw(capsule_controls.getMatrix());
+    capsule.draw(capsule_controls.getMatrix());
 
     var aux = mat4.create();
     mat4.fromTranslation(aux, [0.0, 0.0, -5.0]);
-    var cyl = new Sphere(shader, [1.0, 0.0, 0.0]);
+    var cyl = new Capsule(shader);
     cyl.setTexture(shader.getEarthTexture());
     cyl.draw(aux);
 
@@ -73,39 +73,39 @@ function drawScene(shader,
     mat4.fromTranslation(aux, [-5.0, 0.0, 0.0]);
     cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [5.0, 5.0, 0.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [5.0, 5.0, 0.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [5.0, -5.0, 0.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [5.0, -5.0, 0.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [-5.0, 5.0, 0.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [-5.0, 5.0, 0.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [-5.0, -5.0, 0.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [-5.0, -5.0, 0.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [5.0, 5.0, 5.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [5.0, 5.0, 5.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [5.0, -5.0, 5.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [5.0, -5.0, 5.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [-5.0, 5.0, 5.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [-5.0, 5.0, 5.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [-5.0, -5.0, 5.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [-5.0, -5.0, 5.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [5.0, 5.0, -5.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [5.0, 5.0, -5.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [5.0, -5.0, -5.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [5.0, -5.0, -5.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [-5.0, 5.0, -5.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [-5.0, 5.0, -5.0]);
+    // cyl.draw(aux);
 
-    mat4.fromTranslation(aux, [-5.0, -5.0, -5.0]);
-    cyl.draw(aux);
+    // mat4.fromTranslation(aux, [-5.0, -5.0, -5.0]);
+    // cyl.draw(aux);
 }
