@@ -33,12 +33,11 @@ class CircularRectangles {
             init_angle -= Math.PI / 2.0 + this.angular_length_per_section / 2.0;
             var end_angle = init_angle + this.angular_length_per_section;
             var pos_buf = [];
-            var clr_buf = [];
             var nrm_buf = [];
             var uv_buf = [];
             for (var angle = init_angle; angle <= end_angle; angle += this.angular_length_per_section / this.n_curves_per_section) {
                 var aux  = this.getShapePosBuf(angle);
-                // TODO: Use correct clr and nrm.
+                // TODO: Use correct nrm.
                 for (var elem of aux) {
                     pos_buf.push(elem);
                 }
@@ -48,9 +47,6 @@ class CircularRectangles {
                 }
             }
             for (var elem of pos_buf) {
-                clr_buf.push(this.color[0]);
-                clr_buf.push(this.color[1]);
-                clr_buf.push(this.color[2]);
                 // TODO: COmpute normal correctly.
                 nrm_buf.push(this.color[0]);
                 nrm_buf.push(this.color[1]);
@@ -60,16 +56,12 @@ class CircularRectangles {
             // Close the section's top and bottom
             var bottom_pos_buf = [];
             var bottom_nrm_buf = [];
-            var bottom_clr_buf = [];
             var top_pos_buf = [];
-            // TODO: Compute top normal and color vectors.
+            // TODO: Compute top normal vector.
             for (var i = 0; i <= this.n_points_per_curve; i++) {
                 bottom_pos_buf.push(pos_buf[i*3]);
                 bottom_pos_buf.push(pos_buf[i*3+1]);
                 bottom_pos_buf.push(pos_buf[i*3+2]);
-                bottom_clr_buf.push(this.color[0]);
-                bottom_clr_buf.push(this.color[1]);
-                bottom_clr_buf.push(this.color[2]);
                 // TODO: Compute normal correctly.
                 bottom_nrm_buf.push(this.color[0]);
                 bottom_nrm_buf.push(this.color[1]);
@@ -79,15 +71,15 @@ class CircularRectangles {
             mat4.fromRotation(transformation, this.angular_length_per_section - this.angular_length_per_section / this.n_curves_per_section, [0.0, 1.0, 0.0]);
             top_pos_buf = this.utils.TransformPosBuffer(transformation, bottom_pos_buf);
 
-            var grid = new Grid(this.shader, pos_buf, nrm_buf, clr_buf, /*n_rows=*/this.n_curves_per_section + 0.0, /*n_cols=*/this.n_points_per_curve + 1.0, uv_buf);
+            var grid = new Grid(this.shader, pos_buf, nrm_buf, this.color, /*n_rows=*/this.n_curves_per_section + 0.0, /*n_cols=*/this.n_points_per_curve + 1.0, uv_buf);
             grid.setTexture(this.texture);
             this.grids.push(grid);
 
-            var bottom_fan = new Fan(this.shader, bottom_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0);
+            var bottom_fan = new Fan(this.shader, bottom_pos_buf, bottom_nrm_buf, this.color, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0);
             bottom_fan.setTexture(this.texture);
             this.grids.push(bottom_fan);
 
-            var bottom_fan = new Fan(this.shader, top_pos_buf, bottom_nrm_buf, bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0);
+            var bottom_fan = new Fan(this.shader, top_pos_buf, bottom_nrm_buf, this.color, /*n_rows=*/2.0, /*n_cols=*/this.n_points_per_curve + 1.0);
             bottom_fan.setTexture(this.texture);
             this.grids.push(bottom_fan);
         }

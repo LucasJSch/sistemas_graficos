@@ -14,17 +14,14 @@ class NucleusCylinder {
 
         this.sides_pos_buf = [];
         this.sides_nrm_buf = [];
-        this.sides_clr_buf = [];
         this.sides_uv_buf = [];
 
         this.bottom_pos_buf = [];
         this.bottom_nrm_buf = [];
-        this.bottom_clr_buf = [];
         this.bottom_uv_buf = [];
 
         this.top_pos_buf = [];
         this.top_nrm_buf = [];
-        this.top_clr_buf = [];
         this.top_uv_buf = [];
 
         this.ptos_base = [];
@@ -54,11 +51,11 @@ class NucleusCylinder {
         this.generateTopBottomBuffers();
         this.applyTransformMatrix(transformMatrix);
 
-        var sides_grid = new Grid(this.shader, this.sides_pos_buf, this.sides_nrm_buf, this.sides_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal, this.sides_uv_buf);
+        var sides_grid = new Grid(this.shader, this.sides_pos_buf, this.sides_nrm_buf, this.color, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal, this.sides_uv_buf);
         sides_grid.setTexture(this.texture);
-        var top_grid = new Grid(this.shader, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0), this.top_uv_buf);
+        var top_grid = new Grid(this.shader, this.top_pos_buf, this.top_nrm_buf, this.color, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0), this.top_uv_buf);
         top_grid.setTexture(this.texture);
-        var bottom_grid = new Grid(this.shader, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0), this.bottom_uv_buf);
+        var bottom_grid = new Grid(this.shader, this.bottom_pos_buf, this.bottom_nrm_buf, this.color, /*n_rows=*/2.0, /*n_cols=*/((this.n_rows + 1.0) / 2.0), this.bottom_uv_buf);
         bottom_grid.setTexture(this.texture);
         sides_grid.draw();
         top_grid.draw();
@@ -104,10 +101,6 @@ class NucleusCylinder {
         }
 
         for (var i = 0; i < this.sides_pos_buf.length; i += 3) {
-            this.sides_clr_buf.push(this.color[0]);
-            this.sides_clr_buf.push(this.color[1]);
-            this.sides_clr_buf.push(this.color[2]);
-
             // Genero normal cada 3 puntos (i.e. 1 por triangulo)
             if (i < 6) {
                 continue;
@@ -145,13 +138,6 @@ class NucleusCylinder {
         this.top_pos_buf = this.utils.TransformPosBuffer(t_traslacion, this.bottom_pos_buf);
 
         for (var i = 0; i < this.bottom_pos_buf.length; i += 3) {
-            this.bottom_clr_buf.push(this.color[0]);
-            this.bottom_clr_buf.push(this.color[1]);
-            this.bottom_clr_buf.push(this.color[2]);
-            this.top_clr_buf.push(this.color[0]);
-            this.top_clr_buf.push(this.color[1]);
-            this.top_clr_buf.push(this.color[2]);
-
             // Genero normal cada 3 puntos (i.e. 1 por triangulo)
             if (i < 6) {
                 continue;

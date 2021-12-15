@@ -7,7 +7,6 @@ class Sphere {
         this.n_cols = n_cols;
         this.pos_buf = [];
         this.nrm_buf = [];
-        this.clr_buf = [];
         this.uv_buf = [];
 
         this.utils = new Utils();
@@ -24,7 +23,7 @@ class Sphere {
 
         this.generateBuffers();
 
-        var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, this.n_rows, this.n_cols, this.uv_buf);
+        var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.vColor, this.n_rows, this.n_cols, this.uv_buf);
         grid.setTexture(this.texture);
         grid.draw(transformMatrix);
     }
@@ -63,10 +62,6 @@ class Sphere {
                 this.pos_buf.push(x);
                 this.pos_buf.push(y);
                 this.pos_buf.push(z);
-
-                this.clr_buf.push(1.0);
-                this.clr_buf.push(0.0);
-                this.clr_buf.push(0.0);
             }
         }
     }

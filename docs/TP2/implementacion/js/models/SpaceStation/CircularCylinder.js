@@ -11,7 +11,6 @@ class CircularCylinder {
 
         this.pos_buf = [];
         this.nrm_buf = [];
-        this.clr_buf = [];
 
         this.base_shape_pos = null;
 
@@ -27,14 +26,13 @@ class CircularCylinder {
             var pos = this.getShapePosBuf(angle);
             for (var elem of pos) {
                 this.pos_buf.push(elem);
-                // TODO: Use correct clr and nrm.
-                this.clr_buf.push(0.5);
+                // TODO: Use correct nrm.
                 this.nrm_buf.push(0.33);
             }
         }
 
 
-        var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_curves + 1.0, /*n_cols=*/this.n_points_per_curve + 1.0);
+        var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.color, /*n_rows=*/this.n_curves + 1.0, /*n_cols=*/this.n_points_per_curve + 1.0);
         grid.draw(transformMatrix);
     }
 

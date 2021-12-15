@@ -18,12 +18,10 @@ class Capsule {
 
         this.pos_buf = [];
         this.nrm_buf = [];
-        this.clr_buf = [];
         this.uv_buf = [];
 
         this.aleron_pos_buf = [];
         this.aleron_nrm_buf = [];
-        this.aleron_clr_buf = [];
 
         this.utils = new Utils();
     }
@@ -40,9 +38,9 @@ class Capsule {
         this.generateBezierConcatenator();
         this.generateBuffers();
 
-        var capsula = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal, this.uv_buf);
+        var capsula = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.color, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal, this.uv_buf);
         capsula.setTexture(this.texture);
-        var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.aleron_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
+        var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.color_aleron, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         capsula.draw(transformMatrix);
         aleron.draw(transformMatrix);
     }
@@ -87,28 +85,12 @@ class Capsule {
             }
         }
 
-        // for (var i = 0; i < this.pos_buf.length; i += 1) {
-        //     // this.clr_buf.push(this.color[0]);
-        //     // this.clr_buf.push(this.color[1]);
-        //     // this.clr_buf.push(this.color[2]);
-
-        //     // aux = this.bezier_concatenator.getSecondDerivative(this.n_points_bezier * i / this.pos_buf.length);
-        //     // this.nrm_buf.push(aux[0]);
-        //     // this.nrm_buf.push(aux[1]);
-        //     // this.nrm_buf.push(aux[2]);
-        // }
-
         var t = mat4.create();
         var aux = mat4.create();
         mat4.fromScaling(t, [0.5, 0.5, 0.75]);
         mat4.fromTranslation(aux, [0.0, 1.0, 0.0]);
         mat4.mul(t, aux, t);
         this.aleron_pos_buf = this.utils.TransformPosBuffer(t, this.pos_buf);
-        for (var i = 0; i < this.clr_buf.length; i+= 3) {
-            this.aleron_clr_buf.push(this.color_aleron[0]);
-            this.aleron_clr_buf.push(this.color_aleron[1]);
-            this.aleron_clr_buf.push(this.color_aleron[2]);
-        }
         this.aleron_nrm_buf = Array.from(this.nrm_buf);
     }
 }
