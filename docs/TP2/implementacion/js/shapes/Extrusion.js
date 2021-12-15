@@ -49,7 +49,7 @@ class Extrusion {
             this.n_cols = (buffers[0].length/3);
             this.pos_buffer = this.pos_buffer.concat(buffers[0]);
             this.normal_buffer = this.normal_buffer.concat(buffers[1]);
-            this.uv_buffer = this.uv_buffer.concat(buffers[4]);
+            this.uv_buffer = this.uv_buffer.concat(buffers[3]);
         }
     }
 
