@@ -37,12 +37,6 @@ class Capsule {
             transformMatrix = mat4.create();
         }
 
-        var normalMatrix = mat4.clone(transformMatrix);
-
-        mat4.invert(normalMatrix, normalMatrix);
-        mat4.transpose(normalMatrix, normalMatrix);
-        gl.uniformMatrix4fv(this.shader.getNormalMatrixPtr(), false, normalMatrix);
-
         this.generateBezierConcatenator();
         this.generateBuffers();
 
@@ -50,7 +44,7 @@ class Capsule {
         capsula.setTexture(this.texture);
         var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.aleron_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         capsula.draw(transformMatrix);
-        // aleron.draw(transformMatrix);
+        aleron.draw(transformMatrix);
     }
 
     generateBezierConcatenator() {

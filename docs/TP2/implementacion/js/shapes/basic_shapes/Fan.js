@@ -8,11 +8,6 @@ class Fan {
         this.index_buffer = null;
         this.uv_buffer = uv_buffer;
         this.texture = null;
-
-        // console.log("pos buffer len: " + position_buffer.length);
-        // console.log("normal_buffer len: " + normal_buffer.length);
-        // console.log("color_buffer len: " + color_buffer.length);
-        // console.log("uv_buffer len: " + uv_buffer.length);
     }
 
     setTexture(texture) {
@@ -23,6 +18,12 @@ class Fan {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
         }
+
+        var normalMatrix = mat4.clone(transformMatrix);
+
+        mat4.invert(normalMatrix, normalMatrix);
+        mat4.transpose(normalMatrix, normalMatrix);
+        gl.uniformMatrix4fv(this.shader.getNormalMatrixPtr(), false, normalMatrix);
 
         this.createIndexBuffer();
         this.applyTransformation(transformMatrix);

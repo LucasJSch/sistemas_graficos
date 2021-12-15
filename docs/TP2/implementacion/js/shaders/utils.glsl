@@ -24,8 +24,8 @@ const vec3 NULL_VECTOR = vec3(0.);
 
 vec3 ks = vec3(.75);
 
-const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.));
-// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR);
+// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.));
+const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR);
 
 vec3 vector_to_light_source(Light light) {
     vec3 res;

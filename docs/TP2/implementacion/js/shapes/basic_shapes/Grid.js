@@ -20,6 +20,14 @@ class Grid {
             transformMatrix = mat4.create();
         }
         
+        var normalMatrix = mat4.clone(transformMatrix);
+
+        mat4.invert(normalMatrix, normalMatrix);
+        mat4.transpose(normalMatrix, normalMatrix);
+        gl.uniformMatrix4fv(this.shader.getNormalMatrixPtr(), false, normalMatrix);
+        console.log(normalMatrix);
+        console.log(transformMatrix);
+
         this.createIndexBuffer();
         this.applyTransformation(transformMatrix);
         this.setupBuffers();

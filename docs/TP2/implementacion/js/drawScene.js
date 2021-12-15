@@ -54,7 +54,7 @@ function drawScene(shader,
 
     // var aux = mat4.create();
     // mat4.fromTranslation(aux, [0.0, 0.0, -5.0]);
-    // var cyl = new Capsule(shader);
+    // var cyl = new Cylinder(shader, [1.0, 0.0, 0.0]);
     // cyl.setTexture(shader.getEarthTexture());
     // cyl.draw(aux);
 

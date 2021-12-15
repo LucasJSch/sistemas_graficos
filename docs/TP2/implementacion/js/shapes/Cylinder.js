@@ -119,8 +119,8 @@ class CylinderShapeGenerator {
     getUVBuffer() {
         var buffer = [];
         for (var i = 0; i < this.pointsPerCircle + 1; i++) {
-            buffer.push(Math.cos(i * Math.PI * 2.0 / this.pointsPerCircle));
-            buffer.push(Math.sin(i * Math.PI * 2.0 / this.pointsPerCircle));
+            buffer.push(Math.cos((i * Math.PI * 2.0 / this.pointsPerCircle) + 0.0));
+            buffer.push(Math.sin((i * Math.PI * 2.0 / this.pointsPerCircle) + 0.0));
         }
         return buffer;
     }

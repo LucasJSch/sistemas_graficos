@@ -28,22 +28,16 @@ class Extrusion {
         }
 
         this.createBuffers();
-        this.applyTransformation(transformMatrix);
 
         if (this.useFan) {
             var fan = new Fan(this.shader, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.top_uv_buffer);
             fan.setTexture(this.texture);
-            fan.draw();          
+            fan.draw(transformMatrix);          
         } else {
             var grid = new Grid(this.shader, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer);
             grid.setTexture(this.texture);
-            grid.draw();
+            grid.draw(transformMatrix);
         }
-    }
-
-    applyTransformation(transformMatrix) {
-        var utils = new Utils();
-        this.pos_buffer = utils.TransformPosBuffer(transformMatrix, this.pos_buffer);
     }
 
     createBuffers() {
