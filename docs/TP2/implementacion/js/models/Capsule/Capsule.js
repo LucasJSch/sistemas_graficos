@@ -37,6 +37,12 @@ class Capsule {
             transformMatrix = mat4.create();
         }
 
+        var normalMatrix = mat4.clone(transformMatrix);
+
+        mat4.invert(normalMatrix, normalMatrix);
+        mat4.transpose(normalMatrix, normalMatrix);
+        gl.uniformMatrix4fv(this.shader.getNormalMatrixPtr(), false, normalMatrix);
+
         this.generateBezierConcatenator();
         this.generateBuffers();
 
@@ -44,7 +50,7 @@ class Capsule {
         capsula.setTexture(this.texture);
         var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.aleron_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         capsula.draw(transformMatrix);
-        aleron.draw(transformMatrix);
+        // aleron.draw(transformMatrix);
     }
 
     generateBezierConcatenator() {
@@ -71,17 +77,15 @@ class Capsule {
         }
 
         var t_rotacion = mat4.create();
-        var t_rotacion_nrm = mat4.create();
         for (var rotacion = 0.0; rotacion <= 2.0 * Math.PI; rotacion += this.diferencial_rotacion) {
             mat4.fromRotation(t_rotacion, rotacion, [0.0, -1.0, 0.0]);
-            mat4.fromRotation(t_rotacion_nrm, rotacion, [0.0, 1.0, 0.0]);
             const ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, ptos_base);
-            const nrm_rotados = this.utils.TransformPosBuffer(t_rotacion_nrm, nrm_base);
+            const nrm_rotados = this.utils.TransformPosBuffer(t_rotacion, nrm_base);
             for (var elem of ptos_rotados) {
                 this.pos_buf.push(elem);
             }
             for (var elem of nrm_rotados) {
-                this.nrm_buf.push(elem);
+                this.nrm_buf.push(-elem);
             }
             for (var i = 0; i < ptos_rotados.length; i+=3) {
                 this.uv_buf.push(2.0 * i / ptos_rotados.length);
@@ -89,16 +93,16 @@ class Capsule {
             }
         }
 
-        for (var i = 0; i < this.pos_buf.length; i += 1) {
-            // this.clr_buf.push(this.color[0]);
-            // this.clr_buf.push(this.color[1]);
-            // this.clr_buf.push(this.color[2]);
+        // for (var i = 0; i < this.pos_buf.length; i += 1) {
+        //     // this.clr_buf.push(this.color[0]);
+        //     // this.clr_buf.push(this.color[1]);
+        //     // this.clr_buf.push(this.color[2]);
 
-            // aux = this.bezier_concatenator.getSecondDerivative(this.n_points_bezier * i / this.pos_buf.length);
-            // this.nrm_buf.push(aux[0]);
-            // this.nrm_buf.push(aux[1]);
-            // this.nrm_buf.push(aux[2]);
-        }
+        //     // aux = this.bezier_concatenator.getSecondDerivative(this.n_points_bezier * i / this.pos_buf.length);
+        //     // this.nrm_buf.push(aux[0]);
+        //     // this.nrm_buf.push(aux[1]);
+        //     // this.nrm_buf.push(aux[2]);
+        // }
 
         var t = mat4.create();
         var aux = mat4.create();
