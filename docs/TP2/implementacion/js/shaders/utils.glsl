@@ -2,8 +2,6 @@ precision mediump float;
 
 varying vec3 vNormal;
 varying vec3 vPosWorld;
-varying vec3 vColor;
-varying highp vec3 vLighting;
 varying vec3 vFromPointToCameraNormalized;
 uniform float uShininess;
 
@@ -20,9 +18,8 @@ struct Light {
     vec3 direction;
 };
 
-const vec3 NULL_VECTOR = vec3(0.);
-
 vec3 ks = vec3(.75);
+const vec3 NULL_VECTOR = vec3(0.0, 0.0, 0.0);
 
 // const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.));
 const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR);
@@ -54,6 +51,6 @@ vec3 compute_specular_intensity(Light light, vec3 ks_material, float shininness)
 
 vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float shininness) {
 
-    vec3 intensity = compute_diffuse_intensity(light, kd_material, 0.) + compute_specular_intensity(light, ks_material, shininness);
+    vec3 intensity = compute_diffuse_intensity(light, kd_material, 0.3) + compute_specular_intensity(light, ks_material, shininness);
     return intensity * light.color;
 }

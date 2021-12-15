@@ -1,8 +1,8 @@
 class Extrusion {
-    // shapeGenerator is an instance of a class that has 3 methods:
-    // getPosBuffer(central_point), getNormalBuffer(central_point), getColorBuffer(central_point)
+    // shapeGenerator is an instance of a class that has 2 methods:
+    // getPosBuffer(central_point), getNormalBuffer(central_point)
     // For a working example, see either the Cylinder class or the /tests/drawLinearExtrusion.js file.
-    constructor(shader, levels, vStartPos, vEndPos, shapeGenerator, useFan=false) {
+    constructor(shader, levels, vStartPos, vEndPos, shapeGenerator, vColor) {
         this.shader = shader;
         this.levels = levels;
         this.vStartPos = vStartPos;
@@ -12,10 +12,10 @@ class Extrusion {
         this.n_cols = null;
         this.pos_buffer = null;
         this.normal_buffer = null;
-        this.color_buffer = null;
+        this.vColor = vColor;
         this.uv_buffer = null;
 
-        this.useFan = useFan;
+        this.useFan = false;
     }
 
     setTexture(texture) {
@@ -30,11 +30,11 @@ class Extrusion {
         this.createBuffers();
 
         if (this.useFan) {
-            var fan = new Fan(this.shader, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.top_uv_buffer);
+            var fan = new Fan(this.shader, this.pos_buffer, this.normal_buffer, this.vColor, this.n_rows, this.n_cols, this.top_uv_buffer);
             fan.setTexture(this.texture);
             fan.draw(transformMatrix);          
         } else {
-            var grid = new Grid(this.shader, this.pos_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer);
+            var grid = new Grid(this.shader, this.pos_buffer, this.normal_buffer, this.vColor, this.n_rows, this.n_cols, this.uv_buffer);
             grid.setTexture(this.texture);
             grid.draw(transformMatrix);
         }
@@ -43,14 +43,12 @@ class Extrusion {
     createBuffers() {
         this.pos_buffer = [];
         this.normal_buffer = [];
-        this.color_buffer = [];
         this.uv_buffer = [];
         for (var level = 0; level < this.levels; level++) {
             var buffers = this.generateBuffersForLevel(level);
             this.n_cols = (buffers[0].length/3);
             this.pos_buffer = this.pos_buffer.concat(buffers[0]);
             this.normal_buffer = this.normal_buffer.concat(buffers[1]);
-            this.color_buffer = this.color_buffer.concat(buffers[2]);
             this.uv_buffer = this.uv_buffer.concat(buffers[4]);
         }
     }
@@ -88,9 +86,8 @@ class Extrusion {
 
         var pos_buffer = this.shapeGenerator.getPosBuffer(central_point);
         var normal_buffer = this.shapeGenerator.getNormalBuffer(central_point);
-        var color_buffer = this.shapeGenerator.getColorBuffer(central_point);
         var uv_buffer = this.shapeGenerator.getUVBuffer(topPos);
 
-        return [pos_buffer, normal_buffer, color_buffer, central_point, uv_buffer];
+        return [pos_buffer, normal_buffer, central_point, uv_buffer];
     }
 }

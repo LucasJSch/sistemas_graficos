@@ -22,8 +22,8 @@ class Cylinder {
             transformMatrix = mat4.create();
         }
 
-        this.shapeGen = new CylinderShapeGenerator(this.pointsPerCircle, this.radius, this.vColor);
-        this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
+        this.shapeGen = new CylinderShapeGenerator(this.pointsPerCircle, this.radius);
+        this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen, this.vColor);
         this.sides.setTexture(this.texture);
         this.createTopAndBottomFans();
         this.sides.draw(transformMatrix);
@@ -36,15 +36,13 @@ class Cylinder {
         var top_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralTopPos);
         var top_pos_uv_buffer = this.shapeGen.getUVBuffer(this.vCentralTopPos);
         var top_normal_buffer = this.getTopNormalBuffer();
-        var top_color_buffer = this.shapeGen.getColorBuffer(this.vCentralTopPos);
-        this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer, top_pos_uv_buffer);
+        this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, this.vColor, top_pos_uv_buffer);
         this.top_fan.setTexture(this.texture);
 
         var bottom_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralBottomPos);
         var bottom_pos_uv_buffer = this.shapeGen.getUVBuffer(this.vCentralBottomPos);
         var bottom_normal_buffer = this.getBottomNormalBuffer();
-        var bottom_color_buffer = this.shapeGen.getColorBuffer(this.vCentralBottomPos);
-        this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer, bottom_pos_uv_buffer);
+        this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, this.vColor, bottom_pos_uv_buffer);
         this.bottom_fan.setTexture(this.texture);
     }
 
@@ -70,10 +68,9 @@ class Cylinder {
 }
 
 class CylinderShapeGenerator {
-    constructor(pointsPerCircle, radius, vColor) {
+    constructor(pointsPerCircle, radius) {
         this.pointsPerCircle = pointsPerCircle;
         this.radius = radius;
-        this.vColor = vColor;
     }
     
     getPosBuffer(central_pos) {
@@ -106,16 +103,6 @@ class CylinderShapeGenerator {
         return buffer;
     }
         
-    getColorBuffer(central_pos) {
-        var buffer = [];
-        for (var i = 0; i < this.pointsPerCircle + 1; i++) {
-            buffer.push(this.vColor[0]);
-            buffer.push(this.vColor[1]);
-            buffer.push(this.vColor[2]);
-        }
-        return buffer;
-    }
-
     getUVBuffer() {
         var buffer = [];
         for (var i = 0; i < this.pointsPerCircle + 1; i++) {

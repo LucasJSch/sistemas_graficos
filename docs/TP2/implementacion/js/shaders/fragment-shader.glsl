@@ -1,24 +1,18 @@
 // precision highp float;
 // varying vec3 vNormal;
 // varying vec3 vPosWorld;
-// varying vec3 vColor;
-// varying highp vec3 vLighting;
 
-/*********** Textures ***********/
 uniform sampler2D uPanelsSampler;
-varying vec2 vUV;
-/********************************/
+uniform vec3 uColor;
 
-/************ Lights ************/
-// uniform vec3 uColor;
-/********************************/
+varying vec2 vUV;
+
 
 
 void main(void) {
     const int NUM_LIGHTS = 1;
+
     vec3 color_final = vec3(0.);
-
-
     vec3 kd = texture2D(uPanelsSampler, vec2(vUV.s, vUV.t)).xyz;
     vec3 ks = kd + vec3(.15);
 

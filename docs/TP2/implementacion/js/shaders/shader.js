@@ -77,36 +77,14 @@ class ShaderProgram {
 }
 
 
-class MainProgram extends ShaderProgram {
-    constructor() {
-        super(MAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
-
-        this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
-        gl.enableVertexAttribArray(this.attribs.color);
-    }
-
-    setearParametros() {
-        super.setearParametros();
-    }
-
-    getClrBufPtr() {
-        return this.attribs.color;
-    }
-
-
-
-
-}
-
 class PanelsProgram extends ShaderProgram {
     constructor() {
         super(MAIN_VRTXSHADER_SRC, FRAGMENT_SHADER_SRC);
 
-        this.attribs.color = gl.getAttribLocation(this.program, "aVertexColor");
-        gl.enableVertexAttribArray(this.attribs.color);
-
         this.attribs.uv = gl.getAttribLocation(this.program, "aVertexUV");
         gl.enableVertexAttribArray(this.attribs.uv);
+
+        this.unifs.uColor = gl.getUniformLocation(this.program, "uColor");
 
         this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
         this.panelTexture = new Texture("js/assets/textures/paneles_solares.jpg");
@@ -141,10 +119,6 @@ class PanelsProgram extends ShaderProgram {
         // gl.bindTexture(gl.TEXTURE_2D, this.capsuleTexture.gl_tex);
     }
 
-    getClrBufPtr() {
-        return this.attribs.color;
-    }
-
     getUvBufPtr() {
         return this.attribs.uv;
     }
@@ -175,5 +149,9 @@ class PanelsProgram extends ShaderProgram {
 
     getSunTexture() {
         return this.sunTexture.gl_tex;
+    }
+
+    getUniformColorPtr() {
+        return this.unifs.uColor;
     }
 }
