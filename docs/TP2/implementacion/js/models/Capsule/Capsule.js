@@ -42,8 +42,6 @@ class Capsule {
 
         var capsula = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal, this.uv_buf);
         capsula.setTexture(this.texture);
-        console.log(this.texture);
-        console.log(this.uv_buf.length);
         var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.aleron_clr_buf, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         capsula.draw(transformMatrix);
         aleron.draw(transformMatrix);

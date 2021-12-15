@@ -27,6 +27,7 @@ class ShaderProgram {
         this.attribs.normal = gl.getAttribLocation(this.program, "aVertexNormal");
         gl.enableVertexAttribArray(this.attribs.normal);
 
+        this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
         this.unifs.projMatrix = gl.getUniformLocation(this.program, "projMatrix");
         this.unifs.modelMatrix = gl.getUniformLocation(this.program, "modelMatrix");
         this.unifs.viewMatrix = gl.getUniformLocation(this.program, "viewMatrix");
@@ -68,6 +69,10 @@ class ShaderProgram {
 
     getNrmBufPtr() {
         return this.attribs.normal;
+    }
+
+    getShininessPtr() {
+        return this.unifs.shininess;
     }
 }
 
@@ -111,6 +116,7 @@ class PanelsProgram extends ShaderProgram {
         this.esfericoTexture = new Texture("js/assets/textures/esferico.jpg");
         this.moduloTexture = new Texture("js/assets/textures/modulo.jpg");
         this.capsuleTexture = new Texture("js/assets/textures/shiphull.jpg");
+        this.sunTexture = new Texture("js/assets/textures/sun.jpg");
     }
 
     setearParametros() {
@@ -165,5 +171,9 @@ class PanelsProgram extends ShaderProgram {
 
     getCapsuleTexture() {
         return this.capsuleTexture.gl_tex;
+    }
+
+    getSunTexture() {
+        return this.sunTexture.gl_tex;
     }
 }

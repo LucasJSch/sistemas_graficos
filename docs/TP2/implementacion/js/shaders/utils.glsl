@@ -4,6 +4,7 @@ varying vec3 vNormal;
 varying vec3 vPosWorld;
 varying vec3 vColor;
 varying highp vec3 vLighting;
+varying vec3 vFromPointToCameraNormalized;
 uniform float uShininess;
 
 // A.K.A. fuente de luz puntual
@@ -23,7 +24,8 @@ const vec3 NULL_VECTOR = vec3(0.);
 
 vec3 ks = vec3(.75);
 
-const Light sun_light = Light(DIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, vec3(-100.,-100.,-100.));
+// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.));
+const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR);
 
 vec3 vector_to_light_source(Light light) {
     vec3 res;
@@ -44,8 +46,14 @@ vec3 compute_diffuse_intensity(Light light, vec3 kd_material, float min_value) {
     return kd_material * max(dot(points_to_light, vNormal), min_value);
 }
 
+vec3 compute_specular_intensity(Light light, vec3 ks_material, float shininness) {
+    vec3 points_to_light = vector_to_light_source(light);
+    vec3 reflection = reflect(-points_to_light, vNormal);
+    return ks_material * pow(max(dot(reflection, vFromPointToCameraNormalized),0.), shininness);
+}
+
 vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float shininness) {
 
-    vec3 intensity = compute_diffuse_intensity(light, kd_material, 0.);
+    vec3 intensity = compute_diffuse_intensity(light, kd_material, 0.) + compute_specular_intensity(light, ks_material, shininness);
     return intensity * light.color;
 }

@@ -118,14 +118,29 @@ class ConvergedCubeShapeGenerator {
         return buffer;
     }
         
-    // TODO: Fix this. This is incorrect.
     getNormalBuffer(central_pos) {
         var buffer = [];
-        for (var i = 0; i < 5; i++) {
-            buffer.push(0.0);
-            buffer.push(0.0);
-            buffer.push(1.0);
-        }
+
+        buffer.push(1.0);
+        buffer.push(1.0);
+        buffer.push(0.0);
+
+        buffer.push(-1.0);
+        buffer.push(1.0);
+        buffer.push(0.0);
+
+        buffer.push(-1.0);
+        buffer.push(-1.0);
+        buffer.push(0.0);
+
+        buffer.push(1.0);
+        buffer.push(-1.0);
+        buffer.push(0.0);
+
+        buffer.push(1.0);
+        buffer.push(1.0);
+        buffer.push(0.0);
+
         return buffer;
     }
         

@@ -15,6 +15,7 @@ varying vec3 vNormal;
 varying vec3 vPosWorld;
 varying vec3 vColor;
 varying highp vec3 vLighting;
+varying vec3 vFromPointToCameraNormalized;
 
 /*********** Textures ***********/
 uniform sampler2D uPanelsSampler;
@@ -22,23 +23,12 @@ varying vec2 vUV;
 /********************************/
 
 void main(void) {
-    gl_Position = projMatrix * viewMatrix * modelMatrix * vec4(aVertexPosition, 1.0);
+    vec4 viewProd = viewMatrix * modelMatrix * vec4(aVertexPosition, 1.0);
+    gl_Position = projMatrix * viewProd;
+    vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
     
     vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;    // La posicion en coordenadas de mundo
-    vNormal=(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       // La normal en coordenadas de mundo
+    vNormal=normalize(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       // La normal en coordenadas de mundo
     vColor = aVertexColor;
-
-    /*********** Textures ***********/
     vUV = aVertexUV;
-    // vec4 textureColor = texture2D(uPanelsSampler, vec2(aVertexUV.s, aVertexUV.t));         
-    /********************************/
-    
-    /*********** Lighting ************/
-    highp vec3 ambientLight = vec3(0.4, 0.4, 0.4);
-    highp vec3 directionalLightColor = vec3(1, 1, 1);
-    highp vec3 directionalVector = normalize(vec3(0.0, 0.0, 1.0));
-    highp vec4 transformedNormal = normalMatrix * vec4(aVertexNormal, 1.0);
-    highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-    vLighting = ambientLight + (directionalLightColor * directional);
-    /********************************/
 }
