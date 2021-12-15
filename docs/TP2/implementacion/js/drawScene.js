@@ -47,10 +47,10 @@ function drawScene(shader,
     mat4.fromTranslation(aux_t, [200.0, 0.0, 30.0]);
     mat4.mul(sun_t, aux_t, sun_t);
 
-    space_station.draw();
+    // space_station.draw();
     earth.draw(earth_t);
     sun.draw(sun_t);
-    capsule.draw(capsule_controls.getMatrix());
+    // capsule.draw(capsule_controls.getMatrix());
 
     // var aux = mat4.create();
     // mat4.fromTranslation(aux, [0.0, 0.0, -5.0]);

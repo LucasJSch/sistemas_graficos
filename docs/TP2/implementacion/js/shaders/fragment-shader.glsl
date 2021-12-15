@@ -32,6 +32,6 @@ void main(void) {
 
     gl_FragColor = vec4(color_final,1.0);
 
-
-    // gl_FragColor = texture2D(uPanelsSampler, vec2(vUV.s, vUV.t)); 
+    // gl_FragColor = texture2D(uPanelsSampler, vec2(vUV.s, vUV.t));
+    // gl_FragColor = vec4(vUV.x, vUV.y, 0.0, 1.0); 
 }

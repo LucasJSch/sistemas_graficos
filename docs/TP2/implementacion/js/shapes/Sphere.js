@@ -24,7 +24,6 @@ class Sphere {
 
         this.generateBuffers();
 
-        // TODO: Change normal buffer as welll.
         var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, this.n_rows, this.n_cols, this.uv_buf);
         grid.setTexture(this.texture);
         grid.draw(transformMatrix);
@@ -34,14 +33,14 @@ class Sphere {
         var latNumber;
         var longNumber;
 
-        for (latNumber=0; latNumber <= this.n_rows; latNumber++) {
-            var theta = latNumber * Math.PI / (this.n_rows);
+        for (latNumber=0; latNumber < this.n_rows; latNumber++) {
+            var theta = latNumber * Math.PI / (this.n_rows-1);
             var sinTheta = Math.sin(theta);
             var cosTheta = Math.cos(theta);
 
 
             for (longNumber=0; longNumber < this.n_cols; longNumber++) {
-                var phi = longNumber * 2 * Math.PI / this.n_cols;
+                var phi = longNumber * 2 * Math.PI / (this.n_cols-1);
                 var sinPhi = Math.sin(phi);
                 var cosPhi = Math.cos(phi);
 
@@ -52,7 +51,7 @@ class Sphere {
                 var z = sinPhi * sinTheta*r;
 
                 var u =  (longNumber / this.n_cols);
-                var v = 1-(latNumber / this.n_rows);
+                var v = 1 - (latNumber / this.n_rows);
 
                 this.nrm_buf.push(x);
                 this.nrm_buf.push(y);

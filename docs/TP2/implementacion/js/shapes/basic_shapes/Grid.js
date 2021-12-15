@@ -14,7 +14,7 @@ class Grid {
     setTexture(texture) {
         this.texture = texture;
     }
-    
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
@@ -25,8 +25,6 @@ class Grid {
         mat4.invert(normalMatrix, normalMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
         gl.uniformMatrix4fv(this.shader.getNormalMatrixPtr(), false, normalMatrix);
-        console.log(normalMatrix);
-        console.log(transformMatrix);
 
         this.createIndexBuffer();
         this.applyTransformation(transformMatrix);
