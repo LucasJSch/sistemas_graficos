@@ -2,8 +2,8 @@ class Capsule {
     // Draws the capsule.
     constructor(shader) {
         this.shader = shader;
-        this.color = [0.823529412, 0.662745098, 0.53333333];
-        this.color_aleron = [0.1, 0.1, 0.1];
+        this.color = [0.0, 0.0, 0.0];
+        this.color_aleron = [0.0, 0.0, 0.0];
         this.bezier_points = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.5], [0.0, 0.0, 0.5],
                               [0.0, 0.0, 0.5], [0.0, 0.0, 0.75], [0.0, 0.0, 0.75], [0.0, -0.3, 0.9],
                               [0.0, -0.3, 0.9], [0.0, -1.0, 0.9], [0.0, -2.0, 0.8], [0.0, -2.3, 0.5],
@@ -22,6 +22,9 @@ class Capsule {
 
         this.aleron_pos_buf = [];
         this.aleron_nrm_buf = [];
+
+        this.red_light = new Cube(shader, [1.0, 0.0, 0.0]);
+        this.green_light = new Cube(shader, [0.0, 1.0, 0.0]);
 
         this.utils = new Utils();
     }
@@ -43,6 +46,21 @@ class Capsule {
         var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.color_aleron, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
         capsula.draw(transformMatrix);
         aleron.draw(transformMatrix);
+
+        var green_t = mat4.create();
+        var red_t = mat4.create();
+        var aux_t = mat4.create();
+        mat4.fromScaling(green_t, [0.2, 0.2, 0.2]);
+        mat4.fromScaling(red_t, [0.2, 0.2, 0.2]);
+        mat4.fromTranslation(aux_t, [0.8, -8.5, 0.0]);
+        mat4.mul(red_t, aux_t, red_t);
+        mat4.fromTranslation(aux_t, [-0.8, -8.5, 0.0]);
+        mat4.mul(green_t, aux_t, green_t);
+        mat4.mul(transformMatrix, green_t, green_t);
+        mat4.mul(transformMatrix, red_t, red_t);
+
+        this.red_light.draw(red_t);
+        this.green_light.draw(green_t);
     }
 
     generateBezierConcatenator() {
