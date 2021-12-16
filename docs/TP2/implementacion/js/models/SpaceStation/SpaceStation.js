@@ -20,12 +20,13 @@ class SpaceStation {
     setModuloCilindricoTexture(texture) {
         this.nucleus.setTexture2(texture);
     }
-
+    
     setModuloEsfericoTexture(texture) {
         this.nucleus.setTexture1(texture);
     }
-
+    
     setModuloTexture(texture) {
+        this.cylinder.setTexture(texture);
         this.rectangles.setTexture(texture);
     }
 

@@ -18,9 +18,9 @@ function drawScene(shader,
     // var aux_t = mat4.create();
     // mat4.fromTranslation(aux_t, [180.0, 0.0, 30.0]);
 
-    // var coord = new Coordinates(shader);
-    // coord.setTexture(shader.getPanelTexture());
-    // coord.draw();
+    var coord = new Coordinates(shader);
+    coord.setTexture(shader.getPanelTexture());
+    coord.draw();
 
     var capsule = new Capsule(shader, [1.0, 0.0, 0.0]);
     capsule.setTexture(shader.getCapsuleTexture());
@@ -48,27 +48,27 @@ function drawScene(shader,
     mat4.mul(sun_t, aux_t, sun_t);
 
     space_station.draw();
-    earth.draw(earth_t);
-    sun.draw(sun_t);
-    capsule.draw(capsule_controls.getMatrix());
+    // earth.draw(earth_t);
+    // sun.draw(sun_t);
+    // capsule.draw(capsule_controls.getMatrix());
 
     // var surround = new Cylinder(shader);
     // mat4.fromScaling(aux_t, [300.0, 300.0, 300.0]);
     // surround.draw(aux_t);
 
     // var aux = mat4.create();
-    // mat4.fromTranslation(aux, [0.0, 0.0, -5.0]);
-    // var cyl = new Capsule(shader, [1.0, 0.0, 0.0]);
+    // mat4.fromTranslation(aux, [0.0, 0.0, -15.0]);
+    // var cyl = space_station;
     // cyl.setTexture(shader.getEarthTexture());
     // cyl.draw(aux);
 
-    // mat4.fromTranslation(aux, [0.0, 0.0, 5.0]);
+    // mat4.fromTranslation(aux, [0.0, 0.0, 15.0]);
     // cyl.draw(aux);
 
-    // mat4.fromTranslation(aux, [0.0, 5.0, 0.0]);
+    // mat4.fromTranslation(aux, [0.0, 15.0, 0.0]);
     // cyl.draw(aux);
 
-    // mat4.fromTranslation(aux, [0.0, -5.0, 0.0]);
+    // mat4.fromTranslation(aux, [0.0, -15.0, 0.0]);
     // cyl.draw(aux);
 
     // mat4.fromTranslation(aux, [5.0, 0.0, 0.0]);

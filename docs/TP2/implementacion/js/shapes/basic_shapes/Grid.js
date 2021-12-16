@@ -9,15 +9,26 @@ class Grid {
         this.n_cols = n_cols;
         this.index_buffer = null;
         this.uv_buffer = uv_buffer;
+        this.compute_normals = false;
+
+        this.utils = new Utils();
     }
 
     setTexture(texture) {
         this.texture = texture;
     }
 
+    setComputeNormals() {
+        this.compute_normals = true;
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
+        }
+
+        if (this.compute_normals) {
+            this.computeNormals();
         }
         
         var normalMatrix = mat4.clone(transformMatrix);
@@ -92,5 +103,22 @@ class Grid {
     applyTransformation(transformMatrix) {
         var utils = new Utils();
         this.position_buffer = utils.TransformPosBuffer(transformMatrix, this.position_buffer);
+    }
+
+    computeNormals() {
+        this.normal_buffer = [];
+
+        for (var i = 0; i < this.position_buffer.length; i+=9) {
+            var aux = this.utils.GetTriangNormal(
+                [this.position_buffer[i],   this.position_buffer[i+1], this.position_buffer[i+2]],
+                [this.position_buffer[i+3], this.position_buffer[i+4], this.position_buffer[i+5]],
+                [this.position_buffer[i+6], this.position_buffer[i+7], this.position_buffer[i+8]]);
+            this.normal_buffer.push(aux[0]);
+            this.normal_buffer.push(aux[1]);
+            this.normal_buffer.push(aux[2]);
+        }
+
+        console.log(this.normal_buffer.length);
+        console.log(this.position_buffer.length);
     }
 }
