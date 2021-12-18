@@ -86,7 +86,7 @@ class NucleusCylinder {
         var t_rotacion = mat4.create();
         for (var rotacion = 0.0; rotacion <= 2.0 * Math.PI; rotacion += this.diferencial_rotacion) {
             mat4.fromRotation(t_rotacion, rotacion, [1.0, 0.0, 0.0]);
-            const ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, this.ptos_base);
+            var ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, this.ptos_base);
             for (var elem of ptos_rotados) {
                 this.sides_pos_buf.push(elem);
             }
@@ -94,7 +94,11 @@ class NucleusCylinder {
                 this.sides_uv_buf.push(this.scale_factor_u * 4.0 * i / ptos_rotados.length);
                 this.sides_uv_buf.push(this.scale_factor_v * 1.0 * rotacion / Math.PI);
             }
-            this.sides_nrm_buf = this.sides_nrm_buf.concat(this.nrms_base);
+            ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, this.nrms_base);
+            // this.sides_nrm_buf = this.sides_nrm_buf.concat(this.nrms_base);
+            for (var elem of ptos_rotados) {
+                this.sides_nrm_buf.push(elem);
+            }
         }
     }
 
@@ -136,10 +140,5 @@ class NucleusCylinder {
         this.top_pos_buf.push(this.sides_pos_buf[this.ptos_longitudinal-1]);
         this.top_pos_buf.push(this.sides_pos_buf[this.ptos_longitudinal]);
         this.top_pos_buf.push(this.sides_pos_buf[this.ptos_longitudinal+1]);
-
-        
-        console.log(this.top_pos_buf.length);
-        console.log(this.sides_pos_buf.length);
-        console.log(this.ptos_base.length);
     }
 }

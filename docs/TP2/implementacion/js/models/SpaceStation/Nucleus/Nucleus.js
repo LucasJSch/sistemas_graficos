@@ -48,11 +48,11 @@ class Nucleus {
         var cube_12_t = mat4.create();
         var cube_23_t = mat4.create();
         
-        mat4.fromScaling(aux, [1.0, 1.0, 2.0]);
+        mat4.fromScaling(aux, [1., 1.0, 3.0]);
         mat4.fromRotation(cube_12_t, Math.PI/2.0, [0.0, 1.0, 0.0]);
         mat4.mul(aux, cube_12_t, aux);
-        mat4.fromTranslation(cube_12_t, [3.0, -0.5, 0.5]);
-        mat4.fromTranslation(cube_23_t, [10.0, -0.5, 0.5]);
+        mat4.fromTranslation(cube_12_t, [2.0, -0.5, 0.5]);
+        mat4.fromTranslation(cube_23_t, [9.0, -0.5, 0.5]);
         mat4.mul(cube_12_t, cube_12_t, aux);
         mat4.mul(cube_23_t, cube_23_t, aux);
         mat4.mul(cube_12_t, transformMatrix, cube_12_t);
