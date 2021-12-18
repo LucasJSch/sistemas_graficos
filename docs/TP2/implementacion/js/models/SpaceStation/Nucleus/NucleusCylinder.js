@@ -97,7 +97,7 @@ class NucleusCylinder {
             ptos_rotados = this.utils.TransformPosBuffer(t_rotacion, this.nrms_base);
             // this.sides_nrm_buf = this.sides_nrm_buf.concat(this.nrms_base);
             for (var elem of ptos_rotados) {
-                this.sides_nrm_buf.push(elem);
+                this.sides_nrm_buf.push(-elem);
             }
         }
     }
