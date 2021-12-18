@@ -24,6 +24,6 @@ void main(void) {
     vFromPointToCameraNormalized = normalize(-vec3(viewProd) / viewProd.w);
     
     vPosWorld=(modelMatrix*vec4(aVertexPosition,1.0)).xyz;    // La posicion en coordenadas de mundo
-    vNormal=normalize(normalMatrix*vec4(aVertexNormal,1.0)).xyz;       // La normal en coordenadas de mundo
+    vNormal = normalize((normalMatrix*vec4(aVertexNormal,1.0)).xyz); // La normal en coordenadas de mundo
     vUV = aVertexUV;
 }
