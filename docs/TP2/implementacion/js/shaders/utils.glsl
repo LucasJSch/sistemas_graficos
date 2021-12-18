@@ -23,6 +23,7 @@ struct Light {
     vec3 color;
     vec3 position;
     vec3 direction;
+    float distance_decay;
     float spotlight_angle_threshold;
 };
 
@@ -31,8 +32,9 @@ const vec3 NULL_VECTOR = vec3(0.0, 0.0, 0.0);
 
 // const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.), 0.0);
 // const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR, 0.0);
+Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightPos, 1.0, 0.0);
 
-Light capsule_spotlight = Light(SPOTLIGHT_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 0.05);
+Light capsule_spotlight = Light(SPOTLIGHT_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 1.0, 0.05);
 
 vec3 vector_to_light_source(Light light) {
     vec3 res;
@@ -67,7 +69,7 @@ vec3 compute_intensity_for_spotlight(Light light, float shininness) {
         spotlight_angle = dot(vNormal, points_to_light);
     }
     float dist = 0.1 * distance(light.position, vPosWorld);
-    return texture2D(uPanelsSampler, vec2(vUV.s, vUV.t)).rgb * (spotlight_angle / dist);
+    return texture2D(uPanelsSampler, vec2(vUV.s, vUV.t)).rgb * (light.distance_decay * (spotlight_angle / dist));
 }
 
 vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float shininness) {
@@ -75,6 +77,6 @@ vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float sh
         return compute_intensity_for_spotlight(light, shininness);
     }
 
-    vec3 intensity =3.0 * compute_diffuse_intensity(light, kd_material, 0.0) + compute_specular_intensity(light, ks_material, shininness);
+    vec3 intensity = compute_diffuse_intensity(light, kd_material, 0.0)/* + compute_specular_intensity(light, ks_material, shininness)*/;
     return intensity * light.color;
 }
