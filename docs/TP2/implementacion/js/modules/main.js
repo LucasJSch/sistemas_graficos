@@ -82,7 +82,7 @@ function tick() {
         return;
     }
     MAIN_SHADER_PROGRAM.setearParametros();
-    drawScene(MAIN_SHADER_PROGRAM,
+    drawSceneDemo(MAIN_SHADER_PROGRAM,
               modelMatrix,
               viewMatrix,
               projMatrix,

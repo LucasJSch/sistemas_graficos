@@ -24,7 +24,6 @@ class Fan {
         mat4.invert(normalMatrix, normalMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
         gl.uniformMatrix4fv(this.shader.getNormalMatrixPtr(), false, normalMatrix);
-        console.log(this.color);
         gl.uniform3fv(this.shader.getUniformColorPtr(), this.color);
 
         this.createIndexBuffer();

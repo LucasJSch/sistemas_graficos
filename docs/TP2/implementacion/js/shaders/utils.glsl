@@ -3,7 +3,14 @@ precision mediump float;
 varying vec3 vNormal;
 varying vec3 vPosWorld;
 varying vec3 vFromPointToCameraNormalized;
+varying vec2 vUV;
+
+uniform vec3 uCapsuleSpotlightPos;
+uniform vec3 uCapsuleSpotlightDirection;
 uniform float uShininess;
+uniform vec3 uColor;
+
+uniform sampler2D uPanelsSampler;
 
 // A.K.A. fuente de luz puntual
 const int OMNIDIRECTIONAL_LIGHT = 1;
@@ -16,13 +23,16 @@ struct Light {
     vec3 color;
     vec3 position;
     vec3 direction;
+    float spotlight_angle_threshold;
 };
 
 vec3 ks = vec3(.75);
 const vec3 NULL_VECTOR = vec3(0.0, 0.0, 0.0);
 
-// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.));
-const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR);
+// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.), 0.0);
+// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR, 0.0);
+
+Light capsule_spotlight = Light(SPOTLIGHT_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 0.05);
 
 vec3 vector_to_light_source(Light light) {
     vec3 res;
@@ -49,8 +59,22 @@ vec3 compute_specular_intensity(Light light, vec3 ks_material, float shininness)
     return ks_material * pow(max(dot(reflection, vFromPointToCameraNormalized),0.), shininness);
 }
 
-vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float shininness) {
+vec3 compute_intensity_for_spotlight(Light light, float shininness) {
+    float spotlight_angle = 0.0;
+    vec3 points_to_light = vector_to_light_source(light);
+    float dotFromDirection = dot(points_to_light, -light.direction);
+    if (dotFromDirection >= light.spotlight_angle_threshold) {
+        spotlight_angle = dot(vNormal, points_to_light);
+    }
+    float dist = 0.1 * distance(light.position, vPosWorld);
+    return texture2D(uPanelsSampler, vec2(vUV.s, vUV.t)).rgb * (spotlight_angle / dist);
+}
 
-    vec3 intensity =1.0 * compute_diffuse_intensity(light, kd_material, 0.0) + compute_specular_intensity(light, ks_material, shininness);
+vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float shininness) {
+    if (light.type == SPOTLIGHT_LIGHT) {
+        return compute_intensity_for_spotlight(light, shininness);
+    }
+
+    vec3 intensity =3.0 * compute_diffuse_intensity(light, kd_material, 0.0) + compute_specular_intensity(light, ks_material, shininness);
     return intensity * light.color;
 }

@@ -8,7 +8,8 @@ class Capsule {
                               [0.0, 0.0, 0.5], [0.0, 0.0, 0.75], [0.0, 0.0, 0.75], [0.0, -0.3, 0.9],
                               [0.0, -0.3, 0.9], [0.0, -1.0, 0.9], [0.0, -2.0, 0.8], [0.0, -2.3, 0.5],
                               [0.0, -2.3, 0.5], [0.0, -2.3, 0.5], [0.0, -2.4, 0.25], [0.0, -2.4, 0.25],
-                              [0.0, -2.4, 0.25], [0.0, -2.4, 0.25], [0.0, -2.5, 0.1], [0.0, -2.5, 0.1]];
+                              [0.0, -2.4, 0.25], [0.0, -2.4, 0.25], [0.0, -2.5, 0.1], [0.0, -2.5, 0.1],
+                              [0.0, -2.5, 0.1], [0.0, -2.5, 0.1], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]];
         this.bezier_concatenator = null;
 
         this.n_rows = 48.0;
@@ -27,6 +28,17 @@ class Capsule {
         this.green_light = new Cube(shader, [0.0, 1.0, 0.0]);
 
         this.utils = new Utils();
+
+        this.front_pos = [0.0, -2.5, -0.05];
+        this.back_pos = [0.0, 0, 0];
+    }
+
+    getDirection(transformMatrix) {
+        var front = vec3.create();
+        var back = vec3.create();
+        vec3.transformMat4(front, this.front_pos, transformMatrix);
+        vec3.transformMat4(back, this.back_pos, transformMatrix);
+        return [front[0] - back[0], front[1] - back[1], front[2] - back[2]];
     }
 
     setTexture(texture) {
@@ -52,15 +64,18 @@ class Capsule {
         var aux_t = mat4.create();
         mat4.fromScaling(green_t, [0.2, 0.2, 0.2]);
         mat4.fromScaling(red_t, [0.2, 0.2, 0.2]);
-        mat4.fromTranslation(aux_t, [0.8, -8.5, 0.0]);
+        mat4.fromTranslation(aux_t, [0.8, -1.5, -0.2]);
         mat4.mul(red_t, aux_t, red_t);
-        mat4.fromTranslation(aux_t, [-0.8, -8.5, 0.0]);
+        mat4.fromTranslation(aux_t, [-0.8, -1.5, -0.2]);
         mat4.mul(green_t, aux_t, green_t);
-        mat4.mul(transformMatrix, green_t, green_t);
-        mat4.mul(transformMatrix, red_t, red_t);
+        mat4.mul(green_t, transformMatrix, green_t);
+        mat4.mul(red_t, transformMatrix, red_t);
 
-        this.red_light.draw(red_t);
-        this.green_light.draw(green_t);
+        var spotlight_pos = vec3.create();
+        vec3.transformMat4(spotlight_pos, spotlight_pos, green_t);
+
+        gl.uniform3fv(this.shader.getCapsuleSpotlightPosPtr(), spotlight_pos);
+        gl.uniform3fv(this.shader.getCapsuleSpotlightDirPtr(), this.getDirection(transformMatrix));
     }
 
     generateBezierConcatenator() {

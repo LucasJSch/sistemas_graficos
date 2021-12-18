@@ -28,6 +28,8 @@ class ShaderProgram {
         gl.enableVertexAttribArray(this.attribs.normal);
 
         this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
+        this.unifs.capsuleSpotlightPos = gl.getUniformLocation(this.program, "uCapsuleSpotlightPos");
+        this.unifs.capsuleSpotlightDirection = gl.getUniformLocation(this.program, "uCapsuleSpotlightDirection");
         this.unifs.projMatrix = gl.getUniformLocation(this.program, "projMatrix");
         this.unifs.modelMatrix = gl.getUniformLocation(this.program, "modelMatrix");
         this.unifs.viewMatrix = gl.getUniformLocation(this.program, "viewMatrix");
@@ -74,6 +76,14 @@ class ShaderProgram {
     getShininessPtr() {
         return this.unifs.shininess;
     }
+
+    getCapsuleSpotlightPosPtr() {
+        return this.unifs.capsuleSpotlightPos;
+    }
+
+    getCapsuleSpotlightDirPtr() {
+        return this.unifs.capsuleSpotlightDirection;
+    }
 }
 
 
@@ -95,28 +105,12 @@ class PanelsProgram extends ShaderProgram {
         this.moduloTexture = new Texture("js/assets/textures/modulo.jpg");
         this.capsuleTexture = new Texture("js/assets/textures/shiphull.jpg");
         this.sunTexture = new Texture("js/assets/textures/sun.jpg");
+        this.moonTexture = new Texture("js/assets/textures/luna.jpg");
+        this.spaceTexture = new Texture("js/assets/textures/space.jpg");
     }
 
     setearParametros() {
         super.setearParametros();
-
-        // gl.activeTexture(gl.TEXTURE0);
-        // gl.bindTexture(gl.TEXTURE_2D, this.panelTexture.gl_tex);
-
-        // gl.activeTexture(gl.TEXTURE1);
-        // gl.bindTexture(gl.TEXTURE_2D, this.earthTexture.gl_tex);
-
-        // gl.activeTexture(gl.TEXTURE2);
-        // gl.bindTexture(gl.TEXTURE_2D, this.cilindricoTexture.gl_tex);
-
-        // gl.activeTexture(gl.TEXTURE3);
-        // gl.bindTexture(gl.TEXTURE_2D, this.esfericoTexture.gl_tex);
-
-        // gl.activeTexture(gl.TEXTURE4);
-        // gl.bindTexture(gl.TEXTURE_2D, this.moduloTexture.gl_tex);
-
-        // gl.activeTexture(gl.TEXTURE5);
-        // gl.bindTexture(gl.TEXTURE_2D, this.capsuleTexture.gl_tex);
     }
 
     getUvBufPtr() {
@@ -149,6 +143,14 @@ class PanelsProgram extends ShaderProgram {
 
     getSunTexture() {
         return this.sunTexture.gl_tex;
+    }
+
+    getMoonTexture() {
+        return this.moonTexture.gl_tex;
+    }
+
+    getSpaceTexture() {
+        return this.spaceTexture.gl_tex;
     }
 
     getUniformColorPtr() {

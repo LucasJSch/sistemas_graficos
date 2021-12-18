@@ -15,21 +15,21 @@ function drawScene(shader,
     gl.uniformMatrix4fv(shader.getProjMatrixPtr(), false, projMatrix);
     gl.uniformMatrix4fv(shader.getNormalMatrixPtr(), false, normalMatrix);
 
-    // var aux_t = mat4.create();
-    // mat4.fromTranslation(aux_t, [180.0, 0.0, 30.0]);
+    var aux_t = mat4.create();
+    mat4.fromScaling(aux_t, [10.0, 10.0, 10.0]);
 
-    var coord = new Coordinates(shader);
+    var coord = new Cube(shader, [0.0, 0.0, 0.0]);
     coord.setTexture(shader.getPanelTexture());
-    coord.draw();
+    coord.draw(aux_t);
 
     var capsule = new Capsule(shader, [1.0, 0.0, 0.0]);
     capsule.setTexture(shader.getCapsuleTexture());
     
-    var space_station = new SpaceStation(shader, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
-    space_station.setPanelsTexture(shader.getPanelTexture());
-    space_station.setModuloCilindricoTexture(shader.getModuloCilindricoTexture());
-    space_station.setModuloEsfericoTexture(shader.getModuloEsfericoTexture());
-    space_station.setModuloTexture(shader.getModuloTexture());
+    // var space_station = new SpaceStation(shader, n_secciones_nucleo, n_paneles_solares, angulo_paneles, rotacion_anillo);
+    // space_station.setPanelsTexture(shader.getPanelTexture());
+    // space_station.setModuloCilindricoTexture(shader.getModuloCilindricoTexture());
+    // space_station.setModuloEsfericoTexture(shader.getModuloEsfericoTexture());
+    // space_station.setModuloTexture(shader.getModuloTexture());
     
     var earth = new Planet(shader);
     earth.setTexture(shader.getEarthTexture());
@@ -47,14 +47,24 @@ function drawScene(shader,
     mat4.fromTranslation(aux_t, [200.0, 0.0, 30.0]);
     mat4.mul(sun_t, aux_t, sun_t);
 
-    space_station.draw();
+    var moon = new Planet(shader);
+    moon.setTexture(shader.getMoonTexture());
+    var moon_t = mat4.create();
+    mat4.fromScaling(moon_t, [10.0, 10.0, 10.0])
+    mat4.fromRotation(aux_t, 0.0 * Math.PI/3.0, [0.0, 1.0, 0.0])
+    mat4.mul(moon_t, aux_t, moon_t);
+    mat4.fromTranslation(aux_t, [-200.0, 0.0, 30.0]);
+    mat4.mul(moon_t, aux_t, moon_t);
+
+    // space_station.draw();
     // earth.draw(earth_t);
     // sun.draw(sun_t);
-    // capsule.draw(capsule_controls.getMatrix());
+    // moon.draw(moon_t);
+    capsule.draw(capsule_controls.getMatrix());
 
-    // var surround = new Cylinder(shader);
-    // mat4.fromScaling(aux_t, [300.0, 300.0, 300.0]);
-    // surround.draw(aux_t);
+    var surrounding = new Sphere(shader, [0.0, 0.0, 0.0]);
+    mat4.fromScaling(aux_t, [300.0, 300.0, 300.0]);
+    // surrounding.draw(aux_t);
 
     // var aux = mat4.create();
     // mat4.fromTranslation(aux, [0.0, 0.0, -15.0]);
