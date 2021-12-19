@@ -58,8 +58,8 @@ class Sphere {
                 var y = cosTheta*r;
                 var z = sinPhi * sinTheta*r;
 
-                var u =  (longNumber / this.n_cols);
-                var v = 1 - (latNumber / this.n_rows);
+                var u =  (longNumber / (this.n_cols-1));
+                var v = 1 - (latNumber / (this.n_rows-1));
 
                 this.nrm_buf.push(x);
                 this.nrm_buf.push(y);

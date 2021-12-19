@@ -56,7 +56,7 @@ class Capsule {
         var capsula = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.color, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal, this.uv_buf);
         capsula.setTexture(this.texture);
         var aleron = new Grid(this.shader, this.aleron_pos_buf, this.aleron_nrm_buf, this.color_aleron, /*n_rows=*/this.n_rows + 1.0, /*n_cols=*/this.ptos_longitudinal);
-        gl.uniform1f(this.shader.getReflectionFactorPtr(), 1.0);
+        gl.uniform1f(this.shader.getReflectionFactorPtr(), 0.5);
         capsula.draw(transformMatrix);
         gl.uniform1f(this.shader.getReflectionFactorPtr(), 0.0);
         aleron.draw(transformMatrix);
