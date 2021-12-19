@@ -24,6 +24,7 @@ var viewMatrix = mat4.create();
 var projMatrix = mat4.create();
 var normalMatrix = mat4.create();
 var rotacion_anillo = 0;
+var time = 0;
 
 
 var camera = new Camera(capsule_controls);
@@ -64,6 +65,7 @@ function initMenu() {
 
 function animate(){
     rotacion_anillo += 0.1 * vel_rotacion_anillo;
+    time += 0.1;
 
 
     camera.update();
@@ -91,7 +93,8 @@ function tick() {
               angulo_paneles,
               rotacion_anillo,
               n_secciones_nucleo,
-              capsule_controls);
+              capsule_controls,
+              time);
     animate();
 }
 

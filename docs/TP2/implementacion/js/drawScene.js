@@ -8,7 +8,8 @@ function drawScene(shader,
                    angulo_paneles,
                    rotacion_anillo,
                    n_secciones_nucleo,
-                   capsule_controls) {
+                   capsule_controls,
+                   time) {
 
     gl.uniformMatrix4fv(shader.getModelMatrixPtr(), false, modelMatrix);
     gl.uniformMatrix4fv(shader.getViewMatrixPtr(), false, viewMatrix);
@@ -33,6 +34,8 @@ function drawScene(shader,
     mat4.fromScaling(earth_t, [50.0, 50.0, 50.0])
     mat4.fromTranslation(aux_t, [0.0, 0.0, -100.0]);
     mat4.mul(earth_t, aux_t, earth_t);
+    mat4.fromRotation(aux_t, time * 0.01, [1.0, 0.0, 0.0]);
+    mat4.mul(earth_t, earth_t, aux_t);
 
     var sun = new Planet(shader);
     sun.setTexture(shader.getSunTexture());
