@@ -1,22 +1,43 @@
 class Grid {
     // Initializes a Grid. 
-    constructor(shader, position_buffer, normal_buffer, color_buffer, n_rows, n_cols, uv_buffer=null, texture=null) {
+    constructor(shader, position_buffer, normal_buffer, color, n_rows, n_cols, uv_buffer=[]) {
         this.shader = shader;
         this.position_buffer = position_buffer;
         this.normal_buffer = normal_buffer;
-        this.color_buffer = color_buffer;
+        this.color = color;
         this.n_rows = n_rows;
         this.n_cols = n_cols;
         this.index_buffer = null;
         this.uv_buffer = uv_buffer;
+        this.compute_normals = false;
+
+        this.utils = new Utils();
+    }
+
+    setTexture(texture) {
         this.texture = texture;
+    }
+
+    setComputeNormals() {
+        this.compute_normals = true;
     }
 
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
         }
+
+        if (this.compute_normals) {
+            this.computeNormals();
+        }
         
+        var normalMatrix = mat4.clone(transformMatrix);
+
+        mat4.invert(normalMatrix, normalMatrix);
+        mat4.transpose(normalMatrix, normalMatrix);
+        gl.uniformMatrix4fv(this.shader.getNormalMatrixPtr(), false, normalMatrix);
+        gl.uniform3fv(this.shader.getUniformColorPtr(), this.color);
+
         this.createIndexBuffer();
         this.applyTransformation(transformMatrix);
         this.setupBuffers();
@@ -58,18 +79,11 @@ class Grid {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.index_buffer), gl.STATIC_DRAW);
 
-        if (this.uv_buffer != null && this.uv_buffer.length != 0 && this.texture != null) {
-            this.webgl_uv_buffer = gl.createBuffer();
-            this.webgl_uv_buffer.itemSize = 2;
-            this.webgl_uv_buffer.numItems = this.uv_buffer.length / 2;
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uv_buffer), gl.STATIC_DRAW);
-        } else {
-            // If not using texture, use color.
-            this.webgl_color_buffer = gl.createBuffer();
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.color_buffer), gl.STATIC_DRAW);
-        }
+        this.webgl_uv_buffer = gl.createBuffer();
+        this.webgl_uv_buffer.itemSize = 2;
+        this.webgl_uv_buffer.numItems = this.uv_buffer.length / 2;
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.uv_buffer), gl.STATIC_DRAW);
 
         // Cargamos los vértices en el shader.
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_position_buffer);
@@ -78,23 +92,33 @@ class Grid {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_normal_buffer);
         gl.vertexAttribPointer(this.shader.getNrmBufPtr(), 3, gl.FLOAT, false, 0, 0);
                 
-        if (this.uv_buffer != null && this.uv_buffer.length != 0 && this.texture != null) {
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
-            gl.vertexAttribPointer(this.shader.getUvBufPtr(), 2, gl.FLOAT, false, 0, 0);
-            gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            gl.uniform1i(this.shader.getProgram().samplerUniform, 0);
-        } else {
-            // If not using texture, use color.
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_color_buffer);
-            gl.vertexAttribPointer(this.shader.getClrBufPtr(), 3, gl.FLOAT, false, 0, 0);
-        }
-
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.webgl_uv_buffer);
+        gl.vertexAttribPointer(this.shader.getUvBufPtr(), 2, gl.FLOAT, false, 0, 0);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+        
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
    }
 
     applyTransformation(transformMatrix) {
         var utils = new Utils();
         this.position_buffer = utils.TransformPosBuffer(transformMatrix, this.position_buffer);
+    }
+
+    computeNormals() {
+        this.normal_buffer = [];
+
+        for (var i = 0; i < this.position_buffer.length; i+=9) {
+            var aux = this.utils.GetTriangNormal(
+                [this.position_buffer[i],   this.position_buffer[i+1], this.position_buffer[i+2]],
+                [this.position_buffer[i+3], this.position_buffer[i+4], this.position_buffer[i+5]],
+                [this.position_buffer[i+6], this.position_buffer[i+7], this.position_buffer[i+8]]);
+            this.normal_buffer.push(aux[0]);
+            this.normal_buffer.push(aux[1]);
+            this.normal_buffer.push(aux[2]);
+        }
+
+        console.log(this.normal_buffer.length);
+        console.log(this.position_buffer.length);
     }
 }

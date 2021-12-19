@@ -18,15 +18,12 @@ class NucleusCube {
 
         this.pos_buf = [];
         this.nrm_buf = [];
-        this.clr_buf = [];
 
         this.top_pos_buf = [];
         this.top_nrm_buf = [];
-        this.top_clr_buf = [];
 
         this.bottom_pos_buf = [];
         this.bottom_nrm_buf = [];
-        this.bottom_clr_buf = [];
 
         this.utils = new Utils();
         this.ptos_base = [];
@@ -43,9 +40,9 @@ class NucleusCube {
         this.generateTopBottomBuffers();
         this.applyTransformMatrix(transformMatrix);
 
-        var sides_grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.clr_buf, /*n_rows=*/this.n_levels + 1, /*n_cols=*/this.ptos_longitudinal+1);
-        var top_grid = new Grid(this.shader, this.top_pos_buf, this.top_nrm_buf, this.top_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
-        var bottom_grid = new Grid(this.shader, this.bottom_pos_buf, this.bottom_nrm_buf, this.bottom_clr_buf, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
+        var sides_grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.color, /*n_rows=*/this.n_levels + 1, /*n_cols=*/this.ptos_longitudinal+1);
+        var top_grid = new Grid(this.shader, this.top_pos_buf, this.top_nrm_buf, this.color, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
+        var bottom_grid = new Grid(this.shader, this.bottom_pos_buf, this.bottom_nrm_buf, this.color, /*n_rows=*/2, /*n_cols=*/(this.ptos_longitudinal+1) / 2.0);
 
         sides_grid.draw();
         top_grid.draw();
@@ -90,10 +87,6 @@ class NucleusCube {
         }
 
         for (var i = 0; i < this.pos_buf.length; i += 3) {
-            this.clr_buf.push(this.color[0]);
-            this.clr_buf.push(this.color[1]);
-            this.clr_buf.push(this.color[2]);
-
             // Genero normal cada 3 puntos (i.e. 1 por triangulo)
             if (i < 6) {
                 continue;
@@ -118,13 +111,6 @@ class NucleusCube {
         this.top_pos_buf = this.utils.TransformPosBuffer(t_traslacion, this.ptos_base);
 
         for (var i = 0; i < this.bottom_pos_buf.length; i += 3) {
-            this.bottom_clr_buf.push(this.color[0]);
-            this.bottom_clr_buf.push(this.color[1]);
-            this.bottom_clr_buf.push(this.color[2]);
-            this.top_clr_buf.push(this.color[0]);
-            this.top_clr_buf.push(this.color[1]);
-            this.top_clr_buf.push(this.color[2]);
-
             // Genero normal cada 3 puntos (i.e. 1 por triangulo)
             if (i < 6) {
                 continue;

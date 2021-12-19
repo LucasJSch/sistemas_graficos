@@ -8,13 +8,18 @@ class Plane {
         this.grid = null;
     }
 
+    setTexture(texture) {
+        this.texture = texture;
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
         }
 
         this.createBuffers(transformMatrix);
-        this.grid = new Grid(shader, this.position_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols);
+        this.grid = new Grid(this.shader, this.position_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer);
+        this.grid.setTexture(this.texture);
         this.grid.draw();
     }
 
@@ -22,6 +27,7 @@ class Plane {
         this.position_buffer = [];
         this.normal_buffer = [];
         this.color_buffer = [];
+        this.uv_buffer = [];
         var step_x = 1.0/this.n_cols;
         var step_y = 1.0/this.n_rows;
         var transformed_pos = vec4.create();
@@ -37,6 +43,9 @@ class Plane {
                 this.normal_buffer.push(0.0);
                 this.normal_buffer.push(0.0);
                 this.normal_buffer.push(1.0);
+
+                this.uv_buffer.push(y / this.n_rows);
+                this.uv_buffer.push(x / this.n_cols);
 
                 this.color_buffer.push(this.vColor[0]);
                 this.color_buffer.push(this.vColor[1]);

@@ -1,11 +1,11 @@
 class CraneColumn {
     constructor(shader) {
         this.shader = shader;
-        this.color = [0.392156863, 0.294117647, 0.31372549];
+        this.color = [0.9, 0.294117647, 0.31372549];
         
         this.left_column = new Cube(shader, this.color);
         this.right_column = new Cube(shader, this.color);
-        this.cyl = new Cylinder(this.shader, this.color, /*pointsPerCircle=*/10);
+        this.cyl = new Cylinder(this.shader, this.color, /*pointsPerCircle=*/8);
 
         this.cylinders_t = [];
         this.length = 26.2;

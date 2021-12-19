@@ -13,6 +13,23 @@ class SpaceStation {
         this.center_cylinder = new Cylinder(shader, [0.0, 0.82, 0.12])
     }
 
+    setPanelsTexture(texture) {
+        this.panels.setTexture(texture);
+    }
+
+    setModuloCilindricoTexture(texture) {
+        this.nucleus.setTexture2(texture);
+    }
+    
+    setModuloEsfericoTexture(texture) {
+        this.nucleus.setTexture1(texture);
+        this.cylinder.setTexture(texture);
+    }
+    
+    setModuloTexture(texture) {
+        this.rectangles.setTexture(texture);
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();

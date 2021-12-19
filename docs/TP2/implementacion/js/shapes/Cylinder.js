@@ -13,13 +13,18 @@ class Cylinder {
         this.shapeGen = null
     }
 
+    setTexture(texture) {
+        this.texture = texture;
+    }
+
     draw(transformMatrix) {
         if (transformMatrix == null) {
             transformMatrix = mat4.create();
         }
 
-        this.shapeGen = new CylinderShapeGenerator(this.pointsPerCircle, this.radius, this.vColor);
-        this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen);
+        this.shapeGen = new CylinderShapeGenerator(this.pointsPerCircle, this.radius);
+        this.sides = new Extrusion(this.shader, /*levels=*/2, /*vStartPos=*/this.vCentralBottomPos, /*vEndPos=*/this.vCentralTopPos, this.shapeGen, this.vColor);
+        this.sides.setTexture(this.texture);
         this.createTopAndBottomFans();
         this.sides.draw(transformMatrix);
         this.top_fan.draw(transformMatrix);
@@ -29,14 +34,16 @@ class Cylinder {
     // TODO: Use correctly fan pos buffer. (i.e. first use central pos)
     createTopAndBottomFans() {
         var top_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralTopPos);
+        var top_pos_uv_buffer = this.shapeGen.getUVBuffer(this.vCentralTopPos);
         var top_normal_buffer = this.getTopNormalBuffer();
-        var top_color_buffer = this.shapeGen.getColorBuffer(this.vCentralTopPos);
-        this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, top_color_buffer);
+        this.top_fan = new Fan(this.shader, top_pos_buffer, top_normal_buffer, this.vColor, top_pos_uv_buffer);
+        this.top_fan.setTexture(this.texture);
 
         var bottom_pos_buffer = this.shapeGen.getPosBuffer(this.vCentralBottomPos);
+        var bottom_pos_uv_buffer = this.shapeGen.getUVBuffer(this.vCentralBottomPos);
         var bottom_normal_buffer = this.getBottomNormalBuffer();
-        var bottom_color_buffer = this.shapeGen.getColorBuffer(this.vCentralBottomPos);
-        this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, bottom_color_buffer);
+        this.bottom_fan = new Fan(this.shader, bottom_pos_buffer, bottom_normal_buffer, this.vColor, bottom_pos_uv_buffer);
+        this.bottom_fan.setTexture(this.texture);
     }
 
     getTopNormalBuffer() {
@@ -61,10 +68,9 @@ class Cylinder {
 }
 
 class CylinderShapeGenerator {
-    constructor(pointsPerCircle, radius, vColor) {
+    constructor(pointsPerCircle, radius) {
         this.pointsPerCircle = pointsPerCircle;
         this.radius = radius;
-        this.vColor = vColor;
     }
     
     getPosBuffer(central_pos) {
@@ -92,22 +98,17 @@ class CylinderShapeGenerator {
         for (var i = 0; i < this.pointsPerCircle + 1; i++) {
             buffer.push(Math.cos(i * Math.PI * 2.0 / this.pointsPerCircle));
             buffer.push(Math.sin(i * Math.PI * 2.0 / this.pointsPerCircle));
-            buffer.push(1.0);
+            buffer.push(0.0);
         }
         return buffer;
     }
         
-    getColorBuffer(central_pos) {
+    getUVBuffer() {
         var buffer = [];
         for (var i = 0; i < this.pointsPerCircle + 1; i++) {
-            buffer.push(this.vColor[0]);
-            buffer.push(this.vColor[1]);
-            buffer.push(this.vColor[2]);
+            buffer.push(Math.cos((i * Math.PI * 2.0 / this.pointsPerCircle) + 0.0));
+            buffer.push(Math.sin((i * Math.PI * 2.0 / this.pointsPerCircle) + 0.0));
         }
         return buffer;
-    }
-
-    getUVBuffer() {
-        return [];
     }
 }

@@ -1,16 +1,24 @@
 class Texture {
+    static TEX_CACHE = {};
+
     constructor(textureFile) {
         this.gl_tex = null;
-
+        this.finished = false;
         this.initTexture(textureFile);
     }
 
     initTexture(textureFile) {
+        if (Texture.TEX_CACHE[textureFile] != null) {
+			this.gl_tex = Texture.TEX_CACHE[textureFile];
+		}
+
         this.gl_tex = gl.createTexture();
         this.gl_tex.image = new Image();
 
         this.gl_tex.image.onload = () => this.onTextureLoaded(this.gl_tex);
         this.gl_tex.image.src = textureFile;
+
+        Texture.TEX_CACHE[textureFile] = this.gl_tex;
     };
 
     onTextureLoaded(tex) {
@@ -22,6 +30,7 @@ class Texture {
         gl.generateMipmap(gl.TEXTURE_2D);
 
         gl.bindTexture(gl.TEXTURE_2D, null);
+        this.finished = true;
     };
 
 }

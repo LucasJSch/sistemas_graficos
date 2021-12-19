@@ -11,10 +11,6 @@ var n_secciones_nucleo = 2.0;
 var gl = null;
 var canvas = null;
 
-// glProgram = null,
-// fragmentShader = null,
-// vertexShader = null;
-
 var aux_t = mat4.create();
 var capsule_t = mat4.create();
 mat4.fromRotation(aux_t, Math.PI, [1.0, 0.0, 0.0]);
@@ -33,7 +29,6 @@ var rotacion_anillo = 0;
 var camera = new Camera(capsule_controls);
 camera.initialize();
 
-// var global;
 var MAIN_SHADER_PROGRAM;
 
 function onResize() {
@@ -42,16 +37,12 @@ function onResize() {
     aspect = $canvas.width() / $canvas.height();
 }
 
-function _rgbToFloat(r,g,b) {
-    return [r/256, g/256, b/256];
-}
-
 function setupWebGL() {
 
     gl.enable(gl.DEPTH_TEST);
     //set the clear color
-    gl.clearColor(0.1, 0.1, 0.2, 1.0);     
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);     
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);     
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     gl.viewport(0, 0, canvas.width, canvas.height);
 
@@ -67,7 +58,7 @@ function initMenu() {
     var gui = new dat.GUI();
     gui.add(window, "n_paneles_solares", 1, 10).step(1);
     gui.add(window, "angulo_paneles", 0, Math.PI * 2.0).step(0.1);
-    gui.add(window, "vel_rotacion_anillo", 0, 5.0).step(0.1);
+    gui.add(window, "vel_rotacion_anillo", 0, 2.0).step(0.1);
     gui.add(window, "n_secciones_nucleo", 2, 8).step(1);
 }
 
@@ -80,13 +71,17 @@ function animate(){
 
     mat4.identity(modelMatrix);
     mat4.identity(normalMatrix);
-    mat4.multiply(normalMatrix, viewMatrix, modelMatrix);
-    mat4.invert(normalMatrix, normalMatrix);
-    mat4.transpose(normalMatrix, normalMatrix);
+    // mat4.multiply(normalMatrix, viewMatrix, modelMatrix);
+    // mat4.invert(normalMatrix, normalMatrix);
+    // mat4.transpose(normalMatrix, normalMatrix);
 }
 
 function tick() {
     requestAnimationFrame(tick);
+    if (!MAIN_SHADER_PROGRAM.panelTexture.finished) {
+        return;
+    }
+    MAIN_SHADER_PROGRAM.setearParametros();
     drawScene(MAIN_SHADER_PROGRAM,
               modelMatrix,
               viewMatrix,
@@ -116,8 +111,7 @@ function webGLStart() {
         setupWebGL();
         initMenu(); 
 
-        MAIN_SHADER_PROGRAM = new MainProgram();
-        MAIN_SHADER_PROGRAM.setearParametros();
+        MAIN_SHADER_PROGRAM = new PanelsProgram();
         tick();
 
     } else{    

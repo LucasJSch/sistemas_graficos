@@ -8,12 +8,14 @@
         <!-- Third party libs -->
         <script type="text/javascript" src="js/libs/includeHTML.js"></script>
         <script type="text/javascript" src="js/libs/gl-matrix.js"></script>
-        <script type="text/javascript" src="js/libs/three.min.js"></script>
         <script type="text/javascript" src="js/libs/jquery.min.js"></script>
         <script type="text/javascript" src="js/libs/random.js"></script>
+        <!-- <script type="text/javascript" src="js/libs/WebGL-Inspector-master/core/embed.js"></script> -->
+        <!-- <script src="http://benvanik.github.com/WebGL-Inspector/core/embed.js"></script> -->
         <script src="js/libs/dat.gui.js"></script>
         <!-- Interface between this script and JS classes -->
         <script type="text/javascript" src="js/drawScene.js"></script>
+        <script type="text/javascript" src="js/drawSceneDemo.js"></script>
         <!-- Shapes -->
         <script type="text/javascript" src="js/shapes/basic_shapes/Fan.js"></script>
         <script type="text/javascript" src="js/shapes/basic_shapes/Grid.js"></script>
@@ -148,7 +150,8 @@
 
 <body>
 
-    <canvas id="my-canvas" width="1000" height="800">
+    <canvas id="my-canvas" style="background: url('textures/stars.jpg')" width="1000" height="800"></canvas>
+    <!-- <canvas id="my-canvas" width="1000" height="800"> -->
         Your browser does not support the HTML5 canvas element.
     </canvas>
 
