@@ -20,92 +20,20 @@ gl.uniformMatrix4fv(shader.getNormalMatrixPtr(), false, normalMatrix);
 var coord = new Coordinates(shader);
 coord.draw();
 
-var space_station = new SpaceStation(shader, n_secciones_nucleo, 4, 0.0, rotacion_anillo);
-space_station.setPanelsTexture(shader.getPanelTexture());
-space_station.setModuloCilindricoTexture(shader.getModuloCilindricoTexture());
-space_station.setModuloEsfericoTexture(shader.getModuloEsfericoTexture());
-space_station.setModuloTexture(shader.getModuloTexture());
-space_station.draw();
-
-// var nucleus = new Nucleus(shader, [0.0, 0.0, 0.0]);
-// nucleus.setTexture1(shader.getCapsuleTexture());
-// nucleus.draw();
-
-// var coord = new Coordinates(shader, [0.0, 0.0, 0.0]);
-// coord.setTexture(shader.getPanelTexture());
-// coord.draw();
 
 var capsule = new Capsule(shader, [1.0, 0.0, 0.0]);
 capsule.setTexture(shader.getCapsuleTexture());
 capsule.draw(capsule_controls.getMatrix());
 
-// var aux = mat4.create();
+var plane = new Plane(shader, [0.5, 0.5, 0.0]);
 
-// var cyl = new Cube(shader, [0.0, 0.0, 0.0]);
-// cyl.setTexture(shader.getEarthTexture());
-// cyl.draw(aux);
+var plane_t = mat4.create();
+var aux = mat4.create();
+mat4.fromScaling(plane_t, [50, 50, 50]);
+mat4.fromRotation(aux, Math.PI/2.0, [1.0, 0.0, 0.0]);
+mat4.mul(plane_t, aux, plane_t);
+mat4.fromTranslation(aux, [-10.0, -7.0, -10.0]);
+mat4.mul(plane_t, aux, plane_t);
 
-// mat4.fromTranslation(aux, [2.0, 2.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [3.0, 3.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [4.0, 4.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [5.0, 5.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [6.0, 6.0, 0.0]);
-// cyl.draw(aux);
-// mat4.fromTranslation(aux, [7.0, 7.0, 0.0]);
-// cyl.draw(aux);
-// mat4.fromTranslation(aux, [8.0, 8.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [0.0, -15.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [5.0, 0.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [-5.0, 0.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [5.0, 5.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [5.0, -5.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [-5.0, 5.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [-5.0, -5.0, 0.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [5.0, 5.0, 5.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [5.0, -5.0, 5.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [-5.0, 5.0, 5.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [-5.0, -5.0, 5.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [5.0, 5.0, -5.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [5.0, -5.0, -5.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [-5.0, 5.0, -5.0]);
-// cyl.draw(aux);
-
-// mat4.fromTranslation(aux, [-5.0, -5.0, -5.0]);
-// cyl.draw(aux);
+plane.draw(plane_t);
 }

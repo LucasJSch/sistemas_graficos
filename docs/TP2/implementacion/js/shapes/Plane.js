@@ -18,7 +18,7 @@ class Plane {
         }
 
         this.createBuffers(transformMatrix);
-        this.grid = new Grid(this.shader, this.position_buffer, this.normal_buffer, this.color_buffer, this.n_rows, this.n_cols, this.uv_buffer);
+        this.grid = new Grid(this.shader, this.position_buffer, this.normal_buffer, this.vColor, this.n_rows, this.n_cols, this.uv_buffer);
         this.grid.setTexture(this.texture);
         this.grid.draw();
     }
@@ -26,7 +26,6 @@ class Plane {
     createBuffers(transformMatrix) {
         this.position_buffer = [];
         this.normal_buffer = [];
-        this.color_buffer = [];
         this.uv_buffer = [];
         var step_x = 1.0/this.n_cols;
         var step_y = 1.0/this.n_rows;
@@ -46,10 +45,6 @@ class Plane {
 
                 this.uv_buffer.push(y / (this.n_rows-1));
                 this.uv_buffer.push(x / (this.n_cols-1));
-
-                this.color_buffer.push(this.vColor[0]);
-                this.color_buffer.push(this.vColor[1]);
-                this.color_buffer.push(this.vColor[2]);
             }
           }
     }

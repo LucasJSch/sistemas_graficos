@@ -73,8 +73,10 @@ class Capsule {
         mat4.mul(green_t, transformMatrix, green_t);
         mat4.mul(red_t, transformMatrix, red_t);
 
-        var spotlight_pos = vec3.create();
-        vec3.transformMat4(spotlight_pos, spotlight_pos, green_t);
+        mat4.fromTranslation(aux_t, [0.0, 0.1, -1.5]);
+        mat4.mul(aux_t, transformMatrix, aux_t);
+        var spotlight_pos = vec3.clone(this.front_pos);
+        vec3.transformMat4(spotlight_pos, spotlight_pos, aux_t);
 
         gl.uniform3fv(this.shader.getCapsuleSpotlightPosPtr(), spotlight_pos);
         gl.uniform3fv(this.shader.getCapsuleSpotlightDirPtr(), this.getDirection(transformMatrix));
