@@ -30,6 +30,8 @@ class ShaderProgram {
         this.unifs.shininess = gl.getUniformLocation(this.program, "uShininess");
         this.unifs.capsuleSpotlightPos = gl.getUniformLocation(this.program, "uCapsuleSpotlightPos");
         this.unifs.capsuleSpotlightDirection = gl.getUniformLocation(this.program, "uCapsuleSpotlightDirection");
+        this.unifs.capsuleRedLightPos = gl.getUniformLocation(this.program, "uCapsuleRedLightPos");
+        this.unifs.capsuleGreenLightPos = gl.getUniformLocation(this.program, "uCapsuleGreenLightPos");
         this.unifs.projMatrix = gl.getUniformLocation(this.program, "projMatrix");
         this.unifs.modelMatrix = gl.getUniformLocation(this.program, "modelMatrix");
         this.unifs.viewMatrix = gl.getUniformLocation(this.program, "viewMatrix");
@@ -83,6 +85,14 @@ class ShaderProgram {
 
     getCapsuleSpotlightDirPtr() {
         return this.unifs.capsuleSpotlightDirection;
+    }
+
+    getCapsuleGreenLightPosPtr() {
+        return this.unifs.capsuleGreenLightPos;
+    }
+
+    getCapsuleRedLightPosPtr() {
+        return this.unifs.capsuleRedLightPos;
     }
 }
 

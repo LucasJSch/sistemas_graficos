@@ -9,6 +9,8 @@ varying vec2 vUV;
 
 uniform vec3 uCapsuleSpotlightPos;
 uniform vec3 uCapsuleSpotlightDirection;
+uniform vec3 uCapsuleGreenLightPos;
+uniform vec3 uCapsuleRedLightPos;
 uniform float uShininess;
 uniform vec3 uColor;
 uniform float uDontUseLight;
@@ -36,10 +38,10 @@ vec3 ks = vec3(.75);
 const vec3 NULL_VECTOR = vec3(0.0, 0.0, 0.0);
 
 const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(1000.0, 0.0, 0.0), vec3(0.), 50.0, 0.0);
-// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR, 0.0, 0.0);
-// Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 1.0, 0.0);
 
 Light capsule_spotlight = Light(SPOTLIGHT_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 0.5, 0.001);
+Light capsule_green_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(0.0, 1.0, 0.0), uCapsuleGreenLightPos, vec3(0.), 0.1, 0.0);
+Light capsule_red_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.0, 0.0, 0.0), uCapsuleRedLightPos, vec3(0.), 0.1, 0.0);
 
 vec3 vector_to_light_source(Light light) {
     vec3 res;
