@@ -48,7 +48,7 @@ class SpaceStation {
         mat4.fromTranslation(aux, [0.0, -7.0, 0.0]);
         mat4.mul(t, aux, t);
         mat4.mul(t, transformMatrix, t);
-        // this.nucleus.draw(t);
+        this.nucleus.draw(t);
 
         var center_cyl_t = mat4.create();
         mat4.fromRotation(aux, Math.PI / 2.0, [1.0, 0.0, 0.0]);
@@ -61,10 +61,10 @@ class SpaceStation {
         mat4.fromRotation(aux, this.ring_rotation, [0.0, 1.0, 0.0]);
         mat4.mul(aux, transformMatrix, aux);
 
-        // this.rectangles.draw(aux);
-        // this.columns.draw(aux);
+        this.rectangles.draw(aux);
+        this.columns.draw(aux);
         this.cylinder.draw(transformMatrix);
-        // this.panels.draw(t_panels);
-        // this.center_cylinder.draw(center_cyl_t);
+        this.panels.draw(t_panels);
+        this.center_cylinder.draw(center_cyl_t);
     }
 }

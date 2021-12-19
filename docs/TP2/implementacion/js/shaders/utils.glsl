@@ -30,11 +30,11 @@ struct Light {
 vec3 ks = vec3(.75);
 const vec3 NULL_VECTOR = vec3(0.0, 0.0, 0.0);
 
-// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.), 0.0);
-// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR, 0.0);
-Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightPos, 1.0, 0.0);
+const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(180.0, 0.0, 30.0), vec3(0.), 5.0, 0.0);
+// const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), NULL_VECTOR, NULL_VECTOR, 0.0, 0.0);
+// Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 1.0, 0.0);
 
-Light capsule_spotlight = Light(SPOTLIGHT_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 1.0, 0.05);
+Light capsule_spotlight = Light(SPOTLIGHT_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 0.5, 0.001);
 
 vec3 vector_to_light_source(Light light) {
     vec3 res;
@@ -52,7 +52,10 @@ vec3 vector_to_light_source(Light light) {
 
 vec3 compute_diffuse_intensity(Light light, vec3 kd_material, float min_value) {
     vec3 points_to_light = vector_to_light_source(light);
-    return kd_material * max(dot(points_to_light, vNormal), min_value);
+    // return kd_material * max(dot(points_to_light, vNormal), min_value);
+    float dist = 0.1 * distance(light.position, vPosWorld);
+    return kd_material * max(dot(points_to_light, vNormal), min_value) * (light.distance_decay / dist);
+    // return vec3(abs(vNormal.x), abs(vNormal.y), abs(vNormal.z));
 }
 
 vec3 compute_specular_intensity(Light light, vec3 ks_material, float shininness) {
