@@ -95,6 +95,7 @@ class PanelsProgram extends ShaderProgram {
         gl.enableVertexAttribArray(this.attribs.uv);
 
         this.unifs.uColor = gl.getUniformLocation(this.program, "uColor");
+        this.unifs.uDontUseLight = gl.getUniformLocation(this.program, "uDontUseLight");
 
         this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
         this.panelTexture = new Texture("js/assets/textures/paneles_solares.jpg");
@@ -111,6 +112,7 @@ class PanelsProgram extends ShaderProgram {
 
     setearParametros() {
         super.setearParametros();
+        gl.uniform1f(this.unifs.uDontUseLight, 0.0);
     }
 
     getUvBufPtr() {
@@ -155,5 +157,9 @@ class PanelsProgram extends ShaderProgram {
 
     getUniformColorPtr() {
         return this.unifs.uColor;
+    }
+
+    getDontUseLightPtr() {
+        return this.unifs.uDontUseLight;
     }
 }

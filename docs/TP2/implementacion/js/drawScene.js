@@ -17,7 +17,6 @@ function drawScene(shader,
     gl.uniformMatrix4fv(shader.getNormalMatrixPtr(), false, normalMatrix);
 
     var aux_t = mat4.create();
-    mat4.fromScaling(aux_t, [10.0, 10.0, 10.0]);
 
     var capsule = new Capsule(shader, [1.0, 0.0, 0.0]);
     capsule.setTexture(shader.getCapsuleTexture());
@@ -45,6 +44,7 @@ function drawScene(shader,
     mat4.mul(sun_t, aux_t, sun_t);
     mat4.fromTranslation(aux_t, [20000.0, 0.0, 0.0]);
     mat4.mul(sun_t, aux_t, sun_t);
+    sun.setDontUseLight();
 
     var moon = new Planet(shader);
     moon.setTexture(shader.getMoonTexture());
@@ -63,6 +63,7 @@ function drawScene(shader,
 
     var surrounding = new Sphere(shader, [0.0, 0.0, 0.0]);
     surrounding.setTexture(shader.getSpaceTexture());
+    surrounding.setDontUseLight();
     mat4.fromScaling(aux_t, [30000.0, 30000.0, 30000.0]);
     surrounding.draw(aux_t);
 }

@@ -9,7 +9,12 @@ class Sphere {
         this.nrm_buf = [];
         this.uv_buf = [];
 
+        this.dont_use_light = false;
         this.utils = new Utils();
+    }
+
+    setDontUseLight() {
+        this.dont_use_light = true;
     }
 
     setTexture(texture) {
@@ -25,7 +30,11 @@ class Sphere {
 
         var grid = new Grid(this.shader, this.pos_buf, this.nrm_buf, this.vColor, this.n_rows, this.n_cols, this.uv_buf);
         grid.setTexture(this.texture);
+        if (this.dont_use_light) {
+            gl.uniform1f(this.shader.getDontUseLightPtr(), 1.0);
+        }
         grid.draw(transformMatrix);
+        gl.uniform1f(this.shader.getDontUseLightPtr(), 0.0);
     }
 
     generateBuffers() {
