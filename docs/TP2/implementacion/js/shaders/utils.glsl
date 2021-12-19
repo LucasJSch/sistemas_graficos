@@ -37,9 +37,9 @@ struct Light {
 vec3 ks = vec3(.75);
 const vec3 NULL_VECTOR = vec3(0.0, 0.0, 0.0);
 
-const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.), vec3(1000.0, 0.0, 0.0), vec3(0.), 50.0, 0.0);
+const Light sun_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.0, 1.0, 1.0), vec3(1000.0, 0.0, 0.0), vec3(0.), 50.0, 0.0);
 
-Light capsule_spotlight = Light(SPOTLIGHT_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 0.5, 0.001);
+Light capsule_spotlight = Light(SPOTLIGHT_LIGHT, vec3(1.), uCapsuleSpotlightPos, uCapsuleSpotlightDirection, 0.5, 0.2);
 Light capsule_green_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(0.0, 1.0, 0.0), uCapsuleGreenLightPos, vec3(0.), 0.1, 0.0);
 Light capsule_red_light = Light(OMNIDIRECTIONAL_LIGHT, vec3(1.0, 0.0, 0.0), uCapsuleRedLightPos, vec3(0.), 0.1, 0.0);
 
@@ -70,14 +70,16 @@ vec3 compute_specular_intensity(Light light, vec3 ks_material, float shininness)
 }
 
 vec3 compute_intensity_for_spotlight(Light light, vec3 kd_material, float shininness) {
-    float spotlight_angle = 0.0;
+    float intensity = 0.0;
     vec3 points_to_light = vector_to_light_source(light);
     float dotFromDirection = dot(points_to_light, -light.direction);
     if (dotFromDirection >= light.spotlight_angle_threshold) {
-        spotlight_angle = dot(vNormal, points_to_light);
+        intensity = dot(vNormal, points_to_light);
+        float dist = 0.1 * distance(light.position, vPosWorld);
+        return kd_material.xyz * (light.distance_decay * (intensity / dist));
+    } else {
+        return NULL_VECTOR;
     }
-    float dist = 0.1 * distance(light.position, vPosWorld);
-    return kd_material.xyz * (light.distance_decay * (spotlight_angle / dist));
 }
 
 vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float shininness) {

@@ -25,13 +25,13 @@ var capsule = new Capsule(shader, [1.0, 0.0, 0.0]);
 capsule.setTexture(shader.getCapsuleTexture());
 capsule.draw(capsule_controls.getMatrix());
 
-var plane = new Plane(shader, [0.5, 0.5, 0.0]);
+var plane = new Cube(shader, [1.0, 1.0, 1.0]);
 
 var plane_t = mat4.create();
 var aux = mat4.create();
 mat4.fromScaling(plane_t, [50, 50, 50]);
-mat4.fromRotation(aux, Math.PI/2.0, [1.0, 0.0, 0.0]);
-mat4.mul(plane_t, aux, plane_t);
+// mat4.fromRotation(aux, Math.PI/2.0, [1.0, 0.0, 0.0]);
+// mat4.mul(plane_t, aux, plane_t);
 mat4.fromTranslation(aux, [-10.0, -7.0, -10.0]);
 mat4.mul(plane_t, aux, plane_t);
 

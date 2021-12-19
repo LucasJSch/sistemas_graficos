@@ -76,15 +76,14 @@ class Capsule {
         this.green_light.draw(green_t);
         this.red_light.draw(red_t);
 
-        mat4.fromTranslation(aux_t, [0.0, 0.1, -1.5]);
-        mat4.mul(aux_t, transformMatrix, aux_t);
         var spotlight_pos = vec3.clone(this.front_pos);
-        vec3.transformMat4(spotlight_pos, spotlight_pos, aux_t);
+        vec3.transformMat4(spotlight_pos, spotlight_pos, transformMatrix);
 
+        var aux = vec3.create();
         gl.uniform3fv(this.shader.getCapsuleSpotlightPosPtr(), spotlight_pos);
         gl.uniform3fv(this.shader.getCapsuleSpotlightDirPtr(), this.getDirection(transformMatrix));
-        gl.uniform3fv(this.shader.getCapsuleGreenLightPosPtr(), vec3.transformMat4(spotlight_pos, vec3.clone(this.front_pos), green_t));
-        gl.uniform3fv(this.shader.getCapsuleRedLightPosPtr(), vec3.transformMat4(spotlight_pos, vec3.clone(this.front_pos), red_t));
+        gl.uniform3fv(this.shader.getCapsuleGreenLightPosPtr(), vec3.transformMat4(aux, vec3.clone(this.front_pos), green_t));
+        gl.uniform3fv(this.shader.getCapsuleRedLightPosPtr(), vec3.transformMat4(aux, vec3.clone(this.front_pos), red_t));
     }
 
     generateBezierConcatenator() {
