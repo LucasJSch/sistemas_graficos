@@ -83,7 +83,7 @@ vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float sh
         return compute_intensity_for_spotlight(light, kd_material, shininness);
     }
 
-    vec3 intensity = compute_diffuse_intensity(light, kd_material, 0.0)/* + compute_specular_intensity(light, ks_material, shininness)*/;
+    vec3 intensity = compute_diffuse_intensity(light, kd_material, 0.0) + compute_specular_intensity(light, ks_material, shininness);
     return intensity * light.color;
 }
 
