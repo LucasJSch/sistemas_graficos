@@ -26,6 +26,7 @@ function drawScene(shader,
     space_station.setModuloCilindricoTexture(shader.getModuloCilindricoTexture());
     space_station.setModuloEsfericoTexture(shader.getModuloEsfericoTexture());
     space_station.setModuloTexture(shader.getModuloTexture());
+    space_station.setMetalTexture(shader.getMetalTexture());
     
     var earth = new Planet(shader, [0.0, 0.0, 0.0]);
     earth.setTexture(shader.getEarthTexture());
@@ -46,7 +47,7 @@ function drawScene(shader,
     mat4.mul(sun_t, aux_t, sun_t);
     sun.setDontUseLight();
 
-    var moon = new Planet(shader);
+    var moon = new Planet(shader, [0.0, 0.0, 0.0]);
     moon.setTexture(shader.getMoonTexture());
     var moon_t = mat4.create();
     mat4.fromScaling(moon_t, [100.0, 100.0, 100.0])

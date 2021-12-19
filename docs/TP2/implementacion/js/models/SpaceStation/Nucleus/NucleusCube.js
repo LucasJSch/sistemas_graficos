@@ -2,7 +2,7 @@ class NucleusCube {
     // Draws a cube with Bezier-defined surfaces
     constructor(shader) {
         this.shader = shader;
-        this.color = [0.690196078, 0.298039216, 0.611764706];
+        this.color = [0.5, 0.5, 0.5];
         this.bezier_points = [[0.5, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.0, 0.0], [1.0, 0.5, 0.0],
                               [1.0, 0.5, 0.0], [1.0, 1.0, 0.0], [1.0, 1.0, 0.0], [0.5, 1.0, 0.0],
                               [0.5, 1.0, 0.0], [0.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.5, 0.0],

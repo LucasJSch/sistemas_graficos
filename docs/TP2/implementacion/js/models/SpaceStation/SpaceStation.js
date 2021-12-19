@@ -10,7 +10,7 @@ class SpaceStation {
         this.cylinder = new CircularCylinder(shader);
         this.nucleus = new Nucleus(shader);
         this.panels = new Panels(shader, n_solar_panels, panels_angle);
-        this.center_cylinder = new Cylinder(shader, [0.0, 0.82, 0.12])
+        this.center_cylinder = new Cylinder(shader, [0.5, 0.5, 0.5])
     }
 
     setPanelsTexture(texture) {
@@ -23,6 +23,9 @@ class SpaceStation {
     
     setModuloEsfericoTexture(texture) {
         this.nucleus.setTexture1(texture);
+    }
+    
+    setMetalTexture(texture) {
         this.cylinder.setTexture(texture);
     }
     
@@ -52,7 +55,7 @@ class SpaceStation {
 
         var center_cyl_t = mat4.create();
         mat4.fromRotation(aux, Math.PI / 2.0, [1.0, 0.0, 0.0]);
-        mat4.fromScaling(center_cyl_t, [2.0, 2.0, 0.5]);
+        mat4.fromScaling(center_cyl_t, [1.75, 1.75, 0.5]);
         mat4.mul(center_cyl_t, aux, center_cyl_t);
         mat4.fromTranslation(aux, [0.0, 0.25, 0.0]);
         mat4.mul(center_cyl_t, aux, center_cyl_t);

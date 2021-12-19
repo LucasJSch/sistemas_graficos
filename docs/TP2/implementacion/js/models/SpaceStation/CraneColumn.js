@@ -1,11 +1,12 @@
 class CraneColumn {
     constructor(shader) {
         this.shader = shader;
-        this.color = [0.9, 0.294117647, 0.31372549];
+        this.color = [0.0, 0.0, 0.0];
         
         this.left_column = new Cube(shader, this.color);
         this.right_column = new Cube(shader, this.color);
         this.cyl = new Cylinder(this.shader, this.color, /*pointsPerCircle=*/8);
+        this.cyl.setTexture(this.shader.getMetalTexture());
 
         this.cylinders_t = [];
         this.length = 26.2;
@@ -44,6 +45,8 @@ class CraneColumn {
             this.cyl.draw(t);
         }
 
+        this.left_column.setTexture(this.shader.getMetalTexture());
+        this.right_column.setTexture(this.shader.getMetalTexture());
         this.left_column.draw(this.left_t);
         this.right_column.draw(this.right_t);
     }
