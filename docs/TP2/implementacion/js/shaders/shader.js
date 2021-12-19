@@ -99,6 +99,9 @@ class PanelsProgram extends ShaderProgram {
 
         this.unifs.panelSampler = gl.getUniformLocation(this.program, "uPanelsSampler");
         this.panelTexture = new Texture("js/assets/textures/paneles_solares.jpg");
+
+        this.unifs.samplerReflectionMap = gl.getUniformLocation(this.program, "uSamplerReflectionMap");   
+        this.unifs.reflectionFactor = gl.getUniformLocation(this.program, "uReflectionFactor");   
         
         this.earthTexture = new Texture("js/assets/textures/tierra.jpg");
         this.cilindricoTexture = new Texture("js/assets/textures/cilindrico.jpg");
@@ -108,6 +111,7 @@ class PanelsProgram extends ShaderProgram {
         this.sunTexture = new Texture("js/assets/textures/8k_sun.jpg");
         this.moonTexture = new Texture("js/assets/textures/luna.jpg");
         this.spaceTexture = new Texture("js/assets/textures/8k_stars_milky_way.jpg");
+        this.earthReflectionTexture = new Texture("js/assets/textures/earth_refmap.jpg");
     }
 
     setearParametros() {
@@ -161,5 +165,17 @@ class PanelsProgram extends ShaderProgram {
 
     getDontUseLightPtr() {
         return this.unifs.uDontUseLight;
+    }
+
+    getReflectionFactorPtr() {
+        return this.unifs.reflectionFactor;
+    }
+
+    getReflectionMapSamplerPtr() {
+        return this.unifs.samplerReflectionMap;
+    }
+
+    getEarthReflectionTexture() {
+        return this.earthReflectionTexture.gl_tex;
     }
 }

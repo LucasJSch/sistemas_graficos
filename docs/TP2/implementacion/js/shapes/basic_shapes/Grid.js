@@ -96,6 +96,9 @@ class Grid {
         gl.vertexAttribPointer(this.shader.getUvBufPtr(), 2, gl.FLOAT, false, 0, 0);
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, this.shader.getEarthReflectionTexture());
+        gl.uniform1i(this.shader.getReflectionMapSamplerPtr(), 1);
         
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.webgl_index_buffer);
    }
@@ -117,8 +120,5 @@ class Grid {
             this.normal_buffer.push(aux[1]);
             this.normal_buffer.push(aux[2]);
         }
-
-        console.log(this.normal_buffer.length);
-        console.log(this.position_buffer.length);
     }
 }

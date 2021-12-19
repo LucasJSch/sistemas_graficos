@@ -13,6 +13,10 @@ void main(void) {
 
     kd = texture2D(uPanelsSampler, vec2(vUV.s, vUV.t)).xyz;
     ks = kd + vec3(.15);
+    vec3 reflection = reflect(-vFromPointToCameraNormalized, vNormal);
+    float m = length(reflection);
+    float alfa = map(atan(reflection.y, reflection.x), -PI, PI, 0., 1.);
+    float beta = map(acos(reflection.z / m), 0., PI, 0., 1.);
 
     Light lights[NUM_LIGHTS];
     lights[0] = sun_light;
@@ -20,8 +24,8 @@ void main(void) {
 
     for (int i = 0; i < NUM_LIGHTS; i++) {
         color_final += compute_intensity(lights[i], kd, ks, 100000000.);
+        color_final += texture2D(uSamplerReflectionMap, vec2(alfa,beta)).xyz * uReflectionFactor * 0.3;
     }
 
-    gl_FragColor = vec4(color_final,1.0);
-    // gl_FragColor = vec4(kd,1.0);
+    gl_FragColor = vec4(color_final, 1.0);
 }

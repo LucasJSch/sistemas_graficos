@@ -1,5 +1,7 @@
 precision mediump float;
 
+const float PI = 3.14159265358979;
+
 varying vec3 vNormal;
 varying vec3 vPosWorld;
 varying vec3 vFromPointToCameraNormalized;
@@ -10,8 +12,10 @@ uniform vec3 uCapsuleSpotlightDirection;
 uniform float uShininess;
 uniform vec3 uColor;
 uniform float uDontUseLight;
+uniform float uReflectionFactor;
 
 uniform sampler2D uPanelsSampler;
+uniform sampler2D uSamplerReflectionMap;
 
 // A.K.A. fuente de luz puntual
 const int OMNIDIRECTIONAL_LIGHT = 1;
@@ -83,4 +87,8 @@ vec3 compute_intensity(Light light, vec3 kd_material, vec3 ks_material, float sh
 
     vec3 intensity = compute_diffuse_intensity(light, kd_material, 0.0)/* + compute_specular_intensity(light, ks_material, shininness)*/;
     return intensity * light.color;
+}
+
+float map(float value, float inMin, float inMax, float outMin, float outMax) {
+  return outMin + (outMax - outMin) * (value - inMin) / (inMax - inMin);
 }
