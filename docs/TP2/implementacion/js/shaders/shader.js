@@ -104,9 +104,9 @@ class PanelsProgram extends ShaderProgram {
         this.esfericoTexture = new Texture("js/assets/textures/esferico.jpg");
         this.moduloTexture = new Texture("js/assets/textures/modulo.jpg");
         this.capsuleTexture = new Texture("js/assets/textures/shiphull.jpg");
-        this.sunTexture = new Texture("js/assets/textures/sun.jpg");
+        this.sunTexture = new Texture("js/assets/textures/8k_sun.jpg");
         this.moonTexture = new Texture("js/assets/textures/luna.jpg");
-        this.spaceTexture = new Texture("js/assets/textures/space.jpg");
+        this.spaceTexture = new Texture("js/assets/textures/8k_stars_milky_way.jpg");
     }
 
     setearParametros() {

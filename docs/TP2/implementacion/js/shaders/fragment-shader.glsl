@@ -19,5 +19,6 @@ void main(void) {
         color_final += compute_intensity(lights[i], kd, ks, 100000000.);
     }
 
-    gl_FragColor = vec4(color_final,1.0);
+    // gl_FragColor = vec4(color_final,1.0);
+    gl_FragColor = vec4(kd,1.0);
 }

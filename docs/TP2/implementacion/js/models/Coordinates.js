@@ -60,7 +60,7 @@ class Coordinates {
         
 
         x_coord.draw(transf_x);
-        // y_coord.draw(transf_y);
-        // z_coord.draw(transf_z);
+        y_coord.draw(transf_y);
+        z_coord.draw(transf_z);
     }
 }

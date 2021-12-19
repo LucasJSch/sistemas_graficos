@@ -44,8 +44,8 @@ class Plane {
                 this.normal_buffer.push(0.0);
                 this.normal_buffer.push(1.0);
 
-                this.uv_buffer.push(y / this.n_rows);
-                this.uv_buffer.push(x / this.n_cols);
+                this.uv_buffer.push(y / (this.n_rows-1));
+                this.uv_buffer.push(x / (this.n_cols-1));
 
                 this.color_buffer.push(this.vColor[0]);
                 this.color_buffer.push(this.vColor[1]);

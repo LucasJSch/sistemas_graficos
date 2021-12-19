@@ -28,31 +28,31 @@ function drawScene(shader,
     space_station.setModuloEsfericoTexture(shader.getModuloEsfericoTexture());
     space_station.setModuloTexture(shader.getModuloTexture());
     
-    var earth = new Planet(shader);
+    var earth = new Planet(shader, [0.0, 0.0, 0.0]);
     earth.setTexture(shader.getEarthTexture());
     var earth_t = mat4.create();
-    mat4.fromScaling(earth_t, [50.0, 50.0, 50.0])
-    mat4.fromTranslation(aux_t, [0.0, 0.0, -100.0]);
+    mat4.fromScaling(earth_t, [500.0, 500.0, 500.0])
+    mat4.fromTranslation(aux_t, [0.0, 0.0, -1000.0]);
     mat4.mul(earth_t, aux_t, earth_t);
     mat4.fromRotation(aux_t, time * 0.01, [1.0, 0.0, 0.0]);
     mat4.mul(earth_t, earth_t, aux_t);
 
-    var sun = new Planet(shader);
+    var sun = new Sphere(shader, [0.0, 0.0, 0.0]);
     sun.setTexture(shader.getSunTexture());
     var sun_t = mat4.create();
-    mat4.fromScaling(sun_t, [10.0, 10.0, 10.0])
-    mat4.fromRotation(aux_t, 0.0 * Math.PI/3.0, [0.0, 1.0, 0.0])
+    mat4.fromScaling(sun_t, [2000.0, 2000.0, 2000.0])
+    mat4.fromRotation(aux_t, Math.PI / 2.0, [0.0, 1.0, 0.0])
     mat4.mul(sun_t, aux_t, sun_t);
-    mat4.fromTranslation(aux_t, [200.0, 0.0, 30.0]);
+    mat4.fromTranslation(aux_t, [20000.0, 0.0, 0.0]);
     mat4.mul(sun_t, aux_t, sun_t);
 
     var moon = new Planet(shader);
     moon.setTexture(shader.getMoonTexture());
     var moon_t = mat4.create();
-    mat4.fromScaling(moon_t, [10.0, 10.0, 10.0])
+    mat4.fromScaling(moon_t, [100.0, 100.0, 100.0])
     mat4.fromRotation(aux_t, 0.0 * Math.PI/3.0, [0.0, 1.0, 0.0])
     mat4.mul(moon_t, aux_t, moon_t);
-    mat4.fromTranslation(aux_t, [-200.0, 0.0, 30.0]);
+    mat4.fromTranslation(aux_t, [-400.0, 0.0, 30.0]);
     mat4.mul(moon_t, aux_t, moon_t);
 
     space_station.draw();
@@ -63,6 +63,6 @@ function drawScene(shader,
 
     var surrounding = new Sphere(shader, [0.0, 0.0, 0.0]);
     surrounding.setTexture(shader.getSpaceTexture());
-    mat4.fromScaling(aux_t, [300.0, 300.0, 300.0]);
+    mat4.fromScaling(aux_t, [30000.0, 30000.0, 30000.0]);
     surrounding.draw(aux_t);
 }
