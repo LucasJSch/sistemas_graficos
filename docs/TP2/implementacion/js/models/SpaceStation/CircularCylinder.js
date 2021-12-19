@@ -1,7 +1,7 @@
 class CircularCylinder {
     constructor(shader) {
         this.shader = shader;
-        this.color = [1.0, 0.0, 0.0];
+        this.color = [0.0, 0.0, 0.0];
         // The curve in this case is the shape to draw multiple times.
         // Use odd numbers here.
         this.n_curves = 23.0;

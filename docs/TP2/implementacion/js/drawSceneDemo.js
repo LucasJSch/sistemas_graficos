@@ -8,7 +8,8 @@ function drawSceneDemo(shader,
     angulo_paneles,
     rotacion_anillo,
     n_secciones_nucleo,
-    capsule_controls) {
+    capsule_controls,
+    time) {
 
 gl.uniformMatrix4fv(shader.getModelMatrixPtr(), false, modelMatrix);
 gl.uniformMatrix4fv(shader.getViewMatrixPtr(), false, viewMatrix);
@@ -16,13 +17,23 @@ gl.uniformMatrix4fv(shader.getProjMatrixPtr(), false, projMatrix);
 gl.uniformMatrix4fv(shader.getNormalMatrixPtr(), false, normalMatrix);
 
 
-var nucleus = new Nucleus(shader, [0.0, 0.0, 0.0]);
-nucleus.setTexture1(shader.getCapsuleTexture());
-nucleus.draw();
-
-var coord = new Coordinates(shader, [0.0, 0.0, 0.0]);
-coord.setTexture(shader.getPanelTexture());
+var coord = new Coordinates(shader);
 coord.draw();
+
+var space_station = new SpaceStation(shader, n_secciones_nucleo, 4, 0.0, rotacion_anillo);
+space_station.setPanelsTexture(shader.getPanelTexture());
+space_station.setModuloCilindricoTexture(shader.getModuloCilindricoTexture());
+space_station.setModuloEsfericoTexture(shader.getModuloEsfericoTexture());
+space_station.setModuloTexture(shader.getModuloTexture());
+space_station.draw();
+
+// var nucleus = new Nucleus(shader, [0.0, 0.0, 0.0]);
+// nucleus.setTexture1(shader.getCapsuleTexture());
+// nucleus.draw();
+
+// var coord = new Coordinates(shader, [0.0, 0.0, 0.0]);
+// coord.setTexture(shader.getPanelTexture());
+// coord.draw();
 
 var capsule = new Capsule(shader, [1.0, 0.0, 0.0]);
 capsule.setTexture(shader.getCapsuleTexture());

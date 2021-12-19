@@ -33,6 +33,18 @@ class CuadraticBsplineConcatenator {
         return this.bsplines[curveNumber].getFirstDerivative(u);
     }
 
+    // 0 <= t <= ceil(n_points/3)
+    getSecondDerivative(t) {
+        var curveNumber = Math.floor(t);
+        var u = t % 1;
+
+        if (curveNumber > this.bsplines.length-1) {
+            console.log("ERROR: Invalid t in CuadraticBsplineConcatenator. t = " + t);
+        }
+
+        return this.bsplines[curveNumber].getSecondDerivative(u);
+    }
+
     getNumberOfCurves() {
         return this.bsplines.length;
     }
