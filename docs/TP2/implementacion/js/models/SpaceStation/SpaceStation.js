@@ -51,6 +51,7 @@ class SpaceStation {
         mat4.fromTranslation(aux, [0.0, -7.0, 0.0]);
         mat4.mul(t, aux, t);
         mat4.mul(t, transformMatrix, t);
+        gl.uniform1f(this.shader.getReflectionFactorPtr(), 0.1);
         this.nucleus.draw(t);
 
         var center_cyl_t = mat4.create();
@@ -69,5 +70,6 @@ class SpaceStation {
         this.cylinder.draw(transformMatrix);
         this.panels.draw(t_panels);
         this.center_cylinder.draw(center_cyl_t);
+        gl.uniform1f(this.shader.getReflectionFactorPtr(), 0.0);
     }
 }
