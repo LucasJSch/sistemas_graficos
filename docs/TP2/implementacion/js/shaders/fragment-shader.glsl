@@ -21,8 +21,13 @@ void main(void) {
 
     vec3 reflection = reflect(-vFromPointToCameraNormalized, vNormal);
     float m = length(reflection);
-    float alfa = map(atan(reflection.y, reflection.x), -PI, PI, 0., 1.);
-    float beta = map(acos(reflection.z / m), 0., PI, 0., 1.);
+    float alfa = map(atan(reflection.y, reflection.x), -PI, PI, 0.0, 1.0);
+    float beta = 0.0;
+    if (vNormal.z >= 0.0) {
+        beta = map(acos(reflection.z / m), 0., PI, 0.5, 1.0);
+    } else {
+        beta = map(acos(reflection.z / m), 0., PI, 0., 1.);
+    }
 
     Light lights[NUM_LIGHTS];
     lights[0] = sun_light;
