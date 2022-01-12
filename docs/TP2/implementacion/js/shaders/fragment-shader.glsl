@@ -22,11 +22,12 @@ void main(void) {
     vec3 reflection = reflect(-vFromPointToCameraNormalized, vNormal);
     float m = length(reflection);
     float alfa = map(atan(reflection.y, reflection.x), -PI, PI, 0.0, 1.0);
-    float beta = 0.0;
+    float beta = map(acos(reflection.z / m), 0., PI, 0., 1.);
+    float reflection_coef = 0.15;
     if (vNormal.z >= 0.0) {
-        beta = map(acos(reflection.z / m), 0., PI, 0.5, 1.0);
-    } else {
-        beta = map(acos(reflection.z / m), 0., PI, 0., 1.);
+        // Since we're using only the earth's reflection, we can
+        // make this hack.
+        reflection_coef = 0.0;
     }
 
     Light lights[NUM_LIGHTS];
@@ -37,7 +38,7 @@ void main(void) {
 
     for (int i = 0; i < NUM_LIGHTS; i++) {
         color_final += compute_intensity(lights[i], kd, ks, 100000000.);
-        color_final += texture2D(uSamplerReflectionMap, vec2(alfa,beta)).xyz * uReflectionFactor * 0.3;
+        color_final += texture2D(uSamplerReflectionMap, vec2(alfa,beta)).xyz * uReflectionFactor * reflection_coef;
     }
 
     gl_FragColor = vec4(color_final, 1.0);
